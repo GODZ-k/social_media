@@ -6,22 +6,18 @@ import {
   MenuButton,
   MenuList,
   MenuItem,
-  MenuItemOption,
-  MenuGroup,
-  MenuOptionGroup,
-  MenuDivider,
 } from "@chakra-ui/react";
-function Userpost() {
+function Userpost({like,  postImage , comments , replies , title , timestamp, avatar, user}) {
   return (
     <>
-      {/* <Link to={"/tanmay/post/1"} className=" hover:text-white"> */}
-      <div className="flex gap-4 my-3">
+      <Link to={"/tanmay/post/1"} className=" hover:text-white">
+      <div className="flex gap-4 mt-3 mb-10">
         <div className=" flex flex-col items-center">
           <div className=" w-12 h-12">
             <img
               className=" w-full object-center object-cover h-full rounded-full"
-              src="https://images.unsplash.com/photo-1575936123452-b67c3203c357?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8aW1hZ2V8ZW58MHx8MHx8fDA%3D"
-              alt=""
+              src={avatar}
+              alt={user}
             />
           </div>
           <div className=" w-[1px] h-full bg-gray-500 my-2"></div>
@@ -48,11 +44,11 @@ function Userpost() {
                 </div>
               </div>
               <div className=" text-sm text-gray-300">
-                Let's talk about Threads
+               {title}
               </div>
             </div>
             <div className=" flex gap-3 items-center justify-center">
-              <div className=" text-gray-600">1d</div>
+              <div className=" text-gray-600">{timestamp}</div>
               <div>
                 <Menu>
                   <MenuButton bg={"none"}>
@@ -72,14 +68,14 @@ function Userpost() {
           <div className=" w-full h-72 mt-3 mb-2 rounded-md overflow-hidden">
             <img
               className=" object-cover object-center w-full h-full"
-              src="https://images.unsplash.com/photo-1575936123452-b67c3203c357?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8aW1hZ2V8ZW58MHx8MHx8fDA%3D"
+              src={postImage}
               alt=""
             />
           </div>
           <div className=" flex justify-between items-center my-1">
             <div className="flex gap-5 cursor-pointer text-gray-300 text-[16px] md:text-lg">
               <div>
-                <i class="fa-regular fa-heart"></i>
+                <i className=" text-red-800 fa-regular fa-heart"></i>
               </div>
               <div>
                 <i class="fa-regular fa-comment"></i>
@@ -94,12 +90,12 @@ function Userpost() {
             <div className=" text-gray-300 text-sm">1.4K Comments</div>
           </div>
           <div className=" flex gap-7 text-sm text-gray-500 mt-2">
-            <div>438 replies</div>
-            <div>1200 Likes</div>
+            <div>{replies} replies</div>
+            <div>{like} Likes</div>
           </div>
         </div>
       </div>
-      {/* </Link> */}
+      </Link>
     </>
   );
 }
