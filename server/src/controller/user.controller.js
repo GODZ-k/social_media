@@ -56,7 +56,7 @@ const registerUser = async (req, res) => {
     }
 }
 
-// verify account ------
+// verify account ------ ( Pending )
 const verifyAccount = async(req,res)=>{
     try {
         
@@ -129,10 +129,29 @@ const loginUser = async (req, res) => {
     }
 }
 
+const getProfile = async(req,res)=>{
+    try {
+        const user = req.user
+
+        if(!user){
+            return res.status(422).json({
+                msg:"Unauthorized access"
+            })
+        }
+// -------------- resume 
+
+    } catch (error) {
+        return res.status(500).json({
+            msg:"Internal server error"
+        })
+    }
+}
+
 
 
 export {
     registerUser,
     loginUser,
-    verifyAccount
+    verifyAccount,
+    getProfile
 }
