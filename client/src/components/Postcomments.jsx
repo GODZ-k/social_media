@@ -7,7 +7,7 @@ function Postcomments() {
         <div className=" rounded-full overflow-hidden w-11 h-10">
           <img
             className=" h-full w-full object-center object-cover"
-            src="/public/bluetick.png"
+            src="/bluetick.png"
             alt=""
           />
         </div>
@@ -19,7 +19,7 @@ function Postcomments() {
                     Tanmay
                 </div>
                 <div className=' h-4 w-4 '>
-                    <img className=' w-full h-full' src="/public/bluetick.png" alt="" />
+                    <img className=' w-full h-full' src="/bluetick.png" alt="" />
                 </div>
               </div>
               <div className=" text-gray-400 text-sm">

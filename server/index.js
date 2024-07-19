@@ -1,13 +1,15 @@
-import app from "./app.js";
-// import connectDb from "./src/connetction/connectDb.js";
+import app from "./src/app.js";
+import connectDB from "./src/connection/connection.js";
 
-// const port =  process.env.PORT
+const port =  process.env.PORT
 
-// connectDb()
-// .then(()=>{
-//     app.listen(port , ()=>{
-//         console.log(`listning on port ${port}`)
-//     })
-// }).catch((err)=>{
-//     console.log(`Error listning on port ${port} : ${err}`)
-// })
+connectDB()
+.then(()=>{
+    app.listen(port , ()=>{
+        console.log(`listning on port ${port}`)
+    })
+}).catch((err)=>{
+    console.log(`Error listning on port ${port} : ${err}`)
+})
+
+
