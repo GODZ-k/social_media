@@ -13,7 +13,22 @@ const signInSchema = z.object({
 })
 
 
+const updateProfileType = z.object({
+    username:z.string().optional(),
+    name:z.string().optional(),
+    bio:z.string().max(300).optional()
+})
+
+
+const updatePasswordType = z.object({
+    oldPassword:z.string(),
+    newPassword:z.string(),
+    confirmPassword:z.string()
+})
+
 export {
     signInSchema,
-    signUpSchema
+    signUpSchema,
+    updateProfileType,
+    updatePasswordType
 }

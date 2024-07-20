@@ -1,9 +1,10 @@
 import jwt from 'jsonwebtoken'
+import User from '../models/user.model.js';
 
 
 
-
-const verifyJWT = async(req,res,next)=>{
+// authorize user --
+const verifyJWT = async (req, res, next) => {
     try {
         let token;
         if (req.cookies) {
@@ -12,15 +13,15 @@ const verifyJWT = async(req,res,next)=>{
             token = req.headers.authorization.split(" ")[1];
         }
 
-        if(!token){
+        if (!token) {
             return res.status(422).json({
-                msg:"Unauthorized access"
+                msg: "Unauthorized access"
             })
         }
 
-        const user = jwt.verify(token,  process.env.ACCESS_TOKEN_SECRET_KEY)
+        const user = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET_KEY)
 
-        if(!user){
+        if (!user) {
             return res.status(422).json({
                 msg: "Unauthorized access",
             });
@@ -32,7 +33,51 @@ const verifyJWT = async(req,res,next)=>{
 
     } catch (error) {
         return res.status(500).json({
-            msg:"Internal server error"
+            msg: "Internal server error"
+        })
+    }
+}
+
+
+
+//  decode verify account token 
+const verifyVerificationToken = async (req, res, next) => {
+    try {
+        const token = req.query.token
+
+        if (!token) {
+            return res.status(400).json({
+                msg: "Token expired or invalid token"
+            })
+        }
+
+        const user = jwt.verify(token, process.env.VERIFICATION_TOKEN_SECRET_KEY)
+
+        if (!user) {
+            return res.status(422).json({
+                msg: "Token expired or invalid token"
+            })
+        }
+
+        const verifyUser = await User.findById(user._id)
+
+        if(!verifyUser || !verifyUser.isVerified){
+            return res.status(422).json({
+                msg:"unauthorized access"
+            })
+        }
+
+        req.user = {
+            user,
+            token
+        }
+
+        next()
+
+    } catch (error) {
+        console.log(error)
+        return res.status(500).json({
+            msg: "internal server error"
         })
     }
 }
@@ -40,5 +85,6 @@ const verifyJWT = async(req,res,next)=>{
 
 
 export {
-    verifyJWT
+    verifyJWT,
+    verifyVerificationToken
 }

@@ -32,7 +32,7 @@ const generateVerificationToken = async (user) => {
 
         return jwt.sign(
             user,
-            process.env.VERIFICATION_TOKEN,
+            process.env.VERIFICATION_TOKEN_SECRET_KEY,
             { expiresIn: process.env.VERIFICATION_TOKEN_EXPIRY }
         )
 
