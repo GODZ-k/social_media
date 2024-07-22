@@ -26,9 +26,22 @@ const updatePasswordType = z.object({
     confirmPassword:z.string()
 })
 
+
+const forgotPasswordType = z.object({
+    email:z.string().email()
+})
+
+
+const resetpasswordType = z.object({
+    newPassword:z.string().min(8),
+    confirmPassword:z.string().min(8)
+})
+
 export {
     signInSchema,
     signUpSchema,
     updateProfileType,
-    updatePasswordType
+    updatePasswordType,
+    forgotPasswordType,
+    resetpasswordType
 }

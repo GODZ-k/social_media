@@ -53,17 +53,26 @@ const verifyVerificationToken = async (req, res, next) => {
 
         const user = jwt.verify(token, process.env.VERIFICATION_TOKEN_SECRET_KEY)
 
+
         if (!user) {
             return res.status(422).json({
                 msg: "Token expired or invalid token"
             })
         }
 
-        const verifyUser = await User.findById(user._id)
+        const verifyUser = await User.findOne({ $or: [{ username: user.username }, { email: user.email }] })
 
-        if(!verifyUser || !verifyUser.isVerified){
+
+        if (!verifyUser) {
+
             return res.status(422).json({
-                msg:"unauthorized access"
+                msg: "unauthorized access"
+            })
+        }
+
+        if (verifyUser.isVerified) {
+            return res.status(400).json({
+                msg: "Account already verified"
             })
         }
 
@@ -83,8 +92,60 @@ const verifyVerificationToken = async (req, res, next) => {
 }
 
 
+// reset password verfify jwt 
+const verifyForgotPasswordToken = async (req, res, next) => {
+    try {
+        const token = req.params.token
+
+        if (!token) {
+            return res.status(422).json({
+                msg: "Invalid token or token expired"
+            })
+        }
+
+        const user = jwt.verify(token, process.env.VERIFICATION_TOKEN_SECRET_KEY)
+
+        if (!user) {
+            return res.status(422).json({
+                msg: "Invalid token or token expired"
+            })
+        }
+
+        const verifiedUser = await User.findById(user.id)
+
+        if (!verifiedUser) {
+            return res.status(422).json({
+                msg: "invalid token or token expired"
+            })
+        }
+
+        if (!verifiedUser.isVerified) {
+            return res.status(422).json({
+                msg: "Please verify your account first"
+            })
+        }
+
+        if (!verifiedUser.verificationToken) {
+            return res.status(422).json({
+                msg: "Token expired"
+            })
+        }
+
+        req.user = verifiedUser
+
+        next()
+
+    } catch (error) {
+        return res.status(500).json({
+            msg: "Invalid token or token expired"
+        })
+    }
+}
+
+
 
 export {
     verifyJWT,
-    verifyVerificationToken
+    verifyVerificationToken,
+    verifyForgotPasswordToken
 }

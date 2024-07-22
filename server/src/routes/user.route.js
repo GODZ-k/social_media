@@ -1,6 +1,6 @@
 import { Router }from 'express'
-import { deleteAccount, deleteProfileImage, getCurrentUser, loginUser, logoutUser, registerUser, verifyAccount } from '../controller/user.controller.js'
-import { verifyJWT, verifyVerificationToken } from '../middleware/user.middleware.js'
+import { deleteAccount, deleteProfileImage, forgotPassword, getCurrentUser, loginUser, logoutUser, registerUser, resetPassword, verifyAccount } from '../controller/user.controller.js'
+import { verifyForgotPasswordToken, verifyJWT, verifyVerificationToken } from '../middleware/user.middleware.js'
 import updateUserRoute from "./update.user.route.js"
 const router =  Router()
 
@@ -14,6 +14,8 @@ router.route('/logout').get(verifyJWT,logoutUser)
 router.route('/verify').get(verifyVerificationToken,verifyAccount)
 router.route('/delete').get(verifyJWT,deleteAccount)
 router.route('/remove-profile-image').get(verifyJWT,deleteProfileImage)
+router.route('/forgot-password').post(forgotPassword)
+router.route('/reset-password/:token').post(verifyForgotPasswordToken,resetPassword)
 
 
 // bypass update routes ---

@@ -29,12 +29,18 @@ const userSchema = new Schema({
         default: ""
 
     },
-    followers: {
-        type:[String]
-    },
-    following:{
-        type:[String]
-    },
+    followers: [
+        {
+            type:mongoose.Schema.Types.ObjectId,
+            ref:'User'
+        }
+    ],
+    following:[
+        {
+            type:mongoose.Schema.Types.ObjectId,
+            ref:'User'
+        }
+    ],
     bio: {
         type: String,
         default: ""
