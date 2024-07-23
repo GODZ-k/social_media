@@ -1,18 +1,20 @@
 import { Router } from "express";
-import userRouter from "./user.route.js"
-import { getProfile } from "../controller/main.controller.js";
-import { verifyJWT } from "../middleware/user.middleware.js";
-import { followUser } from "../controller/user.controller.js";
+import authRoute from "./auth.user.route.js"
+import userRoute from "./user.route.js"
+import { getAllPosts, getPost } from "../controller/main.controller.js";
+
 const router =  Router()
 
 // bypass routes ---
-router.use('/auth/user', userRouter)
+router.use('/auth/user', authRoute)
+
+router.use('/user' , userRoute)
 
 
 // main routes ---
-router.route('/user/:username').get(getProfile)
 
-router.route('/user/follow/:userId').get(verifyJWT,followUser)
+router.route("/posts").get(getAllPosts)
+router.route('/post/:postId').get(getPost)
 
 
 export default router
