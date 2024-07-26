@@ -164,14 +164,20 @@ const updatePost = async (req, res) => {
     }
 
     if (inputData) {
-      post.updateOne({
-        postTitle: inputData.postTitle,
-      });
+      await post.updateOne({
+        $set:{
+            postTitle: inputData.postTitle,
+          }
+      },{new:true});
     }
 
+    const updatedPost = await Post.findById(postId)
+
     return res.status(200).json({
+      updatedPost,
       msg: "Post updated successfully",
     });
+
   } catch (error) {
     return res.status(500).json({
       msg: "Internal server error",

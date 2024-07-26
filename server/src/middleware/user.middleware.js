@@ -32,6 +32,18 @@ const verifyJWT = async (req, res, next) => {
         next()
 
     } catch (error) {
+        if (error.name === 'TokenExpiredError') {
+            const options = {
+                httpOnly: true,
+                path: "/"
+            }
+            return res
+                .clearCookie('accessToken', options)
+                .clearCookie('refreshToken', options)
+                .status(422).json({
+                    msg: "Session timeout please login again"
+                })
+        }
         return res.status(500).json({
             msg: "Internal server error"
         })
@@ -84,7 +96,11 @@ const verifyVerificationToken = async (req, res, next) => {
         next()
 
     } catch (error) {
-        console.log(error)
+        if (error.name === 'TokenExpiredError') {
+            return res.status(422).json({
+                msg: "Token expired"
+            })
+        }
         return res.status(500).json({
             msg: "internal server error"
         })

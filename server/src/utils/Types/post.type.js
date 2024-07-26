@@ -5,7 +5,6 @@ const createPostType = z.object({
     postTitle:z.string().optional(),
 })
 
-
 export {
     createPostType
 }
