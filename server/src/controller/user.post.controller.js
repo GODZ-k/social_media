@@ -1,7 +1,7 @@
 import Post from "../models/post.model.js";
 import User from "../models/user.model.js";
 import uploadOnCloudinary from "../utils/cloudinary.js";
-import { createPostType } from "../utils/Types/post.type.js";
+import { createPostType, updatePostType } from "../utils/Types/post.type.js";
 
 // create posts ------
 const createPost = async (req, res) => {
@@ -127,7 +127,7 @@ const deletePost = async (req, res) => {
   }
 };
 
-// update post    --- ( Pending )
+// update post    ---
 const updatePost = async (req, res) => {
   try {
     const user = req.user;
@@ -144,6 +144,12 @@ const updatePost = async (req, res) => {
       return res.status(422).json({
         msg: "Unauthorized access",
       });
+    }
+
+    const payload = updatePostType.safeParse(inputData)
+
+    if(!payload.success){
+      
     }
 
     const [post, loggedInUser] = await Promise.all([
@@ -245,7 +251,56 @@ const likePost = async (req, res) => {
 
 // comment --------
 
+const commentPost = async(req,res)=>{
+  try {
+    const user = req.user
+    const inputData = req.body
+    const postId = req.params.postId
+
+    if(!inputData){
+      return res.status(400).json({
+        msg:"All field must be required"
+      })
+    }
+
+    if(user){
+      return res.status(422).json({
+        msg:"Unauthorized access"
+      })
+    }
+
+    if(postId){
+      return res.status(400).json({
+        msg:"Bad request"
+      })
+    }
+
+    const [post , loggedInUser]= await Promise.all([
+      User.findById(user._id),
+      Post.findById(postId)
+    ])
+
+    if(!post){
+      return res.status(400).json({
+        msg:"post not found "
+      })
+    }
+
+    if(!loggedInUser){
+      return res.status(422).json({
+        msg:"Unauthorized access "
+      })
+    }
+
+
+  } catch (error) {
+    return res.status(500).json({
+      msg:"Internal server error"
+    })
+  }
+}
 
 
 
-export { createPost, deletePost, updatePost, likePost };
+
+export { createPost, deletePost, updatePost, likePost  , commentPost };

@@ -34,7 +34,7 @@ const postSchema = new Schema(
         },
       },
     ],
-    replies: [
+    comment: [
       {
         userId: {
           type: mongoose.Schema.Types.ObjectId,
@@ -44,6 +44,24 @@ const postSchema = new Schema(
           type: String,
           required: true,
         },
+        replies: [
+          {
+            userId: {
+              type: mongoose.Schema.Types.ObjectId,
+              ref: "User",
+            },
+            comment: {
+              type: String,
+              required: true,
+            },
+            avatar: {
+              type: String,
+            },
+            username: {
+              type: String,
+            },
+          },
+        ],
         avatar: {
           type: String,
         },
