@@ -34,40 +34,10 @@ const postSchema = new Schema(
         },
       },
     ],
-    comment: [
+    comments: [
       {
-        userId: {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: "User",
-        },
-        comment: {
-          type: String,
-          required: true,
-        },
-        replies: [
-          {
-            userId: {
-              type: mongoose.Schema.Types.ObjectId,
-              ref: "User",
-            },
-            comment: {
-              type: String,
-              required: true,
-            },
-            avatar: {
-              type: String,
-            },
-            username: {
-              type: String,
-            },
-          },
-        ],
-        avatar: {
-          type: String,
-        },
-        username: {
-          type: String,
-        },
+        type:Schema.Types.ObjectId,
+        ref:"Comment"
       },
     ],
   },

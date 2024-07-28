@@ -11,7 +11,7 @@ const updatePostType = z.object({
 })
 
 const createCommentType = z.object({
-    postTitle:z.string().max(300),
+    comment:z.string().max(300),
 })
 
 export {
