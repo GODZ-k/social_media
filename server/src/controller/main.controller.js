@@ -1,3 +1,4 @@
+import Comment from "../models/comments.post.model.js"
 import Post from "../models/post.model.js"
 import User from "../models/user.model.js"
 
@@ -91,8 +92,39 @@ const getPost = async(req,res)=>{
 }
 
 
+// get Comment -----
+const getComment = async (req, res) => {
+    try {
+      const commentId = req.params.commentId;
+  
+      if (!commentId) {
+        return res.status(400).json({
+          msg: "Bad request",
+        });
+      }
+  
+      const comment  = await Comment.findById(commentId)
+  
+      if(!comment){
+        return res.status(404).json({
+          msg:"Comment not found"
+        })
+      }
+  
+      return res.status(200).json({
+        comment,
+        msg:"Comment found successfully"
+      })
+    } catch (error) {
+      return res.status(500).json({
+        msg: "Internal server error",
+      });
+    }
+};
+
 export {
     getProfile,
     getAllPosts,
-    getPost
+    getPost,
+    getComment
 }

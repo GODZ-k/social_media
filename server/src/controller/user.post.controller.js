@@ -366,10 +366,10 @@ const deleteComment = async (req, res) => {
       });
     }
 
-    const [loggedInUser, comment , post] = await Promise.all([
+    const [loggedInUser, comment, post] = await Promise.all([
       User.findById(user._id),
       Comment.findById(commentId),
-      Post.findById(postId)
+      Post.findById(postId),
     ]);
 
     if (!loggedInUser) {
@@ -384,46 +384,119 @@ const deleteComment = async (req, res) => {
       });
     }
 
-    if(!post){
+    if (!post) {
       return res.status(404).json({
         msg: "post not found",
       });
     }
 
     if (comment.userId.toString() !== loggedInUser._id.toString()) {
-      console.log(comment.userId.toString() , loggedInUser._id.toString())
+      console.log(comment.userId.toString(), loggedInUser._id.toString());
       return res.status(422).json({
         msg: "You are not authorized",
       });
     }
-   
-    console.log("start")
-    console.log(commentId)
-    await comment.deleteOne()
-    post.comments = post.comments.filter((cmt)=> cmt._id.toString() !== comment._id.toString())
+
+    console.log("start");
+    console.log(commentId);
+    await comment.deleteOne();
+    post.comments = post.comments.filter(
+      (cmt) => cmt._id.toString() !== comment._id.toString()
+    );
 
     // post.comments.map((cmt)=>{
     //   console.log(cmt._id)
     //   console.log(comment._id)
     // })
-    await post.save({validateBeforeSave:false})
-    
+    await post.save({ validateBeforeSave: false });
+
     return res.status(200).json({
       msg: "comment deleted successfully",
     });
   } catch (error) {
-    console.log(error)
+    console.log(error);
     return res.status(500).json({
       msg: "Internal server error",
     });
   }
 };
 
+// reply comment -----
+const replyComment = async (req, res) => {
+  try {
+    const user = req.user;
+    const commentId = req.params.commentId;
+    const inputData = req.body;
 
+    if (!user) {
+      return res.status(422).json({
+        msg: "unauthorized access",
+      });
+    }
 
+    if (!inputData) {
+      return res.status(404).json({
+        msg: "All fields must be requiered",
+      });
+    }
 
+    if (!commentId) {
+      return res.status(400).json({
+        msg: "Bad request",
+      });
+    }
 
+    const payload = createCommentType.safeParse(inputData);
 
+    if (!payload) {
+      return res.status(400).json({
+        msg: "Please enter valid input",
+      });
+    }
+
+    const [loggedInUser, comment] = await Promise.all([
+      User.findById(user._id),
+      Comment.findById(commentId),
+    ]);
+
+    if (!loggedInUser) {
+      return res.status(422).json({
+        msg: "unauthorized access",
+      });
+    }
+
+    if (!comment) {
+      return res.status(400).json({
+        msg: "Comment not found",
+      });
+    }
+
+    const reply = await Comment.create({
+      userId: loggedInUser._id,
+      comment: payload.data.comment,
+      avatar: loggedInUser.avatar,
+      username: loggedInUser.username,
+    });
+
+    if (!reply) {
+      return res.status(400).json({
+        msg: "failed to create comment",
+      });
+    }
+
+    comment.replies.push(reply._id);
+    await comment.save({ validateBeforeSave: false });
+
+    return res.status(200).json({
+      msg: "Reply added successfully",
+    });
+
+  } catch (error) {
+    return res.status(500).json({
+      msg: "Internal server error",
+    });
+  }
+};
 
 export {
   createPost,
@@ -432,4 +505,5 @@ export {
   likePost,
   commentPost,
   deleteComment,
+  replyComment
 };

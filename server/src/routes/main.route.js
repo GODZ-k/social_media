@@ -1,7 +1,7 @@
 import { Router } from "express";
 import authRoute from "./auth.user.route.js"
 import userRoute from "./user.route.js"
-import { getAllPosts, getPost } from "../controller/main.controller.js";
+import { getAllPosts, getComment, getPost } from "../controller/main.controller.js";
 
 const router =  Router()
 
@@ -15,6 +15,6 @@ router.use('/user' , userRoute)
 
 router.route("/posts").get(getAllPosts)
 router.route('/post/:postId').get(getPost)
-
+router.route('/post/comment/:commentId').get(getComment)
 
 export default router

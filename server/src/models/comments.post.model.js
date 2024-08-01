@@ -10,21 +10,25 @@ const commentSchema = new Schema({
     required: true,
   },
   replies: [
+    // {
+    //   userId: {
+    //     type: Schema.Types.ObjectId,
+    //     ref: "User",
+    //   },
+    //   comment: {
+    //     type: String,
+    //     required: true,
+    //   },
+    //   avatar: {
+    //     type: String,
+    //   },
+    //   username: {
+    //     type: String,
+    //   },
+    // },
     {
-      userId: {
-        type: Schema.Types.ObjectId,
-        ref: "User",
-      },
-      comment: {
-        type: String,
-        required: true,
-      },
-      avatar: {
-        type: String,
-      },
-      username: {
-        type: String,
-      },
+      type:Schema.Types.ObjectId,
+      ref:"Comment"
     },
   ],
   avatar: {
