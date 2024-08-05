@@ -498,6 +498,98 @@ const replyComment = async (req, res) => {
   }
 };
 
+
+// find user posts
+const getUserPosts = async(req,res)=>{
+  try {
+    const user = req.user
+
+    if(!user){
+      return res.status(422).json({
+        msg:"Unauthorized access"
+      })
+    }
+
+    const loggedInUser = await User.findById(user._id)
+
+    if(!loggedInUser){
+      return res.status(422).json({
+        msg:"Unauthorized access"
+      })
+    }
+
+    const posts = await Post.find({createdBy:loggedInUser._id})
+
+    if(!posts){
+      return res.status(404).json({
+        msg:"Posts not found"
+      })
+    }
+
+    return res.status(200).json({
+      posts,
+      msg:"Post found successfully"
+    })
+  } catch (error) {
+    return res.status(500).json({
+      msg:"Internal server error"
+    })
+  }
+}
+
+
+// get feed posts 
+const getFeedPosts = async(req,res)=>{
+  try {
+    const user = req.user
+
+    if(!user){
+      return res.status(422).json({
+        msg:"Unauthorized access"
+      })
+    }
+
+    const loggedInUser = await User.findById(user._id)
+
+    if(!loggedInUser){
+      return res.status(422).json({
+        msg:"Unauthorized access"
+      })
+    }
+
+    const combinedUserIds = [
+      ...loggedInUser.following,
+      ...loggedInUser.followers
+    ];
+    
+    const posts = await Post.find({
+      createdBy: {
+        $in: combinedUserIds
+      }
+    });
+
+    if(!posts){
+      return res.status(404).json({
+        msg:"Post not found"
+      })
+    }
+
+    return res.status(200).json({
+      posts,
+      msg:"Feed found succcessfully"
+    })
+
+  } catch (error) {
+    console.log(error)
+    return res.status(500).json({
+      msg:"Internal server error"
+    })
+  }
+
+}
+
+
+
 export {
   createPost,
   deletePost,
@@ -505,5 +597,7 @@ export {
   likePost,
   commentPost,
   deleteComment,
-  replyComment
+  replyComment,
+  getUserPosts,
+  getFeedPosts
 };
