@@ -518,7 +518,7 @@ const getUserPosts = async(req,res)=>{
       })
     }
 
-    const posts = await Post.find({createdBy:loggedInUser._id})
+    const posts = await Post.find({createdBy:loggedInUser._id}).sort({ createdAt: -1 });
 
     if(!posts){
       return res.status(404).json({
@@ -566,7 +566,7 @@ const getFeedPosts = async(req,res)=>{
       createdBy: {
         $in: combinedUserIds
       }
-    });
+    }).sort({ createdAt: -1 });
 
     if(!posts){
       return res.status(404).json({
