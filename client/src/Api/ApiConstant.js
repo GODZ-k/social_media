@@ -1,7 +1,7 @@
-import { backendApiUrl } from "../../config";
+// import { backendApiUrl } from "../../config";
 
 
-const authApiUrl = `${backendApiUrl}/auth/user`
+const authApiUrl = `/api/v1/auth/user`
 
 export const ApiURL ={
     registerUser:`${authApiUrl}/register`,
