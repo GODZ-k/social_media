@@ -7,7 +7,7 @@ import {
   Button,
   Portal,
 } from "@chakra-ui/react";
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
 
 function Userheader() {
   function copyUrl() {

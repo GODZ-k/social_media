@@ -7,9 +7,9 @@ const router = Router()
 
 
 
-router.route('/profile').post(verifyJWT,updateProfile)
-router.route('/password').post(verifyJWT,updatePassword)
-router.route('/profile-image').post(verifyJWT,upload.single('avatar'),updateAvatar)
+router.route('/profile').put(verifyJWT,updateProfile)
+router.route('/password').put(verifyJWT,updatePassword)
+router.route('/profile-image').put(verifyJWT,upload.single('avatar'),updateAvatar)
 
 
 

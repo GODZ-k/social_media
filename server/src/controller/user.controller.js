@@ -33,7 +33,13 @@ const registerUser = async (req, res) => {
       });
     }
 
-    const { username, email, password } = payload.data;
+    const { username, email, password , confirmPassword } = payload.data;
+
+    if(password !== confirmPassword){
+      return res.status(400).json({
+        msg:"Confirm password does not match"
+      })
+    }
 
     const user = await User.findOne({ $or: [{ email }, { username }] });
 
@@ -188,6 +194,7 @@ const loginUser = async (req, res) => {
       .json({
         msg: "User loggedin successfully",
       });
+
   } catch (error) {
     return res.status(500).json({
       msg: "Internal server error",

@@ -4,10 +4,11 @@ import { mode } from "@chakra-ui/theme-tools";
 import { ChakraProvider, extendTheme } from "@chakra-ui/react";
 import ReactDOM from "react-dom/client";
 import App from "./App.jsx";
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { Toaster } from "react-hot-toast";
 import "./index.css";
 import { BrowserRouter } from "react-router-dom";
+import { Provider } from "react-redux";
+import store from "./redux/store/store.js";
 
 const styles = {
   global: (props) => ({
@@ -34,21 +35,14 @@ const theme = extendTheme({ config, styles, colors });
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <BrowserRouter>
-      <ChakraProvider theme={theme}>
-        <ColorModeScript initialColorMode={theme.config.initialColorMode} />
-        <App />
-        <ToastContainer  
-        position="top-center"
-        autoClose={3000}
-        hideProgressBar
-        closeOnClick
-        pauseOnFocusLoss={false}
-        draggable={false}
-        pauseOnHover={false}
-        theme="dark"
-        />
-      </ChakraProvider>
-    </BrowserRouter>
+    <Provider store={store}>
+      <BrowserRouter>
+        <ChakraProvider theme={theme}>
+          <ColorModeScript initialColorMode={theme.config.initialColorMode} />
+          <App />
+          <Toaster />
+        </ChakraProvider>
+      </BrowserRouter>
+    </Provider>
   </React.StrictMode>
 );
