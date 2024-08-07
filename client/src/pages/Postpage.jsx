@@ -1,13 +1,28 @@
 import { MenuItem, MenuList, Portal, Menu, MenuButton } from "@chakra-ui/react";
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useParams } from "react-router-dom";
 import Postcomments from "../components/Postcomments";
 import Detailpost from "../components/Detailpost";
+import { getPost } from "../Api/ApiData";
 
 function Postpage({}) {
+  const [post, setPost] = useState({});
+  const { username, pid } = useParams();
+
+  useEffect(() => {
+    getPost(setPost,pid);
+  }, [username, pid]);
+
+  console.log(post)
   return (
     <>
-      <Detailpost/>
+      <Detailpost  title = {post?.postTitle}
+    postImage = {post?.image}
+    timestamp = {post?.createdAt}
+    comment = {post?.commnets?.length}
+    like = {post?.likes}
+    user = {username}
+    />
       <div className=" border-y border-y-gray-800 py-5 flex justify-between items-center">
         <div className=" flex gap-2 text-gray-500">
           <div>👋</div>
@@ -17,7 +32,7 @@ function Postpage({}) {
           Get
         </button>
       </div>
-      <Postcomments/>
+      <Postcomments post={post} />
     </>
   );
 }

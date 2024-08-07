@@ -13,19 +13,6 @@ const getProfile = async (req, res) => {
       });
     }
 
-    // const profile  = await User.findOne({username}).select("-password  -refreshToken")
-
-    // if(!profile || !profile.isVerified){
-    //     return res.status(404).json({
-    //         msg:"User not found"
-    //     })
-    // }
-
-    // return res.status(200).json({
-    //     profile,
-    //     msg:"Profile fetched successfully"
-    // })
-
     const profile = await User.aggregate([
       { $match: { username: username } },
       {
@@ -49,6 +36,8 @@ const getProfile = async (req, res) => {
           username: 1,
           email: 1,
           avatar: 1,
+          firstName:1,
+          lastName:1,
           isVerified:1,
           followers: {
             _id: 1,

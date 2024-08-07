@@ -8,10 +8,13 @@ import Homepage from "./pages/Homepage";
 import Signup_page from "./pages/Signup_page";
 import Signin_page from "./pages/Signin_page";
 import { getProfile } from "./Api/ApiData";
+import { useDispatch } from "react-redux";
+import Profilepage from "./pages/Profilepage";
 function App() {
 
-  useEffect(()=>{
-     getProfile()
+  const dispatch = useDispatch()
+  useEffect( ()=>{
+    getProfile(dispatch)
   },[])
 
   return (
@@ -21,6 +24,7 @@ function App() {
           <Route index element={<Homepage />} />
           <Route path="/:username/post/:pid" element={<Postpage />} />
           <Route path="/:username" element={<Userpage />} />
+          <Route path="/profile" element={<Profilepage />} />
           <Route path="signup" element={<Signup_page/>}/>
           <Route path="signin" element={<Signin_page/>}/>
         </Route>

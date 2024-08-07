@@ -39,18 +39,52 @@ const getProfile = async(dispatch)=>{
         const response = await axios.get(ApiURL.currentUser, {
             withCredentials:true
         })
-        const data = response.data
-
+        const data = response.data.profile
         dispatch(login(data))
-
     } catch (error) {
+       
         toast.error(error.response.data.msg)
     }
 }
 
 
+const getUser = async(username,setUser)=>{
+    try {
+        const response = await axios.get(`${ApiURL.getProfile}/${username}`)
+        setUser(response.data.profile)
+    } catch (error) {
+        toast.error(error.response.data.msg)
+
+    }
+}
+
+
+const getMypost = async(setPosts)=>{
+    try {
+        const response =  await axios.get(ApiURL.getMypost,{
+            withCredentials:true
+        })
+        setPosts(response.data.posts)
+
+    } catch (error) {
+         toast.error(error.response.data.msg)
+    }
+}
+
+
+const getPost = async(setPost,pid)=>{
+    try {
+        const response =  await axios.get(`${ApiURL.getPost}/${pid}`)
+        setPost(response.data.post)
+    } catch (error) {
+        toast.error(error.response.data.msg)
+    }
+}
 export {
     SignUpUser,
     SigninUser,
-    getProfile
+    getProfile,
+    getUser,
+    getMypost,
+    getPost
 }

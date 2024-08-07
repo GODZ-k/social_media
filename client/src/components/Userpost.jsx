@@ -3,18 +3,19 @@ import { Link } from "react-router-dom";
 import { Avatar, AvatarBadge, AvatarGroup, Portal } from "@chakra-ui/react";
 import { Menu, MenuButton, MenuList, MenuItem } from "@chakra-ui/react";
 function Userpost({
+  postId,
   like,
   postImage,
   comments,
-  replies,
   title,
   timestamp,
   avatar,
   user,
+  likedBy
 }) {
   return (
     <>
-      <Link to={"/tanmay/post/1"} className=" hover:text-white">
+      <Link  to={`/${user}/post/${postId}`} className=" hover:text-white">
         <div className="flex gap-4 mt-3 mb-10">
           <div className=" flex flex-col items-center">
             <div className=" w-12 h-12">
@@ -27,23 +28,13 @@ function Userpost({
             <div className=" w-[1px] h-full bg-gray-500 my-2"></div>
             <div className=" flex justify-center items-center">
               <AvatarGroup size="sm" max={2}>
-                <Avatar
-                  name="Ryan Florence"
-                  src="https://bit.ly/ryan-florence"
-                />
-                <Avatar
-                  name="Segun Adebayo"
-                  src="https://bit.ly/sage-adebayo"
-                />
-                <Avatar name="Kent Dodds" src="https://bit.ly/kent-c-dodds" />
-                <Avatar
-                  name="Prosper Otemuyiwa"
-                  src="https://bit.ly/prosper-baba"
-                />
-                <Avatar
-                  name="Christian Nwamba"
-                  src="https://bit.ly/code-beast"
-                />
+                {likedBy?.map((like)=>(
+                  <Avatar
+                  name={like?.username}
+                  src={like?.avatar}
+                  />
+                ))
+              }
               </AvatarGroup>
             </div>
           </div>
@@ -101,7 +92,6 @@ function Userpost({
               <div className=" text-gray-300 text-sm">{comments} Comments</div>
             </div>
             <div className=" flex gap-7 text-sm text-gray-500 mt-2">
-              <div>{replies} replies</div>
               <div>{like} Likes</div>
             </div>
           </div>

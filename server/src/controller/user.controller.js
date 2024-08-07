@@ -33,7 +33,7 @@ const registerUser = async (req, res) => {
       });
     }
 
-    const { username, email, password , confirmPassword } = payload.data;
+    const { username, email, password , confirmPassword , firstName , lastName } = payload.data;
 
     if(password !== confirmPassword){
       return res.status(400).json({
@@ -71,6 +71,8 @@ const registerUser = async (req, res) => {
     if (data) {
       await User.create({
         email,
+        firstName,
+        lastName,
         username,
         password,
         verificationToken,
@@ -217,8 +219,6 @@ const getCurrentUser = async (req, res) => {
     //   "-password -refreshToken"
     // );
 
-    
-
     const profile = await User.aggregate([
       { $match: { _id: new mongoose.Types.ObjectId(user._id) } },
       {
@@ -240,6 +240,9 @@ const getCurrentUser = async (req, res) => {
       {
         $project: {
           username: 1,
+          firstName:1,
+          lastName:1,
+          bio:1,
           email: 1,
           avatar: 1,
           isVerified:1,
@@ -267,12 +270,11 @@ const getCurrentUser = async (req, res) => {
     }
 
     return res.status(200).json({
-      profile,
+      profile:profile[0],
       msg: "User fetched successfully",
     });
     
   } catch (error) {
-    console.log(error)
     return res.status(500).json({
       msg: "Internal server error",
     });
