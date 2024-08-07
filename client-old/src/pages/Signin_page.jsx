@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { Input } from "../components";
 import { SigninUser } from "../Api/ApiData";
@@ -8,12 +8,13 @@ import { useDispatch } from "react-redux";
 function Signin_page() {
   const {register , handleSubmit} = useForm()
   const dispatch = useDispatch()
+  const navigate = useNavigate()
 
 
 
   function onSubmit(data){
     try {
-      SigninUser(data,dispatch)
+      SigninUser(data,dispatch , navigate)
     } catch (error) {
       console.log(error)
     }
