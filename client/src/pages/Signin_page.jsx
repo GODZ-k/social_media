@@ -1,11 +1,12 @@
-import React from "react";
+import React, { memo } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import { Input } from "../components";
-import { SigninUser } from "../Api/ApiData";
+import { Input } from "../../../client-old/src/components";
+import { SigninUser } from "../../../client-old/src/Api/ApiData";
 import { useDispatch } from "react-redux";
+import useRenderLogger from "../components/RenderLogger";
 
-function Signin_page() {
+const Signin_page = memo(() => {
   const {register , handleSubmit} = useForm()
   const dispatch = useDispatch()
   const navigate = useNavigate()
@@ -19,6 +20,9 @@ function Signin_page() {
       console.log(error)
     }
   }
+
+
+  useRenderLogger()
 
   return (
     <section className=" w-full dark:bg-gray-900">
@@ -94,6 +98,6 @@ function Signin_page() {
       </div>
     </section>
   );
-}
+})
 
 export default Signin_page;

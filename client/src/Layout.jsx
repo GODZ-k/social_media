@@ -1,12 +1,22 @@
 import React from 'react'
-import { Outlet } from 'react-router-dom'
+import { Navigate, Outlet, useLocation } from 'react-router-dom'
 import Footer from './components/Footer'
 import Header from "./components/Header"
+import { useSelector } from 'react-redux'
 function Layout() {
+  const location = useLocation()
+  const user = useSelector(state => state.auth.status)  
+  
   return (
     <>
         <Header/>
-        <Outlet/>
+        {
+          user ? (
+            <Outlet/>
+          ) : (
+            <Navigate to={"/signin"} state={{from: location }} replace/>
+          )
+        } 
         <Footer/>
     </>
   )

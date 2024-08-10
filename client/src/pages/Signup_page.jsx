@@ -1,8 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import { Input } from "../components";
-import { SignUpUser } from "../Api/ApiData";
+import { Input } from "../../../client-old/src/components";
+import { SignUpUser } from "../../../client-old/src/Api/ApiData";
 
 function Signup_page() {
     const {register , handleSubmit} = useForm()

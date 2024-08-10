@@ -1,8 +1,11 @@
 import React from 'react'
+import { Suggestions } from '../components'
 
 function Homepage() {
   return (
-    <div>Homepage</div>
+    <div>
+      <Suggestions/>
+    </div>
   )
 }
 
