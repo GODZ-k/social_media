@@ -1,7 +1,7 @@
 import Comment from "../models/comments.post.model.js";
 import Post from "../models/post.model.js";
 import User from "../models/user.model.js";
-import uploadOnCloudinary from "../utils/cloudinary.js";
+import {uploadOnCloudinary, uploadVideoOnCloudinary} from "../utils/cloudinary.js";
 import {
   createCommentType,
   createPostType,
@@ -48,12 +48,22 @@ const createPost = async (req, res) => {
     let post;
     if (filePath) {
       const image = await uploadOnCloudinary(filePath);
+      // const image = await uploadVideoOnCloudinary(filePath);
+
+      if(!image){
+        return res.status(500).json({
+          msg:"Image uploadation failed"
+        })
+      }
+
       post = await Post.create({
         postTitle,
-        image: image.url,
+        image: image.secure_url,
         createdBy: loggedInUser._id,
       });
+
     } else {
+
       post = await Post.create({
         postTitle,
         createdBy: loggedInUser._id,
@@ -71,7 +81,6 @@ const createPost = async (req, res) => {
       msg: "Post created successfully",
     });
   } catch (error) {
-    console.log(error);
     return res.status(500).json({
       msg: "Internal server error",
     });

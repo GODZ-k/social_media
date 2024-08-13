@@ -1,5 +1,5 @@
 import User from "../models/user.model.js"
-import uploadOnCloudinary from "../utils/cloudinary.js"
+import {uploadOnCloudinary} from "../utils/cloudinary.js"
 import { updatePasswordType, updateProfileType } from "../utils/Types/user.type.js"
 
 

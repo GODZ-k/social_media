@@ -16,6 +16,9 @@ const authSlice = createSlice({
         logout:(state,action)=>{
             state.status =  false,
             state.userData = null
+        },
+        updateProfile:(state,action)=>{
+            state.userData = action.payload
         }
     }
 })
