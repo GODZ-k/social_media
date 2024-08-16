@@ -598,6 +598,56 @@ const getFeedPosts = async(req,res)=>{
 }
 
 
+// Save post
+const savePost = async(req,res)=>{
+  try {
+    const user = req.user
+    const postId = req.params.postId
+
+
+    if(!postId){
+      return res.status(404).json({
+        msg:"post not found"
+      })
+    }
+
+    if(!user){
+      return res.status(422).json({
+        msg:"Anauthorized access"
+      })
+    }
+
+    const [loggedInUser , post ] = await Promise.all([
+      await User.findById(user._id),
+      await Post.findById(postId)
+    ])
+
+    if(!loggedInUser){
+      return res.status(422).json({
+        msg:"Authuthorized access"
+      })
+    }
+
+    if(!post){
+      return res.status(404).json({
+        msg:"post not found"
+      })
+    }
+
+    loggedInUser.savedPost.push(post._id)
+    await loggedInUser.save({validateBeforeSave:false})
+
+    return res.status(200).json({
+      msg:"Post saved successfully"
+    })
+
+  } catch (error) {
+    return res.status(500).json({
+      msg:"internal server error"
+    })
+  }
+}
+
 
 export {
   createPost,
@@ -608,5 +658,6 @@ export {
   deleteComment,
   replyComment,
   getUserPosts,
-  getFeedPosts
+  getFeedPosts,
+  savePost
 };

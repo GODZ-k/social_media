@@ -9,12 +9,6 @@ const commentSchema = new Schema({
     type: String,
     required: true,
   },
-  replies: [
-    {
-      type:Schema.Types.ObjectId,
-      ref:"Comment"
-    },
-  ],
   avatar: {
     type: String,
   },

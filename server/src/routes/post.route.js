@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { verifyJWT } from "../middleware/user.middleware.js";
 import upload from "../middleware/multer.middleware.js";
-import { commentPost, createPost, deleteComment, deletePost, getFeedPosts, getUserPosts, likePost, replyComment, updatePost } from "../controller/user.post.controller.js";
+import { commentPost, createPost, deleteComment, deletePost, getFeedPosts, getUserPosts, likePost, replyComment, savePost, updatePost } from "../controller/user.post.controller.js";
 const router = Router()
 
 
@@ -15,5 +15,6 @@ router.route('/comment/delete/:postId/:commentId').delete(verifyJWT,deleteCommen
 router.route('/comment/reply/:commentId').post(verifyJWT,replyComment)
 router.route('').get(verifyJWT,getUserPosts)
 router.route('/feed').get(verifyJWT,getFeedPosts)
+router.route('/save-post/:postId').get(verifyJWT,savePost)
 
 export default router

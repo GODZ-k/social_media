@@ -594,6 +594,49 @@ const followUser = async (req, res) => {
   }
 };
 
+
+// get all followers
+const getFollowers =async(req,res)=>{
+  try {
+    const user = req.user
+    const userId = req.params.userId
+
+    if(!user){
+      return res.status(422).json({
+        msg:"UnAuthrozed access"
+      })    }
+
+    const [loggedInUser,newUser] = await Promise.all([
+     await User.findById(user._id),
+     await User.findById(userId)
+    ])
+
+    if(!loggedInUser){
+      return res.status(422).json({
+        msg:"UnAuthrozed access"
+      })
+    }
+
+    const followers = await Promise.all(
+      newUser.followers.map((userId)=>{
+        return User.findById(userId._id).select("-password -refreshToken") 
+      })
+    )
+
+    return res.status(200).json({
+      followers,
+      msg:"Followers found successfully"
+    })
+
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      msg:"Internal server error"
+    })
+  }
+}
+
+
 // cron job ----------------
 
 // delete unverified user - after 24h -------------------------------------
@@ -621,4 +664,5 @@ export {
   forgotPassword,
   resetPassword,
   followUser,
+  getFollowers
 };

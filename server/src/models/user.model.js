@@ -45,6 +45,7 @@ const userSchema = new Schema({
             ref:'User'
         }
     ],
+    
     bio: {
         type: String,
         default: ""
@@ -56,6 +57,12 @@ const userSchema = new Schema({
     verificationToken:{
         type:String
     },
+    savedPost:[
+        {
+            type:Schema.Types.ObjectId,
+            ref:"Post"
+        },
+    ],
     isVerified:{
         type:Boolean,
         default:false

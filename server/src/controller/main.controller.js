@@ -13,59 +13,22 @@ const getProfile = async (req, res) => {
       });
     }
 
-    const profile = await User.aggregate([
-      { $match: { username: username } },
-      {
-        $lookup: {
-          from: "users",
-          localField: "followers",
-          foreignField: "_id",
-          as: "followers",
-        },
-      },
-      {
-        $lookup: {
-          from: "users",
-          localField: "following",
-          foreignField: "_id",
-          as: "following",
-        },
-      },
-      {
-        $project: {
-          username: 1,
-          email: 1,
-          avatar: 1,
-          firstName:1,
-          lastName:1,
-          isVerified:1,
-          followers: {
-            _id: 1,
-            username: 1,
-            email: 1,
-            avatar: 1,
-          },
-          following: {
-            _id: 1,
-            username: 1,
-            email: 1,
-            avatar: 1,
-          },
-        },
-      },
-    ]);
+    const profile = await User.findOne({username}).select('-password -verificationToken -refreshToken')
 
-    if (!profile || profile.length === 0 || !profile[0].isVerified ) {
+
+    if (!profile || profile.length === 0 || !profile.isVerified ) {
       return res.status(404).json({
         msg: "User not found or not verified",
       });
     }
 
     return res.status(200).json({
-      profile: profile[0],
+      profile,
       msg: "Profile fetched successfully",
     });
+
   } catch (error) {
+    console.log(error);
     return res.status(500).json({
       msg: "Internal server error",
     });
@@ -154,4 +117,6 @@ const getComment = async (req, res) => {
   }
 };
 
-export { getProfile, getAllPosts, getPost, getComment };
+
+
+export { getProfile, getAllPosts, getPost, getComment  };
