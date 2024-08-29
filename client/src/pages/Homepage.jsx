@@ -1,11 +1,16 @@
 import React from 'react'
-import { Suggestions } from '../components'
+import { Suggestions , Container as MainContainer ,RightSuggestaion } from '../components'
+import { Container } from '@chakra-ui/react'
 
 function Homepage() {
   return (
-    <div>
-      <Suggestions/>
-    </div>
+    <MainContainer>
+      <Container>
+      {/* <Suggestions/>   */}
+      <RightSuggestaion/>  
+            </Container>
+
+    </MainContainer>
   )
 }
 

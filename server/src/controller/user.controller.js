@@ -262,7 +262,6 @@ const getCurrentUser = async (req, res) => {
       },
     ]);
 
-
     if (!profile.length || !profile[0].isVerified) {
         return res.status(422).json({
             msg: "Unauthorized access"
