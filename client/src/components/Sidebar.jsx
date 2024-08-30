@@ -9,7 +9,6 @@ const navItems = [
   },
   {
     label: "Search",
-    isMobile:true,
     icon: "https://cdn.lordicon.com/kkvxgpti.json",
     to: "/search",
   },
@@ -21,6 +20,7 @@ const navItems = [
   },
   {
     label: "Explore",
+    isMobile:true,
     icon: "https://cdn.lordicon.com/xunzgeah.json",
     to: "/explore",
   },
@@ -52,7 +52,7 @@ const navItems = [
 function Sidebar() {
   return (
     <>
-    <div className=" md:block hidden p-5 overflow-scroll  w-72 h-screen static top-0 left-0">
+    <div className=" md:block hidden p-5   w-72 h-screen static top-0 left-0">
       <div className=" py-4">
         <div className=" w-40">
           <img

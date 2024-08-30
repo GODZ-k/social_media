@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import AspectRatio from '@mui/joy/AspectRatio';
 import Avatar from '@mui/joy/Avatar';
 import Box from '@mui/joy/Box';
@@ -17,9 +17,20 @@ import Face from '@mui/icons-material/Face';
 import BookmarkBorderRoundedIcon from '@mui/icons-material/BookmarkBorderRounded';
 
 function PostCard() {
-  return (
+  const [text ,setText] = useState("")
+
+  function handleComment(e){
+    const value = e.target.value
+    if(value.trim()){
+      setText(value)
+    }else{
+      setText("")
+    }
+  }
+  return (  
     <Card
-    variant="outlined"
+    variant="plain"
+    className=" border-b border-b-gray-300 shadow-md p-3 rounded-xl"
     sx={{ minWidth: 300, '--Card-radius': (theme) => theme.vars.radius.xs }}
   >
     <CardContent orientation="horizontal" sx={{ alignItems: 'center', gap: 1 }}>
@@ -46,14 +57,14 @@ function PostCard() {
           sx={{ p: 0.5, border: '2px solid', borderColor: 'background.body' }}
         />
       </Box>
-      <Typography sx={{ fontWeight: 'lg' }}>MUI</Typography>
+      <Typography sx={{ fontWeight: 'lg' }}>Username</Typography>
       <IconButton variant="plain" color="neutral" size="sm" sx={{ ml: 'auto' }}>
         <MoreHoriz />
       </IconButton>
     </CardContent>
-    <CardOverflow>
-      <AspectRatio>
-        <img src="/static/images/cards/yosemite.jpeg" alt="" loading="lazy" />
+    <CardOverflow className=" h-96">
+      <AspectRatio sx={{ width: '100%', height:'auto'  }}>
+        <img className=' w-full h-full object-cover object-center' src="logo.png" alt="" loading="lazy" />
       </AspectRatio>
     </CardOverflow>
     <CardContent orientation="horizontal" sx={{ alignItems: 'center', mx: -1 }}>
@@ -122,6 +133,13 @@ function PostCard() {
       <Link
         component="button"
         underline="none"
+        sx={{ fontSize: 'sm', color: 'text.tertiary' }}
+      >
+        View all 122 Comments
+      </Link>
+      <Link
+        component="button"
+        underline="none"
         sx={{ fontSize: '10px', color: 'text.tertiary', my: 0.5 }}
       >
         2 DAYS AGO
@@ -134,12 +152,18 @@ function PostCard() {
       <Input
         variant="plain"
         size="sm"
+        value={text}
+        onChange={handleComment}
         placeholder="Add a comment…"
         sx={{ flex: 1, px: 0, '--Input-focusedThickness': '0px' }}
       />
-      <Link disabled underline="none" role="button">
+    {
+      text.length > 0 && (
+        <button className=' text-blue-600' underline="none" role="button">
         Post
-      </Link>
+      </button>
+      )
+    }
     </CardContent>
   </Card>
   )

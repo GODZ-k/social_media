@@ -12,14 +12,14 @@ function RightSuggestaion() {
               <div className="shrink-0">
                 <img
                   alt="Neil img"
-                  height="32"
+                  height="42"
                   src="https://images.rawpixel.com/image_800/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIyLTA1L3JtNTMzLW5lb24tMDAzLmpwZw.jpg"
-                  width="32"
+                  width="42"
                   className="rounded-full"
                 />
               </div>
               <div className="min-w-0 flex-1">
-                <p className="truncate text-sm font-medium text-gray-900 dark:text-white">
+                <p className="truncate text-sm font-semibold text-gray-900 dark:text-white">
                   Neil Sims
                 </p>
                 <p className="truncate text-sm text-gray-500 dark:text-gray-400">
