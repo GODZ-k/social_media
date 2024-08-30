@@ -4,8 +4,8 @@ import Suggestions from "./Suggestions";
 
 function RightSuggestaion() {
   return (
-    <Card className="max-w-xs ">
-      <div className="flow-root">
+    <Card className=" w-full h-full">
+      <div className="flow-root h-fit">
         <ul className="divide-y divide-gray-200 dark:divide-gray-700">
           <li className="py-3 sm:py-4">
             <div className="flex items-center space-x-4">

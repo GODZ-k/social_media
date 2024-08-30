@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client'
 import App from './App.jsx'
 import './index.css'
 import { BrowserRouter } from 'react-router-dom'
+import { CssVarsProvider } from "@mui/joy/styles";
 import { ChakraProvider } from '@chakra-ui/react'
 import { Toaster } from 'react-hot-toast'
 import store from './redux/store/store.js'
@@ -13,7 +14,9 @@ createRoot(document.getElementById('root')).render(
      <Provider store={store}>
       <BrowserRouter>
         <ChakraProvider>
+        <CssVarsProvider>
           <App />
+        </CssVarsProvider>
           <Toaster/>
         </ChakraProvider>
       </BrowserRouter>
