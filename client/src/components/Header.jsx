@@ -7,7 +7,6 @@ function Header() {
     <Flex justifyContent={"center"} mt="6" mb="12" >
         <Image src={colorMode === 'dark' ? "dark-logo.png" : "light-logo.png" } alt='logo' width={10} cursor={'pointer'}
         onClick={toggleColorMode} />
-
     </Flex>
   )
 }

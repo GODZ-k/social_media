@@ -1,7 +1,7 @@
 import toast from "react-hot-toast"
 import {ApiURL} from "./ApiConstant.js"
 import axios from "axios"
-import { login } from "../redux/features/authSlice.js"
+import { login } from "../src/redux/features/authSlice.js"
 
 
 
