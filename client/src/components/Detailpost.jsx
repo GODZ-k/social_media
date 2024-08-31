@@ -1,86 +1,221 @@
-import { Menu, MenuButton, MenuItem, MenuList, Portal } from '@chakra-ui/react'
-import React from 'react'
-
-function Detailpost({
-    title = "hii there",
-    postImage = "",
-    replies = "121",
-    timestamp = "1d",
-    comment = "1.4k",
-    like = "22",
-    user = "Tanmay",
-}) {
+import React from "react";
+import Comment from "./Comment";
+const comments = [
+  {
+    username: "tanmaykhatri__",
+    avatar:
+      "https://images.rawpixel.com/image_800/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIyLTA1L3JtNTMzLW5lb24tMDAzLmpwZw.jpg",
+    likes: 12,
+    time: 2,
+    comment: "hii there",
+  },
+  {
+    username: "tanmaykhatri__",
+    avatar:
+      "https://images.rawpixel.com/image_800/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIyLTA1L3JtNTMzLW5lb24tMDAzLmpwZw.jpg",
+    likes: 12,
+    time: 2,
+    comment: "hii there",
+  },
+  {
+    username: "tanmaykhatri__",
+    avatar:
+      "https://images.rawpixel.com/image_800/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIyLTA1L3JtNTMzLW5lb24tMDAzLmpwZw.jpg",
+    likes: 12,
+    time: 2,
+    comment: "hii there",
+  },
+  {
+    username: "tanmaykhatri__",
+    avatar:
+      "https://images.rawpixel.com/image_800/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIyLTA1L3JtNTMzLW5lb24tMDAzLmpwZw.jpg",
+    likes: 12,
+    time: 2,
+    comment: "hii there",
+  },
+  {
+    username: "tanmaykhatri__",
+    avatar:
+      "https://images.rawpixel.com/image_800/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIyLTA1L3JtNTMzLW5lb24tMDAzLmpwZw.jpg",
+    likes: 12,
+    time: 2,
+    comment: "hii there",
+  },
+  {
+    username: "tanmaykhatri__",
+    avatar:
+      "https://images.rawpixel.com/image_800/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIyLTA1L3JtNTMzLW5lb24tMDAzLmpwZw.jpg",
+    likes: 12,
+    time: 2,
+    comment: "hii there",
+  },
+  {
+    username: "tanmaykhatri__",
+    avatar:
+      "https://images.rawpixel.com/image_800/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIyLTA1L3JtNTMzLW5lb24tMDAzLmpwZw.jpg",
+    likes: 12,
+    time: 2,
+    comment: "hii there",
+  },
+  {
+    username: "tanmaykhatri__",
+    avatar:
+      "https://images.rawpixel.com/image_800/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIyLTA1L3JtNTMzLW5lb24tMDAzLmpwZw.jpg",
+    likes: 12,
+    time: 2,
+    comment: "hii there",
+  },
+  {
+    username: "tanmaykhatri__",
+    avatar:
+      "https://images.rawpixel.com/image_800/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIyLTA1L3JtNTMzLW5lb24tMDAzLmpwZw.jpg",
+    likes: 12,
+    time: 2,
+    comment: "hii there",
+  },
+  {
+    username: "tanmaykhatri__",
+    avatar:
+      "https://images.rawpixel.com/image_800/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIyLTA1L3JtNTMzLW5lb24tMDAzLmpwZw.jpg",
+    likes: 12,
+    time: 2,
+    comment: "hii there",
+  },
+  {
+    username: "tanmaykhatri__",
+    avatar:
+      "https://images.rawpixel.com/image_800/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIyLTA1L3JtNTMzLW5lb24tMDAzLmpwZw.jpg",
+    likes: 12,
+    time: 2,
+    comment: "hii there",
+  },
+  {
+    username: "tanmaykhatri__",
+    avatar:
+      "https://images.rawpixel.com/image_800/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIyLTA1L3JtNTMzLW5lb24tMDAzLmpwZw.jpg",
+    likes: 12,
+    time: 2,
+    comment: "hii there",
+  },
+  {
+    username: "tanmaykhatri__",
+    avatar:
+      "https://images.rawpixel.com/image_800/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIyLTA1L3JtNTMzLW5lb24tMDAzLmpwZw.jpg",
+    likes: 12,
+    time: 2,
+    comment: "hii there",
+  },
+  {
+    username: "tanmaykhatri__",
+    avatar:
+      "https://images.rawpixel.com/image_800/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIyLTA1L3JtNTMzLW5lb24tMDAzLmpwZw.jpg",
+    likes: 12,
+    time: 2,
+    comment: "hii there",
+  },
+  {
+    username: "tanmaykhatri__",
+    avatar:
+      "https://images.rawpixel.com/image_800/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIyLTA1L3JtNTMzLW5lb24tMDAzLmpwZw.jpg",
+    likes: 12,
+    time: 2,
+    comment: "hii there",
+  },
+  {
+    username: "tanmaykhatri__",
+    avatar:
+      "https://images.rawpixel.com/image_800/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIyLTA1L3JtNTMzLW5lb24tMDAzLmpwZw.jpg",
+    likes: 12,
+    time: 2,
+    comment: "hii there",
+  },
+  {
+    username: "tanmaykhatri__",
+    avatar:
+      "https://images.rawpixel.com/image_800/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIyLTA1L3JtNTMzLW5lb24tMDAzLmpwZw.jpg",
+    likes: 12,
+    time: 2,
+    comment: "hii there",
+  },
+];
+function Detailpost({ setIsCommentSection }) {
   return (
-    <div className="flex gap-4 mt-3 mb-7">
-        <div className=" flex flex-col w-full ">
-          <div className=" flex justify-between">
-            <div>
-              <div className="flex gap-3 justify-start items-center">
-                <div className=" mb-4 flex gap-5 items-center ">
-                  <div className=" rounded-full overflow-hidden h-12 w-12">
-                    <img
-                      className=" w-full h-full object-center object-cover"
-                      src=""
-                      alt=""
+    <div className="  fixed inset-0  z-20 bg-[#000000ab] flex justify-center items-center px-8">
+      <div className=" transition-transform duration-500 ease-in-out transform group-hover:scale-100 group-hover:opacity-100 bg-white h-[90%] md:w-[80rem] gap-2 justify-between flex rounded-lg overflow-hidden">
+        <div className=" h-full w-0 md:min-w-[30rem] bg-black ">img</div>
+        <div className=" w-full px-4 py-4 flex flex-col">
+          <div className=" w-full flex flex-col gap-4">
+            <div className="flex items-center space-x-4">
+              <div className="shrink-0">
+                <img
+                  alt="Neil img"
+                  height="35"
+                  src="https://images.rawpixel.com/image_800/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIyLTA1L3JtNTMzLW5lb24tMDAzLmpwZw.jpg"
+                  width="35"
+                  className="rounded-full"
+                />
+              </div>
+              <div className="min-w-0 w-full flex justify-between">
+                <div>
+                  <p className="truncate text-sm font-semibold text-gray-900 dark:text-white">
+                    Neil Sims
+                  </p>
+                  <p className="truncate text-sm text-gray-500 dark:text-gray-400">
+                    email@windster.com
+                  </p>
+                </div>
+                <div>...</div>
+              </div>
+            </div>
+            <div className=" flex flex-col gap-8 h-[69vh] overflow-y-scroll scrollbar-none">
+              {/* caption */}
+              <Comment
+                username={"Qrdine"}
+                isCaption={true}
+                comment={"sfnsefnwenfweuifw ef"}
+                time={3}
+                avatar={
+                  "https://images.rawpixel.com/image_800/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIyLTA1L3JtNTMzLW5lb24tMDAzLmpwZw.jpg"
+                }
+              />
+              {/* comments */}
+              {comments && comments.length > 0
+                ? comments?.map((comment) => (
+                    <Comment
+                      username={comment.username}
+                      comment={comment.comment}
+                      likes={comment.likes}
+                      time={comment.likes}
+                      avatar={comment.avatar}
                     />
-                  </div>
-                  <div className=" font-semibold">{user}</div>
-                </div>
-                <div className=" h-4 w-4">
-                  <img src="bluetick.png" className=" w-full h-full" alt="" />
-                </div>
-              </div>
-              <div className=" text-sm text-gray-300">{title}</div>
-            </div>
-            <div className=" flex gap-3 items-center justify-center">
-              <div className=" text-gray-600">{timestamp}</div>
-              <div>
-                <Menu>
-                  <MenuButton bg={"none"}>
-                    <i className=" text-gray-300 fa-solid fa-ellipsis"></i>
-                  </MenuButton>
-                  <Portal>
-                    <MenuList background={"gray.dark"}>
-                      <MenuItem background={"gray.dark"}>Edit</MenuItem>
-                      <MenuItem background={"gray.dark"}>Delete</MenuItem>
-                      <MenuItem background={"gray.dark"}>Copy link</MenuItem>
-                    </MenuList>
-                  </Portal>
-                </Menu>
-              </div>
+                  ))
+                : "No comment"}
             </div>
           </div>
-          <div className=" w-full h-72 mt-3 mb-2 rounded-md overflow-hidden">
-            <img
-              className=" object-cover object-center w-full h-full"
-              src={postImage}
-              alt=""
-            />
-          </div>
-          <div className=" flex justify-between items-center my-1">
-            <div className="flex gap-5 cursor-pointer text-gray-300 text-[16px] md:text-lg">
-              <div>
-                <i className=" text-red-800 fa-regular fa-heart"></i>
-              </div>
-              <div>
-                <i class="fa-regular fa-comment"></i>
-              </div>
-              <div>
-                <i class="fa-solid fa-repeat"></i>
-              </div>
-              <div>
-                <i class="fa-regular fa-paper-plane"></i>
-              </div>
+         <div>
+         <div className=" border-t border-t-gray-200 flex flex-col gap-1 py-3">
+            <div className=" flex gap-4">
+              <div>like</div>
+              <div>comment</div>
+              <div>share</div>
             </div>
-            <div className=" text-gray-300 text-sm">{comment} Comments</div>
+            <div className=" text-sm font-semibold">34 likes</div>
+            <div className=" text-sm text-gray-500">3 days ago</div>
           </div>
-          <div className=" flex gap-7 text-sm text-gray-500 mt-2">
-            <div>{replies} replies</div>
-            <div>{like} Likes</div>
-          </div>
+          {/* <div>login to like and comment</div> */}
+         </div>
         </div>
       </div>
-  )
+      <div className=" absolute top-2.5 right-4">
+        <button
+          onClick={() => setIsCommentSection(false)}
+          className=" text-gray-200 text-2xl"
+        >
+          <i className="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+    </div>
+  );
 }
 
-export default Detailpost
+export default Detailpost;
