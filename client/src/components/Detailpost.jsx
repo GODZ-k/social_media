@@ -1,5 +1,8 @@
 import React from "react";
+import { Dialog, DialogContent, DialogHeader } from "@/components/ui/dialog";
 import Comment from "./Comment";
+import { DialogTrigger } from "@radix-ui/react-dialog";
+
 const comments = [
   {
     username: "tanmaykhatri__",
@@ -138,12 +141,12 @@ const comments = [
     comment: "hii there",
   },
 ];
-function Detailpost({ setIsCommentSection }) {
+function Detailpost() {
   return (
-    <div className="  fixed inset-0  z-20 bg-[#000000ab] flex justify-center items-center px-8">
-      <div className=" transition-transform duration-500 ease-in-out transform group-hover:scale-100 group-hover:opacity-100 bg-white h-[90%] md:w-[80rem] gap-2 justify-between flex rounded-lg overflow-hidden">
-        <div className=" h-full w-0 md:min-w-[30rem] bg-black ">img</div>
-        <div className=" w-full px-4 py-4 flex flex-col">
+    <DialogContent className=" max-w-6xl p-0 m-0 overflow-hidden outline-none">
+      <div className=" h-full w-full bg-white gap-2 justify-between overflow-hidden flex">
+        <div className=" h-full w-0 md:min-w-[30rem] ">img</div>
+        <div className=" w-full px-4 py-4 mt-4 flex flex-col">
           <div className=" w-full flex flex-col gap-4">
             <div className="flex items-center space-x-4">
               <div className="shrink-0">
@@ -164,7 +167,28 @@ function Detailpost({ setIsCommentSection }) {
                     email@windster.com
                   </p>
                 </div>
-                <div>...</div>
+                {/* post options */}
+                <Dialog className=" w-fit max-w-xl">
+                  <DialogTrigger>
+                    <i className="fa-solid fa-ellipsis"></i>
+                  </DialogTrigger>
+                  <DialogContent className=" max-w-xs"  >
+                    <div className=" w-full">
+                      <ul>
+                    
+                      <button className=" w-full py-2 text-red-600 border-b border-b-gray-300">
+                      <li>Delete</li>
+                      </button>  <button className=" w-full py-2  border-b border-b-gray-300">
+                      <li>Share</li>
+                      </button>  <button className=" w-full py-2  border-b border-b-gray-300">
+                      <li>Copy link</li>
+                      </button>  <button className=" w-full pt-2">
+                      <li>Delete</li>
+                      </button>
+                      </ul>
+                    </div>
+                  </DialogContent>
+                </Dialog>
               </div>
             </div>
             <div className=" flex flex-col gap-8 h-[69vh] overflow-y-scroll scrollbar-none">
@@ -192,29 +216,21 @@ function Detailpost({ setIsCommentSection }) {
                 : "No comment"}
             </div>
           </div>
-         <div>
-         <div className=" border-t border-t-gray-200 flex flex-col gap-1 py-3">
-            <div className=" flex gap-4">
-              <div>like</div>
-              <div>comment</div>
-              <div>share</div>
+          <div>
+            <div className=" border-t border-t-gray-200 flex flex-col gap-1 py-3">
+              <div className=" flex gap-4">
+                <div>like</div>
+                <div>comment</div>
+                <div>share</div>
+              </div>
+              <div className=" text-sm font-semibold">34 likes</div>
+              <div className=" text-sm text-gray-500">3 days ago</div>
             </div>
-            <div className=" text-sm font-semibold">34 likes</div>
-            <div className=" text-sm text-gray-500">3 days ago</div>
+            {/* <div>login to like and comment</div> */}
           </div>
-          {/* <div>login to like and comment</div> */}
-         </div>
         </div>
       </div>
-      <div className=" absolute top-2.5 right-4">
-        <button
-          onClick={() => setIsCommentSection(false)}
-          className=" text-gray-200 text-2xl"
-        >
-          <i className="fa-solid fa-xmark"></i>
-        </button>
-      </div>
-    </div>
+    </DialogContent>
   );
 }
 
