@@ -19,6 +19,7 @@ function CreatePost() {
   const [imageSelected, setImageSelected] = useState(false);
   const [imageName, setImageName] = useState("");
   const [imageUrl, setImageUrl] = useState(""); // Initially empty
+  const [ratio , setRatio] = useState(undefined)
 
   const handleImageChange = (e) => {
     if (e.target.files && e.target.files[0]) {
@@ -29,16 +30,27 @@ function CreatePost() {
     }
   };
 
+
+  const handleThemeChange = (value) => {
+    if (value === "Original") {
+      setRatio(undefined); // Reset to original aspect ratio
+    } else {
+      setRatio(Number(eval(value))); // Convert ratio to a number (e.g., 16/9)
+    }
+    console.log("Selected ratio:", value);
+  };
+
   return (
     <DialogContent
       isClose={false}
-      className={" overflow-hidden p-0 min-w-96 min-h-52 gap-0 max-h-[90vh]"}
+      className={" overflow-hidden p-0 min-w-96 min-h-52 gap-0 "}
     >
       <div className={" flex w-full h-fit justify-between p-3"}>
         <button
           onClick={() => {
             setImageUrl("");
             setImageSelected(false);
+            setRatio(undefined); // Reset ratio when clearing the image
             setImageName("");
           }}
           className="text-sm text-red-500 "
@@ -51,10 +63,10 @@ function CreatePost() {
       <div className="h-full w-full flex  justify-center items-center">
         {imageSelected ? (
           <div className="  h-full w-full">
-            <AspectRatio ratio={16 / 9}>
+            <AspectRatio ratio={ratio}>
               <img
                 src={imageUrl}
-                alt="Image"
+                alt={imageName}
                 className=" w-full h-full object-cover object-center"
               />
             </AspectRatio>
@@ -72,19 +84,24 @@ function CreatePost() {
           </button>
         )}
       </div>
-      <div className=" flex gap-3 m-2">
-        <button>Crop</button>
-        <Select>
-          <SelectTrigger className=" w-20">
-            <SelectValue placeholder="Theme" />
+     {
+      imageSelected && (
+        <div className=" flex gap-3 m-2 ">
+        {/* <button>Crop</button> */}
+        <Select onValueChange={handleThemeChange} defaultValue="Original">
+          <SelectTrigger className=" w-fit">
+            <SelectValue placeholder="Aspect Ratio" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="light">Light</SelectItem>
-            <SelectItem value="dark">Dark</SelectItem>
-            <SelectItem value="system">System</SelectItem>
+            <SelectItem value="Original">Original</SelectItem>
+            <SelectItem value="16/9">16/9</SelectItem>
+            <SelectItem value="1/1">1/1</SelectItem>
+            <SelectItem value="4/5">4/5</SelectItem>
           </SelectContent>
         </Select>
       </div>
+      )
+     }
     </DialogContent>
   );
 }
