@@ -19,14 +19,14 @@ import Detailpost from "./Detailpost";
 
 import {
   Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import ShareButton from "./ShareButton";
+import CommentButton from "./CommentButton";
+import LikeButton from "./LikeButton";
 
 function PostCard() {
+  const [isLiked , setLiked] = useState(true)
   const [text, setText] = useState("");
 
   function handleComment(e) {
@@ -39,7 +39,7 @@ function PostCard() {
   }
   return (
     <>
-      <Dialog>
+      <Dialog >
         <Card
           variant="plain"
           className=" border-b border-b-gray-300 shadow-md p-3 rounded-xl"
@@ -105,15 +105,15 @@ function PostCard() {
           >
             <Box sx={{ width: 0, display: "flex", gap: 0.5 }}>
               <IconButton variant="plain" color="neutral" size="sm">
-                <FavoriteBorder />
+                <LikeButton isLiked={isLiked}/>
               </IconButton>
               <DialogTrigger>
               <IconButton variant="plain" color="neutral" size="sm">
-                <ModeCommentOutlined />
+                <CommentButton/>
               </IconButton>
               </DialogTrigger>
               <IconButton variant="plain" color="neutral" size="sm">
-                <SendOutlined />
+                <ShareButton/>
               </IconButton>
             </Box>
             <Box

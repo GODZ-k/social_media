@@ -1,8 +1,8 @@
 import React from 'react'
 
-function ShareButton() {
+function ShareButton({className}) {
   return (
-    <div>ShareButton</div>
+    <button><i className={`${className} fa-solid text-lg fa-share`}></i></button>
   )
 }
 

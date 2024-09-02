@@ -1,8 +1,8 @@
 import React from 'react'
 
-function LikeButton() {
+function LikeButton({className , isLiked}) {
   return (
-    <div>LikeButton</div>
+    <button><i className={`${isLiked ? 'fa-solid fa-heart text-red-700' : 'fa-regular fa-heart'} ${className} text-lg`}></i></button>
   )
 }
 

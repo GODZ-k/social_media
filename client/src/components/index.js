@@ -7,6 +7,7 @@ import TopLoadingBar from "./TopLoadingBar";
 import PostCard from "./PostCard";
 import Comment from "./Comment";
 import Header from "./Header";
+import CreatePost from "./CreatePost";
 import Detailpost from "./Detailpost";
 export {
     Input,
@@ -18,5 +19,6 @@ export {
     PostCard,
     Header,
     Comment,
-    Detailpost
+    Detailpost,
+    CreatePost
 }

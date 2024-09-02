@@ -1,8 +1,8 @@
 import React, { memo } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import { Input } from "../../../client-old/src/components";
-import { SigninUser } from "../../../client-old/src/Api/ApiData";
+import { Input } from "../components";
+import { SigninUser } from "../../Api/ApiData";
 import { useDispatch } from "react-redux";
 import useRenderLogger from "../components/RenderLogger";
 

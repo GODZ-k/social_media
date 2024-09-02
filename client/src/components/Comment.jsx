@@ -1,16 +1,11 @@
 import React from 'react'
+import AvatarImg from './AvatarImg'
 
 function Comment({username , comment ,  likes , time , avatar , isCaption }) {
   return (
     <div className={`${isCaption ? 'items-start' : 'items-center' } flex  space-x-4`}>
               <div className="shrink-0">
-                <img
-                  alt="Neil img"
-                  height="35"
-                  src={avatar}
-                  width="35"
-                  className="rounded-full"
-                />
+              <AvatarImg src={avatar}/>
               </div>
               <div className="min-w-0  gap-2 w-full">
                 <div className={`${isCaption ? 'block' : 'flex'}  items-center gap-4`}>

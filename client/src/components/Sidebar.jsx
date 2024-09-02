@@ -1,5 +1,9 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
+import Logo from "./Logo";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import AvatarImg from "./AvatarImg";
+
 const navItems = [
   {
     label: "Home",
@@ -11,12 +15,14 @@ const navItems = [
     label: "Search",
     icon: "https://cdn.lordicon.com/kkvxgpti.json",
     to: "/search",
+    isPopUp:true
   },
   {
     label: "Create",
     isMobile:true,
     icon: "https://cdn.lordicon.com/hqymfzvj.json",
-    to: "/create",
+    to:"/post/create"
+   
   },
   {
     label: "Explore",
@@ -44,7 +50,7 @@ const navItems = [
   {
     label: "Profile",
     isMobile:true,
-    icon: "https://images.rawpixel.com/image_800/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIyLTA1L3JtNTMzLW5lb24tMDAzLmpwZw.jpg",
+    icon: "https://github.com/shadcn.png",
     isProfile:true,
     to: "/profile",
   },
@@ -55,11 +61,7 @@ function Sidebar() {
     <div className=" md:block hidden p-5   w-72 h-screen static top-0 left-0">
       <div className=" py-4">
         <div className=" w-40">
-          <img
-            className=" w-full h-full object-center object-cover"
-            src="logo.png"
-            alt=""
-          />
+          <Logo/>
         </div>
       </div>
       <div>
@@ -69,14 +71,15 @@ function Sidebar() {
               to={item.to}
               className={({ isActive }) =>
                 `${
-                  isActive ? "bg-gray-100 text-gray-800" : "bg-transparent"
+                  !item.isPopUp && isActive ? "bg-gray-100 text-gray-800" : "bg-transparent"
                 } rounded-lg p-2 hover:bg-gray-100 flex items-center gap-3`
               }
             >
               {" "}
               <li key={index} className=" flex gap-4 items-center">
                 <div>
-                    {item.isProfile ? <img className=" w-7 h-7 rounded-full" src={item.icon} alt="profile" /> : (
+                    {item.isProfile ? ( <AvatarImg src={item.icon} fallback={'CN'}/>)
+                   : (
                         <lord-icon
                         src={item.icon}
                         trigger="in"
@@ -122,6 +125,7 @@ function Sidebar() {
 
       </div>
     </div>
+    
     </>
   );
 }

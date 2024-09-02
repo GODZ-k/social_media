@@ -5,6 +5,7 @@ import Homepage from "./pages/Homepage";
 import Signup_page from "./pages/Signup_page";
 import Signin_page from "./pages/Signin_page";
 import { TopLoadingBar } from "./components";
+import Createpost from "./pages/Createpost";
 
 function App() {
   return (
@@ -12,7 +13,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Suspense fallback={<TopLoadingBar/>}><Layout /></Suspense>}>
           <Route index element={<Suspense fallback={<TopLoadingBar/>}><Homepage /></Suspense>} />
-          {/* <Route path="/:username/post/:pid" element={<Postpage />} /> */}
+          <Route path="/post/create" element={<Createpost />} />
           {/* <Route path="/:username" element={<Userpage />} /> */}
           {/* <Route path="/profile" element={<Profilepage />} /> */}
         </Route>

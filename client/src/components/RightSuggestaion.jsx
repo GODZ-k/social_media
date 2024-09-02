@@ -1,6 +1,7 @@
 import { Card } from "flowbite-react";
 import React from "react";
 import Suggestions from "./Suggestions";
+import AvatarImg from "./AvatarImg";
 
 function RightSuggestaion() {
   return (
@@ -10,19 +11,13 @@ function RightSuggestaion() {
           <li className="py-3 sm:py-4">
             <div className="flex items-center space-x-4">
               <div className="shrink-0">
-                <img
-                  alt="Neil img"
-                  height="42"
-                  src="https://images.rawpixel.com/image_800/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIyLTA1L3JtNTMzLW5lb24tMDAzLmpwZw.jpg"
-                  width="42"
-                  className="rounded-full"
-                />
+               <AvatarImg src={"https://github.com/shadcn.png"}/>
               </div>
               <div className="min-w-0 flex-1">
                 <p className="truncate text-sm font-semibold text-gray-900 dark:text-white">
                   Neil Sims
                 </p>
-                <p className="truncate text-sm text-gray-500 dark:text-gray-400">
+                <p className="truncate text-xs text-gray-500 dark:text-gray-400">
                   email@windster.com
                 </p>
               </div>
