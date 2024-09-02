@@ -13,7 +13,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Suspense fallback={<TopLoadingBar/>}><Layout /></Suspense>}>
           <Route index element={<Suspense fallback={<TopLoadingBar/>}><Homepage /></Suspense>} />
-          <Route path="/post/create" element={<Createpost />} />
+          {/* <Route path="/post/create" element={<Createpost />} /> */}
           {/* <Route path="/:username" element={<Userpage />} /> */}
           {/* <Route path="/profile" element={<Profilepage />} /> */}
         </Route>
