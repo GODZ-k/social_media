@@ -124,34 +124,57 @@ function Sidebar() {
             </ul>
           </div>
         </div>
+        {/* mobile */}
         <div className=" visible md:invisible block md:hidden fixed bottom-0 left-0 w-full px-3 py-3 z-10">
           <div className=" flex justify-evenly items-center w-full bg-gray-200 px-2 py-3 rounded-xl">
             <ul className=" flex justify-evenly items-center w-full">
               {navItems?.map(
                 (item, index) =>
                   item.isMobile && (
-                    <NavLink to={item.to} className=" text-gray-800">
-                      {" "}
-                      <li key={index} className=" flex gap-4 items-center">
-                        <div>
-                          {item.isProfile ? (
-                            <img
-                              className=" w-7 h-7 rounded-full"
-                              src={item.icon}
-                              alt="profile"
-                            />
-                          ) : (
-                            <lord-icon
-                              src={item.icon}
-                              trigger="in"
-                              delay="1000"
-                              style={{ width: "30px", height: "30px" }}
-                              state="in-home"
-                            ></lord-icon>
-                          )}
-                        </div>
-                      </li>
-                    </NavLink>
+                    <DialogTrigger>
+                      {item.isPopUp ? (
+                        <>
+                         <button
+                        className=" rounded-lg p-2 hover:bg-gray-100 flex items-center gap-3 w-full">
+                        {" "}
+                        <li key={index} className=" flex gap-4 items-center">
+                          <div>
+                              <lord-icon
+                                src={item.icon}
+                                trigger="in"
+                                delay="1000"
+                                style={{ width: "30px", height: "30px" }}
+                                state="in-home"
+                              ></lord-icon>
+                          </div>
+                        </li>
+                      </button>
+                      </>
+                      ) : (
+                        <NavLink to={item.to} className=" text-gray-800">
+                        {" "}
+                        <li key={index} className=" flex gap-4 items-center">
+                          <div>
+                            {item.isProfile ? (
+                              <img
+                                className=" w-7 h-7 rounded-full"
+                                src={item.icon}
+                                alt="profile"
+                              />
+                            ) : (
+                              <lord-icon
+                                src={item.icon}
+                                trigger="in"
+                                delay="1000"
+                                style={{ width: "30px", height: "30px" }}
+                                state="in-home"
+                              ></lord-icon>
+                            )}
+                          </div>
+                        </li>
+                      </NavLink>
+                      )}
+                    </DialogTrigger>
                   )
               )}
             </ul>

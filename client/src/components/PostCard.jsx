@@ -90,14 +90,14 @@ function PostCard() {
             </IconButton>
           </CardContent>
           <CardOverflow className=" h-96">
-            <AspectRatio sx={{ width: "100%", height: "auto" }}>
+            {/* <AspectRatio sx={{ width: "100%", height: "auto" }}> */}
               <img
                 className=" w-full h-full object-cover object-center"
                 src="logo.png"
                 alt=""
                 loading="lazy"
               />
-            </AspectRatio>
+            {/* </AspectRatio> */}
           </CardOverflow>
           <CardContent
             orientation="horizontal"

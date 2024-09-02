@@ -55,7 +55,7 @@ export function CreatePost({ onNext, setPostData, postData }) {
   return (
     <DialogContent
       isClose={false}
-      className={" overflow-hidden p-0 min-w-96 min-h-52 gap-0 "}
+      className={" overflow-hidden p-0 sm:min-w-96 min-h-52 gap-0 "}
     >
       <div className={" flex w-full h-fit justify-between p-3"}>
         <button
@@ -127,7 +127,7 @@ export function CreatePost({ onNext, setPostData, postData }) {
 export function CreatePostDesc({ onBack, postData ,setPostData }) {
 
   return (
-    <DialogContent className={" overflow-hidden p-0 min-w-96 min-h-52 gap-0 "}>
+    <DialogContent className={" overflow-hidden p-0 sm:min-w-96 min-h-52 gap-0 "}>
       <div className=" p-2">
         <div>
         <button className=" hover:bg-gray-200 rounded-md py-1 px-2" onClick={onBack}><i className="fa-solid fa-chevron-left"></i></button>
