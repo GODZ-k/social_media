@@ -3,7 +3,7 @@ import { NavLink } from "react-router-dom";
 import Logo from "./Logo";
 import AvatarImg from "./AvatarImg";
 import { Dialog, DialogTrigger } from "./ui/dialog";
-import { CreatePost } from ".";
+import { CreatePost, PostManager } from ".";
 
 const navItems = [
   {
@@ -157,7 +157,7 @@ function Sidebar() {
             </ul>
           </div>
         </div>
-        <CreatePost />
+        <PostManager />
       </Dialog>
     </>
   );

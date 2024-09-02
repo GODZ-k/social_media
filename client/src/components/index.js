@@ -7,8 +7,9 @@ import TopLoadingBar from "./TopLoadingBar";
 import PostCard from "./PostCard";
 import Comment from "./Comment";
 import Header from "./Header";
-import CreatePost from "./CreatePost";
+import {CreatePost, CreatePostDesc} from "./CreatePost";
 import Detailpost from "./Detailpost";
+import PostManager from "./PostManager";
 export {
     Input,
     Sidebar,
@@ -20,5 +21,7 @@ export {
     Header,
     Comment,
     Detailpost,
-    CreatePost
+    CreatePost,
+    CreatePostDesc,
+    PostManager
 }
