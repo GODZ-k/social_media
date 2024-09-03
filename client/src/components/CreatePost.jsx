@@ -127,7 +127,7 @@ export function CreatePost({ onNext, setPostData, postData }) {
 export function CreatePostDesc({ onBack, postData ,setPostData }) {
 
   return (
-    <DialogContent className={" overflow-hidden p-0 sm:min-w-96 min-h-52 gap-0 "}>
+    <DialogContent className={" overflow-hidden p-0 sm:min-w-96 min-h-32 gap-0 "}>
       <div className=" p-2">
         <div>
         <button className=" hover:bg-gray-200 rounded-md py-1 px-2" onClick={onBack}><i className="fa-solid fa-chevron-left"></i></button>
@@ -135,8 +135,10 @@ export function CreatePostDesc({ onBack, postData ,setPostData }) {
         <div className=" mt-2 flex flex-col gap-4">
           <div className=" flex flex-col gap-2">
          {
-          postData.imageUrl &&  <div className=" w-full h-full rounded-xl overflow-hidden">
-          <img src={postData.imageUrl} className=" w-full h-full object-cover object-center" alt={postData.imageName} srcset="" />
+          postData.imageUrl &&  <div className=" w-full h-64 rounded-xl overflow-hidden">
+         {/* <AspectRatio ratio={16/9}> */}
+         <img src={postData.imageUrl} className=" w-full h-full object-cover object-center" alt={postData.imageName} srcset="" />
+         {/* </AspectRatio> */}
          </div>
          }
           <div className=" flex flex-col gap-2">
