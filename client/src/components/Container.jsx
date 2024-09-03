@@ -3,9 +3,9 @@ import Sidebar from './Sidebar'
 
 function Container({children}) {
   return (
-    <div className=' flex gap-2'>
+    <div className=' flex'>
         <Sidebar/>
-        <div className=" overflow-y-scroll  w-full md:w-dynamic sm:p-6 p-3 pb-16 pt-20 mb-20 md:mb-0 md:p-10">
+        <div className=" overflow-y-scroll  w-full md:w-dynamic sm:pr-6 !px-3 pb-16 pt-20 mb-20 md:mb-0 md:py-10 md:!pr-10">
         {children}
         </div>
     </div>
