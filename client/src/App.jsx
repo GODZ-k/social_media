@@ -5,7 +5,7 @@ import Homepage from "./pages/Homepage";
 import Signup_page from "./pages/Signup_page";
 import Signin_page from "./pages/Signin_page";
 import { TopLoadingBar } from "./components";
-import ProfilePage from "./pages/Profilepage"
+import ProfilePage from "./pages/ProfilePage"
 
 
 function App() {
