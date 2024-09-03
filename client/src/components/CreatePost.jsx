@@ -13,6 +13,7 @@ import {
 
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import AvatarImg from "./AvatarImg";
+import { Button } from "./ui/button";
 
 export function CreatePost({ onNext, setPostData, postData }) {
   const [imageSelected, setImageSelected] = useState(
@@ -92,7 +93,7 @@ export function CreatePost({ onNext, setPostData, postData }) {
             </AspectRatio>
           </div>
         ) : (
-          <button className="relative bg-blue-500 text-white py-2 px-3 rounded-lg z-10">
+          <Button variant="outline" className="relative bg-blue-500 text-white py-2 px-3 rounded-lg z-10">
             <input
               type="file"
               accept="image/*"
@@ -101,7 +102,7 @@ export function CreatePost({ onNext, setPostData, postData }) {
               id="file-input"
             />
             Select from Computer
-          </button>
+          </Button>
         )}
       </div>
       {imageSelected && (

@@ -25,14 +25,14 @@ function Profile() {
                   alt=""
                 />
               </div>
-              <div className=" absolute -bottom-12 sm:-bottom-16 lg:-bottom-20 left-8">
+              <div className=" absolute -bottom-12 sm:-bottom-16 lg:-bottom-20 left-1 sm:left-5">
                 <AvatarImg
                   src={"https://github.com/shadcn.png"}
                   className={"lg:!h-40 !w-24 !h-24 sm:!w-36 sm:!h-36 lg:!w-40"}
                 />
               </div>
             </div>
-            <div className=" mt-20 md:mt-24 sm:px-6 flex flex-col gap-1">
+            <div className=" mt-14 sm:mt-20 lg:mt-24 sm:px-6 flex flex-col gap-1">
               <div className=" flex items-center justify-between">
                 <div className=" font-semibold text-lg">Tanmay khatri</div>
                 <div className=" text-xl flex gap-4 items-center">
@@ -76,7 +76,7 @@ function Profile() {
                       </button>
                     </DropdownMenuTrigger>
 
-                    <DropdownMenuContent className=" mr-2">
+                    <DropdownMenuContent className=" mr-4">
                       <DropdownMenuLabel>My Account</DropdownMenuLabel>
                       <DropdownMenuSeparator />
                       <DropdownMenuItem>Profile</DropdownMenuItem>
