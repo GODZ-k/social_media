@@ -9,6 +9,7 @@ import Comment from "./Comment";
 import Header from "./Header";
 import {CreatePost, CreatePostDesc} from "./CreatePost";
 import Detailpost from "./Detailpost";
+import Profile from "./Profile";
 import PostManager from "./PostManager";
 export {
     Input,
@@ -23,5 +24,6 @@ export {
     Detailpost,
     CreatePost,
     CreatePostDesc,
-    PostManager
+    PostManager,
+    Profile
 }
