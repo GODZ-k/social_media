@@ -3,7 +3,7 @@ import Post from "./Post";
 
 function PostsTab() {
   return (
-    <div className=" w-full flex gap-2 flex-wrap">
+    <div className=" w-full ">
       <Post/>
       <Post/>
       <Post/>

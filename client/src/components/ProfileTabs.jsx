@@ -10,7 +10,7 @@ function    ProfileTabs() {
       <TabsTrigger className=" w-52" value="posts">Posts</TabsTrigger>
       <TabsTrigger className=" w-52" value="videos">Videos</TabsTrigger>
     </TabsList>
-    <TabsContent value="posts" className=" w-    h-full">
+    <TabsContent value="posts" className=" w-full h-full">
       <PostsTab/>
     </TabsContent>
     <TabsContent value="videos">
