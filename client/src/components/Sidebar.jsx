@@ -3,7 +3,8 @@ import { NavLink } from "react-router-dom";
 import Logo from "./Logo";
 import AvatarImg from "./AvatarImg";
 import { Dialog, DialogTrigger } from "./ui/dialog";
-import { CreatePost, PostManager } from ".";
+import { PostManager } from ".";
+import SearchComp from "./SearchComp";
 
 const navItems = [
   {
@@ -15,8 +16,9 @@ const navItems = [
   {
     label: "Search",
     icon: "https://cdn.lordicon.com/kkvxgpti.json",
-    to: "/search",
-    // isPopUp: true,
+    // to: "/search",
+    isPopUp: true,
+    type:"search"
   },
   {
     label: "Create",
@@ -24,6 +26,7 @@ const navItems = [
     icon: "https://cdn.lordicon.com/hqymfzvj.json",
     // to:"/post/create"
     isPopUp: true,
+    type:"create"
   },
   {
     label: "Explore",
@@ -57,9 +60,15 @@ const navItems = [
   },
 ];
 function Sidebar() {
+  const [openDialog, setOpenDialog] = useState(null); // Control which dialog is open
+
+  function handleComponent(type) {
+    setOpenDialog(type);
+  }
+
   return (
     <>
-      <Dialog>
+      <Dialog open={!!openDialog} onOpenChange={() => setOpenDialog(null)}>
         <div className=" md:block hidden p-5   w-72 h-screen static top-0 left-0">
           <div className=" py-4">
             <div className=" w-40">
@@ -69,10 +78,11 @@ function Sidebar() {
           <div>
             <ul className=" flex flex-col gap-5">
               {navItems?.map((item, index) => (
-                <DialogTrigger>
+                <DialogTrigger asChild>
                   {item.isPopUp ? (
                     <>
                       <button
+                      onClick={() => handleComponent(item.type)}
                         className=" rounded-lg p-2 hover:bg-gray-100 flex items-center gap-3 w-full">
                         {" "}
                         <li key={index} className=" flex gap-4 items-center">
@@ -180,7 +190,12 @@ function Sidebar() {
             </ul>
           </div>
         </div>
-        <PostManager />
+        {openDialog === "create" && (
+            <PostManager />
+        )}
+        {openDialog === "search" && (
+            <SearchComp />
+        )}
       </Dialog>
     </>
   );

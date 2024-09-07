@@ -2,8 +2,8 @@ import React from 'react'
 
 function Post() {
   return (
-    <div className=" bg-red-500 sm:h-48 sm:w-48 w-32 h-32 inline-block rounded-lg  m-1">post</div>
+    <div className=" bg-red-500  w-full h-28 sm:h-32 lg:h-36 xl:h-40 inline-block rounded-lg ">post</div>
   )
 }
 
-export default Post
+export default Post 

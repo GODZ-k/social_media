@@ -2,6 +2,15 @@ import React from "react";
 import { Container, RightSuggestaion } from ".";
 import AvatarImg from "./AvatarImg";
 import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+
+import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
@@ -18,19 +27,52 @@ function Profile() {
         <div className=" w-full h-screen flex flex-col gap-11">
           <div>
             <div className=" h-fit relative">
-              <div className="  w-full h-[20vh] sm:h-[30vh] rounded-2xl overflow-hidden">
-                <img
-                  src="https://github.com/shadcn.png"
-                  className=" w-full h-full object-cover object-top"
-                  alt=""
-                />
-              </div>
-              <div className=" absolute -bottom-12 sm:-bottom-16 lg:-bottom-20 left-1 sm:left-5">
-                <AvatarImg
-                  src={"https://github.com/shadcn.png"}
-                  className={"lg:!h-40 !w-24 !h-24 sm:!w-36 sm:!h-36 lg:!w-40"}
-                />
-              </div>
+              <Dialog >
+                <DialogTrigger className=" w-full">
+                  <div className="  w-full h-[20vh] sm:h-[30vh] rounded-2xl overflow-hidden">
+                    <img
+                      src="https://github.com/shadcn.png"
+                      className=" w-full h-full object-cover object-top"
+                      alt=""
+                    />
+                  </div>
+                </DialogTrigger>
+                <DialogContent
+                  isClose={false}
+                  className=" max-w-5xl p-2 bg-transparent  border-none flex justify-center items-center shadow-none w-full"
+                >
+                 <div className=" rounded-2xl  w-full h-96 overflow-hidden">
+                    <img
+                      src="https://github.com/shadcn.png"
+                      className=" w-full h-full object-cover object-top"
+                      alt=""
+                    />
+                  </div>
+                </DialogContent>
+              </Dialog>
+              <Dialog>
+                <DialogTrigger>
+                  <div className=" absolute -bottom-6 sm:-bottom-12 lg:-bottom-14 left-1 sm:left-5">
+                    <AvatarImg
+                      src={"https://github.com/shadcn.png"}
+                      className={
+                        "lg:!h-40 !w-24 !h-24 sm:!w-36 sm:!h-36 lg:!w-40"
+                      }
+                    />
+                  </div>
+                </DialogTrigger>
+                <DialogContent
+                  isClose={false}
+                  className=" bg-transparent border-none flex justify-center items-center shadow-none w-full"
+                >
+                  <div className=" h-60 w-60 ">
+                    <AvatarImg
+                      src={"https://github.com/shadcn.png"}
+                      className={" !w-full !h-full"}
+                    />
+                  </div>
+                </DialogContent>
+              </Dialog>
             </div>
             <div className=" mt-14 sm:mt-20 lg:mt-24 sm:px-6 flex flex-col gap-1">
               <div className=" flex items-center justify-between">
@@ -68,7 +110,7 @@ function Profile() {
                   </button>
                 </div>
                 <div>
-                  <DropdownMenu >
+                  <DropdownMenu>
                     <DropdownMenuTrigger>
                       {" "}
                       <button>
@@ -90,7 +132,7 @@ function Profile() {
             </div>
           </div>
           <div className=" w-full">
-            <ProfileTabs/>
+            <ProfileTabs />
           </div>
         </div>
         <div className=" w-96 lg:block hidden h-fit">

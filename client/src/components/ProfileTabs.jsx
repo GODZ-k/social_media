@@ -1,9 +1,8 @@
 import React from 'react'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import PostsTab from './PostsTab'
-import VideoTab from './VideoTab'
 
-function    ProfileTabs() {
+function ProfileTabs() {
   return (
     <Tabs defaultValue="posts" className=" flex justify-between flex-col items-center w-full">
     <TabsList className=" w-full flex justify-evenly">
@@ -13,8 +12,8 @@ function    ProfileTabs() {
     <TabsContent value="posts" className=" w-full h-full">
       <PostsTab/>
     </TabsContent>
-    <TabsContent value="videos">
-      <VideoTab/>
+    <TabsContent value="videos" className=" w-full h-full">
+      <PostsTab/>
     </TabsContent>
   </Tabs>
   
