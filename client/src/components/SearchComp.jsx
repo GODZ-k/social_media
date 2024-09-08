@@ -1,27 +1,13 @@
-
-import React from 'react'
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog"
-
+import React from "react";
+import { DialogContent } from "@/components/ui/dialog";
+import Searching from "./Searching";
 
 function SearchComp() {
   return (
-    <DialogContent>
-    <DialogHeader>
-      <DialogTitle>Are you absolutely sure?</DialogTitle>
-      <DialogDescription>
-        This action cannot be undone. This will permanently delete your account
-        and remove your data from our servers.
-      </DialogDescription>
-    </DialogHeader>
-  </DialogContent>
-  )
+    <DialogContent isClose={false}>
+      <Searching />
+    </DialogContent>
+  );
 }
 
-export default SearchComp
+export default SearchComp;

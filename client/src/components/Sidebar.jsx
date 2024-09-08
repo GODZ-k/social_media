@@ -16,7 +16,6 @@ const navItems = [
   {
     label: "Search",
     icon: "https://cdn.lordicon.com/kkvxgpti.json",
-    // to: "/search",
     isPopUp: true,
     type:"search"
   },
@@ -24,7 +23,6 @@ const navItems = [
     label: "Create",
     isMobile: true,
     icon: "https://cdn.lordicon.com/hqymfzvj.json",
-    // to:"/post/create"
     isPopUp: true,
     type:"create"
   },
@@ -59,6 +57,7 @@ const navItems = [
     to: "/profile",
   },
 ];
+
 function Sidebar() {
   const [openDialog, setOpenDialog] = useState(null); // Control which dialog is open
 
@@ -76,7 +75,7 @@ function Sidebar() {
             </div>
           </div>
           <div>
-            <ul className=" flex flex-col gap-5">
+            <ul className=" flex flex-col gap-2">
               {navItems?.map((item, index) => (
                 <DialogTrigger asChild>
                   {item.isPopUp ? (
@@ -141,11 +140,12 @@ function Sidebar() {
               {navItems?.map(
                 (item, index) =>
                   item.isMobile && (
-                    <DialogTrigger>
+                    <DialogTrigger asChild>
                       {item.isPopUp ? (
                         <>
                          <button
-                        className=" rounded-lg p-2 hover:bg-gray-100 flex items-center gap-3 w-full">
+                          onClick={() => handleComponent(item.type)}
+                        className=" rounded-lg p-2 hover:bg-gray-100 flex items-center gap-3 ">
                         {" "}
                         <li key={index} className=" flex gap-4 items-center">
                           <div>
