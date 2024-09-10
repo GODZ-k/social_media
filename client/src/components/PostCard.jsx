@@ -1,6 +1,4 @@
 import React, { useState } from "react";
-import AspectRatio from "@mui/joy/AspectRatio";
-import Avatar from "@mui/joy/Avatar";
 import Box from "@mui/joy/Box";
 import Card from "@mui/joy/Card";
 import CardContent from "@mui/joy/CardContent";
@@ -25,6 +23,20 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "./ui/dropdown-menu";
+import AvatarImg from "./AvatarImg";
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "@/components/ui/hover-card";
+import HoverComp from "./HoverComp";
+import HoverUser from "./HoverUser";
 
 const images = [
   {
@@ -69,12 +81,10 @@ const images = [
   },
 ];
 
-
 function PostCard() {
   const [isLiked, setLiked] = useState(true);
   const [text, setText] = useState("");
   const [activeIndex, setActiveIndex] = useState(0); // Track active slide index
-
 
   function handleComment(e) {
     const value = e.target.value;
@@ -95,54 +105,63 @@ function PostCard() {
             "--Card-radius": (theme) => theme.vars.radius.xs,
           }}
         >
+         
           <CardContent
             orientation="horizontal"
             sx={{ alignItems: "center", gap: 1 }}
           >
-            <Box
-              sx={{
-                position: "relative",
-                "&::before": {
-                  content: '""',
-                  position: "absolute",
-                  top: 0,
-                  left: 0,
-                  bottom: 0,
-                  right: 0,
-                  m: "-2px",
-                  borderRadius: "50%",
-                  background:
-                    "linear-gradient(45deg, #f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%)",
-                },
-              }}
-            >
-              <Avatar
-                size="sm"
-                src="/static/logo.png"
+             <HoverComp content={<HoverUser/>}>
+               <div className=" flex gap-3 items-center">
+               <Box
                 sx={{
-                  p: 0.5,
-                  border: "2px solid",
-                  borderColor: "background.body",
+                  position: "relative",
+                  "&::before": {
+                    content: '""',
+                    position: "absolute",
+                    top: 0,
+                    left: 0,
+                    bottom: 0,
+                    right: 0,
+                    m: "-2px",
+                    borderRadius: "50%",
+                    background:
+                      "linear-gradient(45deg, #f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%)",
+                  },
                 }}
-              />
-            </Box>
-            <Typography sx={{ fontWeight: "lg" }}>Username</Typography>
+              > 
+                <AvatarImg src={"https://github.com/shadcn.png"} />
+              </Box>
+              <Typography sx={{ fontWeight: "lg" }}>tanmaykhatri__</Typography>
+               </div>
+              </HoverComp>
+
             <IconButton
               variant="plain"
               color="neutral"
               size="sm"
               sx={{ ml: "auto" }}
             >
-              <MoreHoriz />
+              <DropdownMenu>
+                <DropdownMenuTrigger>
+                  <MoreHoriz />
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className=" mr-4">
+                  <DropdownMenuItem>Profile</DropdownMenuItem>
+                  <DropdownMenuItem>Billing</DropdownMenuItem>
+                  <DropdownMenuItem>Team</DropdownMenuItem>
+                  <DropdownMenuItem>Subscription</DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </IconButton>
           </CardContent>
-          <CardOverflow className=" h-96 !p-0">
+          
+          <CardOverflow className=" h-96 !p-0 -z-0">
             <div className=" h-full w-full">
               <Swiper
                 slidesPerView={1}
-                spaceBetween={30}
-                loop={true}
-                onSlideChange={(swiper)=> setActiveIndex(swiper.activeIndex)}
+                // spaceBetween={30}
+                // loop={true}
+                onSlideChange={(swiper) => setActiveIndex(swiper.activeIndex)}
                 pagination={{
                   clickable: true,
                 }}
@@ -188,18 +207,19 @@ function PostCard() {
               }}
             >
               {images.map((_, index) => (
-               <Box
-               key={index}
-               sx={{
-                 borderRadius: "50%",
-                 width: activeIndex === index ? "8px" : "4px", // Increase size for active dot
-                 height: activeIndex === index ? "8px" : "4px", // Increase size for active dot
-                 margin: "0 1px", // Adjust spacing between dots
-                 bgcolor: activeIndex === index ? "primary.solidBg" : "background.level3", // Change color for active dot
-               }}
-             />
+                <Box
+                  key={index}
+                  sx={{
+                    borderRadius: "50%",
+                    width: activeIndex === index ? "6px" : "4px", // Increase size for active dot
+                    height: activeIndex === index ? "6px" : "4px", // Increase size for active dot
+                    bgcolor:
+                      activeIndex === index
+                        ? "primary.solidBg"
+                        : "background.level3", // Change color for active dot
+                  }}
+                />
               ))}
-             
             </Box>
             <Box
               sx={{ width: 0, display: "flex", flexDirection: "row-reverse" }}

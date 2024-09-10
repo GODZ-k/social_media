@@ -11,6 +11,7 @@ import {CreatePost, CreatePostDesc} from "./CreatePost";
 import Detailpost from "./Detailpost";
 import Profile from "./Profile";
 import PostManager from "./PostManager";
+import HoverUser from "./HoverUser";
 export {
     Input,
     Sidebar,

@@ -71,7 +71,7 @@ function Sidebar() {
         <div className=" md:block hidden p-5   w-72 h-screen static top-0 left-0">
           <div className=" py-4">
             <div className=" w-40">
-              <Logo />
+              {/* <Logo /> */}
             </div>
           </div>
           <div>
