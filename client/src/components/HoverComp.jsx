@@ -5,13 +5,13 @@ import {
   HoverCardTrigger,
 } from "@/components/ui/hover-card";
 
-function HoverComp({content,children , className}) {
+function HoverComp({content,children , className , contentClass}) {
   return (
     <HoverCard className={className}>
       <HoverCardTrigger>
         {children}
       </HoverCardTrigger>
-      <HoverCardContent>
+      <HoverCardContent className={contentClass}>
        {content}
       </HoverCardContent>
     </HoverCard>

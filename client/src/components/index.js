@@ -12,6 +12,7 @@ import Detailpost from "./Detailpost";
 import Profile from "./Profile";
 import PostManager from "./PostManager";
 import HoverUser from "./HoverUser";
+import TriggerOptions from "./TriggerOptions";
 export {
     Input,
     Sidebar,
@@ -26,5 +27,7 @@ export {
     CreatePost,
     CreatePostDesc,
     PostManager,
-    Profile
+    Profile,
+    TriggerOptions,
+    HoverUser
 }

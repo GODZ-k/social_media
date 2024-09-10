@@ -23,20 +23,16 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
+import AvatarImg from "./AvatarImg";
+import HoverComp from "./HoverComp";
+import HoverUser from "./HoverUser";
+import { TriggerOptions } from ".";
+import EmojiPicker from "emoji-picker-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuItem,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
-import AvatarImg from "./AvatarImg";
-import {
-  HoverCard,
-  HoverCardContent,
-  HoverCardTrigger,
-} from "@/components/ui/hover-card";
-import HoverComp from "./HoverComp";
-import HoverUser from "./HoverUser";
 
 const images = [
   {
@@ -81,6 +77,16 @@ const images = [
   },
 ];
 
+const options = [
+  { name: "Copy link" },
+  { name: "Report" },
+  { name: "Comments" },
+  { name: "Unfollow" },
+  { name: "Save" },
+  { name: "About this Account" },
+  { name: "Delete" },
+];
+
 function PostCard() {
   const [isLiked, setLiked] = useState(true);
   const [text, setText] = useState("");
@@ -105,56 +111,53 @@ function PostCard() {
             "--Card-radius": (theme) => theme.vars.radius.xs,
           }}
         >
-         
           <CardContent
             orientation="horizontal"
-            sx={{ alignItems: "center", gap: 1 }}
+            sx={{
+              alignItems: "center",
+              display: "flex",
+              justifyContent: "space-between",
+            }}
           >
-             <HoverComp content={<HoverUser/>}>
-               <div className=" flex gap-3 items-center">
-               <Box
-                sx={{
-                  position: "relative",
-                  "&::before": {
-                    content: '""',
-                    position: "absolute",
-                    top: 0,
-                    left: 0,
-                    bottom: 0,
-                    right: 0,
-                    m: "-2px",
-                    borderRadius: "50%",
-                    background:
-                      "linear-gradient(45deg, #f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%)",
-                  },
-                }}
-              > 
-                <AvatarImg src={"https://github.com/shadcn.png"} />
-              </Box>
-              <Typography sx={{ fontWeight: "lg" }}>tanmaykhatri__</Typography>
-               </div>
-              </HoverComp>
+            <HoverComp content={<HoverUser />}>
+              <div className=" flex gap-3 items-center">
+                <Box
+                  sx={{
+                    position: "relative",
+                    "&::before": {
+                      content: '""',
+                      position: "absolute",
+                      top: 0,
+                      left: 0,
+                      bottom: 0,
+                      right: 0,
+                      m: "-2px",
+                      borderRadius: "50%",
+                      background:
+                        "linear-gradient(45deg, #f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%)",
+                    },
+                  }}
+                >
+                  <AvatarImg src={"https://github.com/shadcn.png"} />
+                </Box>
+                <Typography sx={{ fontWeight: "lg" }}>
+                  tanmaykhatri__
+                </Typography>
+              </div>
+            </HoverComp>
 
-            <IconButton
-              variant="plain"
-              color="neutral"
-              size="sm"
-              sx={{ ml: "auto" }}
-            >
-              <DropdownMenu>
-                <DropdownMenuTrigger>
-                  <MoreHoriz />
-                </DropdownMenuTrigger>
-                <DropdownMenuContent className=" mr-4">
-                  <DropdownMenuItem>Profile</DropdownMenuItem>
-                  <DropdownMenuItem>Billing</DropdownMenuItem>
-                  <DropdownMenuItem>Team</DropdownMenuItem>
-                  <DropdownMenuItem>Subscription</DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </IconButton>
+            <TriggerOptions items={options}>
+              <IconButton
+                variant="plain"
+                color="neutral"
+                size="sm"
+                sx={{ ml: "auto" }}
+              >
+                <MoreHoriz />
+              </IconButton>
+            </TriggerOptions>
           </CardContent>
-          
+
           <CardOverflow className=" h-96 !p-0 -z-0">
             <div className=" h-full w-full">
               <Swiper
@@ -276,14 +279,21 @@ function PostCard() {
             </Link>
           </CardContent>
           <CardContent orientation="horizontal" sx={{ gap: 1 }}>
-            <IconButton
-              size="sm"
-              variant="plain"
-              color="neutral"
-              sx={{ ml: -1 }}
-            >
-              <Face />
-            </IconButton>
+            <DropdownMenu>
+              <DropdownMenuTrigger>
+                <IconButton
+                  size="sm"
+                  variant="plain"
+                  color="neutral"
+                  sx={{ ml: -1 }}
+                >
+                  <Face />
+                </IconButton>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="p-0 h-96 rounded-md bg-none shadow-none border-none">
+                <EmojiPicker lazyLoadEmojis={true} onEmojiClick={(e)=> setText((prev)=> prev +  e.emoji)} />
+              </DropdownMenuContent>
+            </DropdownMenu>
             <Input
               variant="plain"
               size="sm"

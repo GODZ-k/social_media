@@ -7,7 +7,7 @@ import CommentButton from "./CommentButton";
 import ShareButton from "./ShareButton";
 import Input from "@mui/joy/Input";
 import AvatarImg from "./AvatarImg";
-
+import { TriggerOptions } from ".";
 
 const comments = [
   {
@@ -18,7 +18,7 @@ const comments = [
     time: 2,
     comment: "hii there",
   },
-  
+
   {
     username: "tanmaykhatri__",
     avatar:
@@ -36,9 +36,25 @@ const comments = [
     comment: "hii there",
   },
 ];
+
+const options  = [
+  {
+    name:"Copy link"
+  },
+  {
+    name:"Share"
+  },
+  {
+    name:"Hide"
+  },
+  {
+    name:"Delete"
+  },
+]
+
 function Detailpost() {
-  const [isLiked , setLiked] = useState(true)
-  const [text , setText] = useState("")
+  const [isLiked, setLiked] = useState(true);
+  const [text, setText] = useState("");
 
   function handleComment(e) {
     const value = e.target.value;
@@ -56,7 +72,7 @@ function Detailpost() {
           <div className=" w-full flex flex-col gap-4">
             <div className="flex items-center space-x-4">
               <div className="shrink-0">
-                <AvatarImg src={"https://github.com/shadcn.png"}/>
+                <AvatarImg src={"https://github.com/shadcn.png"} />
               </div>
               <div className="min-w-0 w-full flex justify-between">
                 <div>
@@ -68,11 +84,11 @@ function Detailpost() {
                   </p>
                 </div>
                 {/* post options */}
-                <Dialog className=" w-fit max-w-xl">
+                {/* <Dialog className=" w-fit max-w-xl">
                   <DialogTrigger>
                     <i className="fa-solid fa-ellipsis"></i>
                   </DialogTrigger>
-                  <DialogContent className=" max-w-xs rounded-xl"  >
+                  <DialogContent className=" max-w-xs rounded-xl" isClose={false} >
                     <div className=" w-full">
                       <ul>
                     
@@ -88,7 +104,10 @@ function Detailpost() {
                       </ul>
                     </div>
                   </DialogContent>
-                </Dialog>
+                </Dialog> */}
+                <TriggerOptions items={options}>
+                  <i className="fa-solid fa-ellipsis"></i>
+                </TriggerOptions>
               </div>
             </div>
             <div className=" flex flex-col gap-8 h-[69vh] overflow-y-scroll scrollbar-none">
@@ -119,22 +138,29 @@ function Detailpost() {
           <div>
             <div className=" border-t border-t-gray-200 flex flex-col gap-1 pt-3 ">
               <div className=" flex gap-4">
-                <LikeButton isLiked={isLiked}/>
-                <CommentButton/>
-                <ShareButton/>
+                <LikeButton isLiked={isLiked} />
+                <CommentButton />
+                <ShareButton />
               </div>
               <div className=" text-sm font-semibold">34 likes</div>
               <div className=" text-sm text-gray-500">3 days ago</div>
               <div className=" flex w-full justify-between gap-2">
-              <Input
-              variant="plain"
-              size="sm"
-              value={text}
-              onChange={handleComment}
-              placeholder="Add a comment…"
-              sx={{ flex: 1, px: 0, "--Input-focusedThickness": "0px" , background:"none"}}
-            />
-                {text && <button className=" text-blue-500 text-sm">Post</button>}
+                <Input
+                  variant="plain"
+                  size="sm"
+                  value={text}
+                  onChange={handleComment}
+                  placeholder="Add a comment…"
+                  sx={{
+                    flex: 1,
+                    px: 0,
+                    "--Input-focusedThickness": "0px",
+                    background: "none",
+                  }}
+                />
+                {text && (
+                  <button className=" text-blue-500 text-sm">Post</button>
+                )}
               </div>
             </div>
             {/* <div>login to like and comment</div> */}
