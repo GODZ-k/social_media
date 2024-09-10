@@ -16,18 +16,65 @@ import SendOutlined from "@mui/icons-material/SendOutlined";
 import Face from "@mui/icons-material/Face";
 import BookmarkBorderRoundedIcon from "@mui/icons-material/BookmarkBorderRounded";
 import Detailpost from "./Detailpost";
-
-import {
-  Dialog,
-  DialogTrigger,
-} from "@/components/ui/dialog";
+import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import ShareButton from "./ShareButton";
 import CommentButton from "./CommentButton";
 import LikeButton from "./LikeButton";
+import { Navigation } from "swiper/modules";
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
+
+const images = [
+  {
+    src: "https://res.cloudinary.com/dlkzk9g9k/image/upload/v1725101426/WhatsApp_Image_2024-08-31_at_10.39.13_AM_1_ydad1h.jpg",
+    content: "",
+    to: "",
+  },
+  {
+    src: "https://res.cloudinary.com/dlkzk9g9k/image/upload/v1725101343/WhatsApp_Image_2024-08-31_at_10.33.12_AM_2_bbdyxd.jpg",
+    content: "",
+    to: "",
+  },
+  {
+    src: "https://res.cloudinary.com/dlkzk9g9k/image/upload/v1725101345/WhatsApp_Image_2024-08-31_at_10.33.14_AM_1_lbjnq5.jpg",
+    content: "",
+    to: "",
+  },
+  {
+    src: "https://res.cloudinary.com/dlkzk9g9k/image/upload/v1725101424/WhatsApp_Image_2024-08-31_at_10.39.10_AM_1_z0t3p0.jpg",
+    content: "",
+    to: "",
+  },
+  {
+    src: "https://res.cloudinary.com/dlkzk9g9k/image/upload/v1725101425/WhatsApp_Image_2024-08-31_at_10.39.09_AM_1_bnrtey.jpg",
+    content: "",
+    to: "",
+  },
+  {
+    src: "https://res.cloudinary.com/dlkzk9g9k/image/upload/v1725101427/WhatsApp_Image_2024-08-31_at_10.39.12_AM_3_fxgqod.jpg",
+    content: "",
+    to: "",
+  },
+  {
+    src: "https://res.cloudinary.com/dlkzk9g9k/image/upload/v1725101343/WhatsApp_Image_2024-08-31_at_10.33.11_AM_t4bacp.jpg",
+    content: "",
+    to: "",
+  },
+  {
+    src: "https://res.cloudinary.com/dlkzk9g9k/image/upload/v1725101425/WhatsApp_Image_2024-08-31_at_10.39.11_AM_1_cifu4w.jpg",
+    content: "",
+    to: "",
+  },
+];
+
 
 function PostCard() {
-  const [isLiked , setLiked] = useState(true)
+  const [isLiked, setLiked] = useState(true);
   const [text, setText] = useState("");
+  const [activeIndex, setActiveIndex] = useState(0); // Track active slide index
+
 
   function handleComment(e) {
     const value = e.target.value;
@@ -39,7 +86,7 @@ function PostCard() {
   }
   return (
     <>
-      <Dialog >
+      <Dialog>
         <Card
           variant="plain"
           className=" border-b border-b-gray-300 shadow-md p-3 rounded-xl"
@@ -89,15 +136,31 @@ function PostCard() {
               <MoreHoriz />
             </IconButton>
           </CardContent>
-          <CardOverflow className=" h-96">
-            {/* <AspectRatio sx={{ width: "100%", height: "auto" }}> */}
-              <img
-                className=" w-full h-full object-cover object-center"
-                src="logo.png"
-                alt=""
-                loading="lazy"
-              />
-            {/* </AspectRatio> */}
+          <CardOverflow className=" h-96 !p-0">
+            <div className=" h-full w-full">
+              <Swiper
+                slidesPerView={1}
+                spaceBetween={30}
+                loop={true}
+                onSlideChange={(swiper)=> setActiveIndex(swiper.activeIndex)}
+                pagination={{
+                  clickable: true,
+                }}
+                modules={[Navigation]}
+                className="mySwiper"
+              >
+                {images?.map((hotel, index) => (
+                  <SwiperSlide key={index}>
+                    <img
+                      src={hotel.src}
+                      className=" w-full h-full object-cover object-center"
+                      alt=""
+                      srcset=""
+                    />
+                  </SwiperSlide>
+                ))}
+              </Swiper>
+            </div>
           </CardOverflow>
           <CardContent
             orientation="horizontal"
@@ -105,15 +168,15 @@ function PostCard() {
           >
             <Box sx={{ width: 0, display: "flex", gap: 0.5 }}>
               <IconButton variant="plain" color="neutral" size="sm">
-                <LikeButton isLiked={isLiked}/>
+                <LikeButton isLiked={isLiked} />
               </IconButton>
               <DialogTrigger>
-              <IconButton variant="plain" color="neutral" size="sm">
-                <CommentButton/>
-              </IconButton>
+                <IconButton variant="plain" color="neutral" size="sm">
+                  <CommentButton />
+                </IconButton>
               </DialogTrigger>
               <IconButton variant="plain" color="neutral" size="sm">
-                <ShareButton/>
+                <ShareButton />
               </IconButton>
             </Box>
             <Box
@@ -124,21 +187,19 @@ function PostCard() {
                 mx: "auto",
               }}
             >
-              {[...Array(5)].map((_, index) => (
-                <Box
-                  key={index}
-                  sx={[
-                    {
-                      borderRadius: "50%",
-                      width: `max(${6 - index}px, 3px)`,
-                      height: `max(${6 - index}px, 3px)`,
-                    },
-                    index === 0
-                      ? { bgcolor: "primary.solidBg" }
-                      : { bgcolor: "background.level3" },
-                  ]}
-                />
+              {images.map((_, index) => (
+               <Box
+               key={index}
+               sx={{
+                 borderRadius: "50%",
+                 width: activeIndex === index ? "8px" : "4px", // Increase size for active dot
+                 height: activeIndex === index ? "8px" : "4px", // Increase size for active dot
+                 margin: "0 1px", // Adjust spacing between dots
+                 bgcolor: activeIndex === index ? "primary.solidBg" : "background.level3", // Change color for active dot
+               }}
+             />
               ))}
+             
             </Box>
             <Box
               sx={{ width: 0, display: "flex", flexDirection: "row-reverse" }}
@@ -219,10 +280,8 @@ function PostCard() {
           </CardContent>
         </Card>
 
-     
-     {/* detail post */}
-     <Detailpost  />
-        
+        {/* detail post */}
+        <Detailpost />
       </Dialog>
     </>
   );

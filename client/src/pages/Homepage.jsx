@@ -11,7 +11,7 @@ function Homepage() {
   return (
     <MainContainer>
       <div className=" flex justify-center gap-4 w-full">
-        <div className=" w-[30rem] h-screen flex flex-col gap-11">
+        <div className=" w-full sm:w-[30rem] h-screen flex flex-col gap-11">
           <PostCard />
           {/* <PostCard />
           <PostCard />

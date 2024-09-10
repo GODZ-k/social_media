@@ -8,6 +8,9 @@ import { ChakraProvider } from '@chakra-ui/react'
 import { Toaster } from 'react-hot-toast'
 import store from './redux/store/store.js'
 import { Provider } from 'react-redux'
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
