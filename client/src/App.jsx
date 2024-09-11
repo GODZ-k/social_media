@@ -7,6 +7,7 @@ import Signin_page from "./pages/Signin_page";
 import { TopLoadingBar } from "./components";
 import ProfilePage from "./pages/ProfilePage"
 import SearchPage from "./pages/SearchPage";
+import Explorepage from "./pages/Explorepage";
 
 
 function App() {
@@ -17,7 +18,7 @@ function App() {
           <Route index element={<Suspense fallback={<TopLoadingBar/>}><Homepage /></Suspense>} />
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/search" element={<SearchPage />} />
-          {/* <Route path="/profile" element={<Profilepage />} /> */}
+          <Route path="/explore" element={<Explorepage />} />
         </Route>
         <Route path="/signup" element={<Suspense fallback={<TopLoadingBar/>}><Signup_page /></Suspense>} />
         <Route path="/signin" element={<Suspense fallback={<TopLoadingBar/>}><Signin_page /></Suspense>} />

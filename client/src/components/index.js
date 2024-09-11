@@ -13,6 +13,7 @@ import Profile from "./Profile";
 import PostManager from "./PostManager";
 import HoverUser from "./HoverUser";
 import TriggerOptions from "./TriggerOptions";
+import Explorepage_comp from "./Explorepage_comp";
 export {
     Input,
     Sidebar,
@@ -29,5 +30,6 @@ export {
     PostManager,
     Profile,
     TriggerOptions,
-    HoverUser
+    HoverUser,
+    Explorepage_comp
 }

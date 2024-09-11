@@ -117,9 +117,10 @@ function PostCard() {
               alignItems: "center",
               display: "flex",
               justifyContent: "space-between",
+              cursor:"pointer",
             }}
           >
-            <HoverComp content={<HoverUser />}>
+            <HoverComp contentClass={" w-full p-0 "}  content={<HoverUser />}>
               <div className=" flex gap-3 items-center">
                 <Box
                   sx={{
