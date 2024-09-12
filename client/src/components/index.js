@@ -14,6 +14,7 @@ import PostManager from "./PostManager";
 import HoverUser from "./HoverUser";
 import TriggerOptions from "./TriggerOptions";
 import Explorepage_comp from "./Explorepage_comp";
+import Signin  from "./Signin";
 export {
     Input,
     Sidebar,
@@ -22,6 +23,7 @@ export {
     RightSuggestaion,
     TopLoadingBar,
     PostCard,
+    Signin,
     Header,
     Comment,
     Detailpost,
