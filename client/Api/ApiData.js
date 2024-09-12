@@ -1,7 +1,9 @@
-import toast from "react-hot-toast"
+// import toast from "react-hot-toast"
 import {ApiURL} from "./ApiConstant.js"
 import axios from "axios"
-import { login } from "../src/redux/features/authSlice.js"
+import { login, logOut } from "../src/redux/features/authSlice.js"
+import Toast from "@/components/Toast.jsx"
+import toast from "react-hot-toast"
 
 
 
@@ -13,7 +15,7 @@ const SignUpUser = async (userData)=>{
 
 
     } catch (error) {
-      toast.error(error.response.data.msg)
+      toast(error.response.data.msg)
 
     }
 }
@@ -42,8 +44,11 @@ const getProfile = async(dispatch)=>{
         const data = response.data.profile
         dispatch(login(data))
     } catch (error) {
-       
-        toast.error(error.response.data.msg)
+        // <Toast msg={error.response.data.msg}/>
+        // Toast(error.response.data.msg)
+        toast(error.response.data.msg)
+
+        // toast.error(error.response.data.msg)
     }
 }
 
@@ -80,11 +85,25 @@ const getPost = async(setPost,pid)=>{
         toast.error(error.response.data.msg)
     }
 }
+
+
+const logOutUser = async(dispatch, navigate) =>{
+    try {
+        await axios.get(ApiURL.logOutUser,{
+            withCredentials:true
+        })
+        dispatch(logOut())
+        navigate('/signin')
+    } catch (error) {
+        toast.error(error.response.data.msg)
+    }
+}
 export {
     SignUpUser,
     SigninUser,
     getProfile,
     getUser,
     getMypost,
-    getPost
+    getPost,
+    logOutUser
 }

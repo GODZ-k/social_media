@@ -1,7 +1,16 @@
 import React from "react";
 import AvatarImg from "./AvatarImg";
+import { logOutUser } from "../../Api/ApiData";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
 
 function UserShortCard({ type, name, username, image , className }) {
+  const navigate =  useNavigate()
+  const dispatch = useDispatch()
+
+  async function handleLogout(){
+    await logOutUser(dispatch,navigate)
+  }
   return (
     <div className={`${className} flow-root my-4 md:my-0`}>
       <ul className="divide-y divide-gray-200 dark:divide-gray-700">
@@ -19,7 +28,7 @@ function UserShortCard({ type, name, username, image , className }) {
               </p>
             </div>
             {type === "logout" ? (
-              <button className="inline-flex items-center text-sm font-normal text-red-600 dark:text-white">
+              <button onClick={handleLogout} className="inline-flex items-center text-sm font-normal text-red-600 dark:text-white">
                 Logout
               </button>
             ) : (

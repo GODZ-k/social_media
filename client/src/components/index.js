@@ -15,6 +15,8 @@ import HoverUser from "./HoverUser";
 import TriggerOptions from "./TriggerOptions";
 import Explorepage_comp from "./Explorepage_comp";
 import Signin  from "./Signin";
+import ProtectedRoutes from "./ProtectedRoutes";
+import Signup from "./Signup";
 export {
     Input,
     Sidebar,
@@ -30,8 +32,10 @@ export {
     CreatePost,
     CreatePostDesc,
     PostManager,
+    Signup,
     Profile,
     TriggerOptions,
     HoverUser,
-    Explorepage_comp
+    Explorepage_comp,
+    ProtectedRoutes
 }

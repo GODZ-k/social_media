@@ -8,6 +8,7 @@ import { ChakraProvider } from '@chakra-ui/react'
 import { Toaster } from 'react-hot-toast'
 import store from './redux/store/store.js'
 import { Provider } from 'react-redux'
+import { Toaster as Toast} from "@/components/ui/sonner"
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
@@ -21,6 +22,7 @@ createRoot(document.getElementById('root')).render(
           <App />
         </CssVarsProvider>
           <Toaster/>
+          <Toast/>
         </ChakraProvider>
       </BrowserRouter>
     </Provider>

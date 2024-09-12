@@ -11,6 +11,7 @@ export const ApiURL ={
     registerUser:`${authApiUrl}/register`,
     loginUser:`${authApiUrl}/login`,
     currentUser:`${authApiUrl}/profile`,
+    logOutUser:`${authApiUrl}/logout`,
 
     // main routes
     getProfile:`${mainApiUrl}/user`,

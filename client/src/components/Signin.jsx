@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import { SigninUser } from '../../Api/ApiData';
 import { useDispatch } from "react-redux";
 import { Input } from '.';
+import { Container } from '@chakra-ui/react';
 
 function Signin() {
     const {register , handleSubmit} = useForm()
@@ -21,9 +22,10 @@ function Signin() {
   }
 
   return (
-    <section className=" w-full dark:bg-gray-900">
+  <Container className=' flex justify-center items-center h-screen'>
+      <section className=" w-full sm:w-2/3 dark:bg-gray-900">
       <div className="flex flex-col items-center  justify-center py-8">
-        <div className="w-full bg-white rounded-lg shadow dark:border dark:bg-gray-800 dark:border-gray-700">
+        <div className="w-full bg-white rounded-lg  dark:border dark:bg-gray-800 dark:border-gray-700">
           <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
             <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
               Login your account
@@ -93,6 +95,7 @@ function Signin() {
         </div>
       </div>
     </section>
+  </Container>
   )
 }
 

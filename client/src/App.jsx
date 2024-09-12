@@ -4,7 +4,7 @@ const Layout = lazy(() => import("./Layout"));
 import Homepage from "./pages/Homepage";
 import Signup_page from "./pages/Signup_page";
 import Signin_page from "./pages/Signin_page";
-import { TopLoadingBar } from "./components";
+import { ProtectedRoutes, TopLoadingBar } from "./components";
 import ProfilePage from "./pages/ProfilePage";
 import SearchPage from "./pages/SearchPage";
 import Explorepage from "./pages/Explorepage";
@@ -16,7 +16,7 @@ function App() {
   const dispatch = useDispatch()
   useEffect(() => {
     getProfile(dispatch);
-  }, []);
+  }, [dispatch]);
 
   return (
     <Suspense fallback={<TopLoadingBar />}>
@@ -45,7 +45,9 @@ function App() {
           path="/signup"
           element={
             <Suspense fallback={<TopLoadingBar />}>
-              <Signup_page />
+            <ProtectedRoutes>
+            <Signup_page />
+            </ProtectedRoutes>
             </Suspense>
           }
         />
@@ -53,7 +55,9 @@ function App() {
           path="/signin"
           element={
             <Suspense fallback={<TopLoadingBar />}>
+              <ProtectedRoutes>
               <Signin_page />
+              </ProtectedRoutes>
             </Suspense>
           }
         />
