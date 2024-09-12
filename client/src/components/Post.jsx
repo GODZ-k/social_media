@@ -12,7 +12,7 @@ function Post({ type , className }) {
       />
     </div>
   ) : (
-    <div className={`${className} rounded-xl overflow-hidden w-full h-36 sm:h-32 lg:h-36 xl:h-40 inline-block`}>
+    <div className={`${className} rounded-xl overflow-hidden w-full h-28 sm:h-32 lg:h-36 xl:h-40 inline-block`}>
       <video
         autoPlay
         loop
