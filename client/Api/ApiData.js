@@ -2,8 +2,9 @@
 import {ApiURL} from "./ApiConstant.js"
 import axios from "axios"
 import { login, logOut } from "../src/redux/features/authSlice.js"
-import Toast from "@/components/Toast.jsx"
-import toast from "react-hot-toast"
+// import Toast from "@/components/Toast.jsx"
+import { toast } from "sonner"
+// import toast from "react-hot-toast"
 
 
 
@@ -21,16 +22,19 @@ const SignUpUser = async (userData)=>{
 }
 
 
-const SigninUser = async(userData, dispatch , navigate)=>{
+const SigninUser = async(userData, dispatch , navigate , setLoading)=>{
     try {
+        setLoading(true)
         const response = await axios.post(ApiURL.loginUser,userData)
         const data = response.data
         dispatch(login(data))
+        setLoading(false)
         toast.success(data.msg)
         navigate("/")
         
     } catch (error) {
-        toast.error(error.response.data.msg)
+        setLoading(false)
+        toast(error.response.data.msg)
     }
 }
 
@@ -44,11 +48,7 @@ const getProfile = async(dispatch)=>{
         const data = response.data.profile
         dispatch(login(data))
     } catch (error) {
-        // <Toast msg={error.response.data.msg}/>
-        // Toast(error.response.data.msg)
-        toast(error.response.data.msg)
-
-        // toast.error(error.response.data.msg)
+        toast.warning(error.response.data.msg)
     }
 }
 
@@ -58,7 +58,7 @@ const getUser = async(username,setUser)=>{
         const response = await axios.get(`${ApiURL.getProfile}/${username}`)
         setUser(response.data.profile)
     } catch (error) {
-        toast.error(error.response.data.msg)
+        toast.warning(error.response.data.msg)
 
     }
 }
@@ -72,7 +72,7 @@ const getMypost = async(setPosts)=>{
         setPosts(response.data.posts)
 
     } catch (error) {
-         toast.error(error.response.data.msg)
+         toast.warning(error.response.data.msg)
     }
 }
 
@@ -82,7 +82,7 @@ const getPost = async(setPost,pid)=>{
         const response =  await axios.get(`${ApiURL.getPost}/${pid}`)
         setPost(response.data.post)
     } catch (error) {
-        toast.error(error.response.data.msg)
+        toast(error.response.data.msg)
     }
 }
 
@@ -95,7 +95,7 @@ const logOutUser = async(dispatch, navigate) =>{
         dispatch(logOut())
         navigate('/signin')
     } catch (error) {
-        toast.error(error.response.data.msg)
+        toast(error.response.data.msg)
     }
 }
 export {
