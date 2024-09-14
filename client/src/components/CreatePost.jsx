@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  DialogContent,
-} from "@/components/ui/dialog";
+import { DialogContent } from "@/components/ui/dialog";
 
 import {
   Select,
@@ -14,6 +12,9 @@ import {
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import AvatarImg from "./AvatarImg";
 import { Button } from "./ui/button";
+import { useDispatch, useSelector } from "react-redux";
+import { createPost } from "../../Api/ApiData";
+import { useNavigate } from "react-router-dom";
 
 export function CreatePost({ onNext, setPostData, postData }) {
   const [imageSelected, setImageSelected] = useState(
@@ -33,6 +34,7 @@ export function CreatePost({ onNext, setPostData, postData }) {
         imageSelected: true,
         imageName: file.name,
         imageUrl: URL.createObjectURL(file),
+        file
       });
     }
   };
@@ -93,7 +95,10 @@ export function CreatePost({ onNext, setPostData, postData }) {
             </AspectRatio>
           </div>
         ) : (
-          <Button variant="outline" className="relative bg-blue-500 text-white py-2 px-3 rounded-lg z-10">
+          <Button
+            variant="outline"
+            className="relative bg-blue-500 text-white py-2 px-3 rounded-lg z-10"
+          >
             <input
               type="file"
               accept="image/*"
@@ -125,43 +130,99 @@ export function CreatePost({ onNext, setPostData, postData }) {
   );
 }
 
-export function CreatePostDesc({ onBack, postData ,setPostData }) {
+export function CreatePostDesc({ onBack, postData, setPostData }) {
+  const user = useSelector((state) => state.auth.userData);
+  const [loading, setLoading] = useState(false);
+  const [comment, setComment] = useState("");
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  async function handleCreatePost() {
+    try {
+
+      const data = {
+        image: postData.file,
+        postTitle: comment,
+      };
+
+      await createPost(data, dispatch, navigate, setLoading);
+      setComment("")
+      setPostData({
+        imageSelected: false,
+        imageName: "",
+        imageUrl: "",
+        ratio: undefined,
+        file:null
+      });
+
+
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   return (
-    <DialogContent className={" overflow-hidden p-0 sm:min-w-96 min-h-32 gap-0 "}>
+    <DialogContent
+      className={" overflow-hidden p-0 sm:min-w-96 min-h-32 gap-0 "}
+    >
       <div className=" p-2">
         <div>
-        <button className=" hover:bg-gray-200 rounded-md py-1 px-2" onClick={onBack}><i className="fa-solid fa-chevron-left"></i></button>
+          <button
+            className=" hover:bg-gray-200 rounded-md py-1 px-2"
+            onClick={onBack}
+          >
+            <i className="fa-solid fa-chevron-left"></i>
+          </button>
         </div>
         <div className=" mt-2 flex flex-col gap-4">
           <div className=" flex flex-col gap-2">
-         {
-          postData.imageUrl &&  <div className=" w-full h-64 rounded-xl overflow-hidden">
-         {/* <AspectRatio ratio={16/9}> */}
-         <img src={postData.imageUrl} className=" w-full h-full object-cover object-center" alt={postData.imageName} srcset="" />
-         {/* </AspectRatio> */}
-         </div>
-         }
-          <div className=" flex flex-col gap-2">
-            <div className=" flex gap-2 items-center font-semibold">
-            <AvatarImg src={"https://github.com/shadcn.png"}/>
-            <p>tanmaykhatri__</p>
+            {postData.imageUrl && (
+              <div className=" w-full h-64 rounded-xl overflow-hidden">
+                {/* <AspectRatio ratio={16/9}> */}
+                <img
+                  src={postData.imageUrl}
+                  className=" w-full h-full object-cover object-center"
+                  alt={postData.imageName}
+                  srcset=""
+                />
+                {/* </AspectRatio> */}
+              </div>
+            )}
+            <div className=" flex flex-col gap-2">
+              <div className=" flex gap-2 items-center font-semibold">
+                <AvatarImg src={user?.avatar} />
+                <p>{user?.username}</p>
+              </div>
+              <textarea
+                onChange={(e) => setComment(e.target.value)}
+                value={comment || ""}
+                className=" min-h-40 w-full border-none resize-none placeholder:text-sm"
+                placeholder="Enter your Comment"
+                name="comment"
+              ></textarea>
             </div>
-            <textarea className=" min-h-40 w-full border-none resize-none placeholder:text-sm" placeholder="Enter your Comment" name="comment">
-
-            </textarea>
-          </div>
           </div>
           <div className=" flex gap-3">
-          <button onClick={()=>  {
-            setPostData({
-              imageSelected: false,
-              imageName: "",
-              imageUrl: "",
-              ratio: undefined,
-            })
-            onBack()
-          }} className=" cursor-pointer w-fit bg-red-600 rounded-md py-2 px-4 text-white">Discard</button><button className=" cursor-pointer px-8 w-fit bg-blue-600 rounded-md py-2 text-white">Post</button>
+            <button
+              onClick={() => {
+                setPostData({
+                  imageSelected: false,
+                  imageName: "",
+                  imageUrl: "",
+                  ratio: undefined,
+                });
+                onBack();
+              }}
+              className=" cursor-pointer w-fit bg-red-600 rounded-md py-2 px-4 text-white"
+            >
+              Discard
+            </button>
+            <button
+              onClick={handleCreatePost}
+              className=" cursor-pointer px-8 w-fit bg-blue-600 rounded-md py-2 text-white"
+            >
+              {loading ? 'Loading...' : 'Post'}
+            </button>
           </div>
         </div>
       </div>

@@ -2,15 +2,15 @@ import React from 'react'
 import AvatarImg from './AvatarImg'
 import { Button } from './ui/button'
 
-function HoverUser() {
+function HoverUser({user}) {
   return (
     <div className=' p-4'>
       <div className=' mb-2 font-semibold text-sm text-gray-500'>
-        tanmaykhatri__
+        {user?.username}
       </div>
         <div className=' flex gap-2 items-start'>
         <div>
-          <AvatarImg src={"https://github.com/shadcn.png"} className={" !w-16 !h-16"}/>
+          <AvatarImg  src={user?.avatar} className={" !w-16 !h-16"}/>
         </div>
         <div className=' flex flex-col gap-2'>
         <div className=' text-sm gap-3 font-semibold flex justify-between items-center'>
@@ -18,7 +18,7 @@ function HoverUser() {
             200 Posts
           </div>
           <div>
-            12.k Followers
+            {user?.followers.length} Followers
           </div>
         </div>
         <div className=' flex gap-4 items-center'>
@@ -33,10 +33,10 @@ function HoverUser() {
         </div>
         <div className=' my-2 flex flex-col gap-1'>
           <div className=' text-gray-800 text-sm'>
-            Tanmay Khatri
+            {user?.firstName}
           </div>
           <div className=' text-gray-700 text-sm'>
-            hello this is my bio section
+            {user?.bio}
           </div>
         </div>
     </div>

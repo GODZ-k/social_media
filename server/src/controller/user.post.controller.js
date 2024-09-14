@@ -76,10 +76,14 @@ const createPost = async (req, res) => {
       });
     }
 
+    loggedInUser.posts.push(post._id)
+    await loggedInUser.save({validateBeforeSave:false})
+
     return res.status(200).json({
       post,
       msg: "Post created successfully",
     });
+
   } catch (error) {
     return res.status(500).json({
       msg: "Internal server error",
@@ -122,13 +126,10 @@ const deletePost = async (req, res) => {
       });
     }
 
-    const deletedPost = await post.deleteOne();
+    await post.deleteOne();
 
-    if (!deletedPost) {
-      return res.status(404).json({
-        msg: "failed to delete post",
-      });
-    }
+    loggedInUser.posts = loggedInUser.posts.filter(p => p.toString() !== postId);
+    await loggedInUser.save({validateBeforeSave:false})
 
     return res.status(200).json({
       msg: "Post deleted successfully",
@@ -527,7 +528,8 @@ const getUserPosts = async(req,res)=>{
       })
     }
 
-    const posts = await Post.find({createdBy:loggedInUser._id}).sort({ createdAt: -1 });
+    // const posts = await Post.find({createdBy:loggedInUser._id}).sort({ createdAt: -1 });
+    const posts = loggedInUser.populate('posts')
 
     if(!posts){
       return res.status(404).json({

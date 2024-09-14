@@ -43,7 +43,17 @@ const generateVerificationToken = async (user) => {
     }
 }
 
+// cookie options ---->
+
+const options = {
+    httpOnly: true,
+    path: "/",
+    SameSite:'none',
+    Secure:true
+  };
+
 export {
     generateAccessAndRefreshToken,
-    generateVerificationToken
+    generateVerificationToken,
+    options
 }

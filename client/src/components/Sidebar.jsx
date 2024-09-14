@@ -5,6 +5,7 @@ import AvatarImg from "./AvatarImg";
 import { Dialog, DialogTrigger } from "./ui/dialog";
 import { PostManager } from ".";
 import SearchComp from "./SearchComp";
+import { useSelector } from "react-redux";
 
 const navItems = [
   {
@@ -52,15 +53,18 @@ const navItems = [
   {
     label: "Profile",
     isMobile: true,
-    icon: "https://github.com/shadcn.png",
     isProfile: true,
     to: "/profile",
   },
 ];
 
+
 function Sidebar() {
   const [openDialog, setOpenDialog] = useState(null); // Control which dialog is open
+  const user = useSelector(state=> state.auth.userData)
+  // console.log("user data on sidebar ===>" , user)
 
+  
   function handleComponent(type) {
     setOpenDialog(type);
   }
@@ -113,7 +117,7 @@ function Sidebar() {
                       <li key={index} className=" flex gap-4 items-center">
                         <div>
                           {item.isProfile ? (
-                            <AvatarImg src={item.icon} fallback={"CN"} />
+                            <AvatarImg src={user?.avatar} fallback={user?.username[0]} />
                           ) : (
                             <lord-icon
                               src={item.icon}

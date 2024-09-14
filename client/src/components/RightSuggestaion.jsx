@@ -1,15 +1,17 @@
 import { Card } from "flowbite-react";
-import React from "react";
+import React, { memo } from "react";
 import Suggestions from "./Suggestions";
 import UserShortCard from "./UserShortCard";
+import { useSelector } from "react-redux";
 
-function RightSuggestaion() {
+const RightSuggestaion = memo(()=> {
+  const user = useSelector(state=>state.auth.userData)
   return (
     <Card className=" w-full h-full">
-      <UserShortCard type="logout" image="https://github.com/shadcn.png" username="tanmaykhatri__" name="tanmay khatri"/>
+      <UserShortCard type="logout" image={user?.avatar} username={user?.username} name="tanmay khatri"/>
       <Suggestions />
     </Card>
   );
-}
+})
 
 export default RightSuggestaion;

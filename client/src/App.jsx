@@ -1,19 +1,20 @@
 import React, { lazy, Suspense, useEffect } from "react";
 import { Route, Routes } from "react-router-dom";
 const Layout = lazy(() => import("./Layout"));
-import Homepage from "./pages/Homepage";
-import Signup_page from "./pages/Signup_page";
-import Signin_page from "./pages/Signin_page";
+const Homepage  = lazy(()=> import("./pages/Homepage"))
+const Signup_page = lazy(()=> import("./pages/Signup_page"))
+const Signin_page = lazy(()=> import("./pages/Signin_page"))
 import { ProtectedRoutes, TopLoadingBar } from "./components";
-import ProfilePage from "./pages/ProfilePage";
-import SearchPage from "./pages/SearchPage";
-import Explorepage from "./pages/Explorepage";
+const ProfilePage = lazy(()=> import("./pages/ProfilePage"))
+const SearchPage = lazy(()=> import("./pages/SearchPage"))
+const Explorepage = lazy(()=> import("./pages/Explorepage"))
 import { getProfile } from "../Api/ApiData";
 import { useDispatch } from "react-redux";
 
 function App() {
   
   const dispatch = useDispatch()
+
   useEffect(() => {
     getProfile(dispatch);
   }, [dispatch]);
@@ -37,17 +38,21 @@ function App() {
               </Suspense>
             }
           />
-          <Route path="/profile" element={<ProfilePage />} />
-          <Route path="/search" element={<SearchPage />} />
-          <Route path="/explore" element={<Explorepage />} />
+          <Route path="/profile" element={<Suspense fallback={<TopLoadingBar/>}>
+            <ProfilePage />
+          </Suspense>} />
+          <Route path="/search" element={<Suspense fallback={<TopLoadingBar/>}>
+            <SearchPage />
+          </Suspense>} />
+          <Route path="/explore" element={<Suspense fallback={<TopLoadingBar/>}><Explorepage /></Suspense>} />
         </Route>
         <Route
           path="/signup"
           element={
             <Suspense fallback={<TopLoadingBar />}>
-            <ProtectedRoutes>
+            {/* <ProtectedRoutes> */}
             <Signup_page />
-            </ProtectedRoutes>
+            {/* </ProtectedRoutes> */}
             </Suspense>
           }
         />
@@ -55,9 +60,9 @@ function App() {
           path="/signin"
           element={
             <Suspense fallback={<TopLoadingBar />}>
-              <ProtectedRoutes>
+              {/* <ProtectedRoutes> */}
               <Signin_page />
-              </ProtectedRoutes>
+              {/* </ProtectedRoutes> */}
             </Suspense>
           }
         />

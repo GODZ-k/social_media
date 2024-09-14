@@ -38,7 +38,12 @@ const getProfile = async (req, res) => {
 // get all posts ----
 const getAllPosts = async (req, res) => {
   try {
-    const posts = await Post.find({}).sort({ createdAt: -1 });
+    const posts = await Post.find({ createdBy: { $ne:null} }).sort({ createdAt: -1 })
+    .populate({path:'createdBy',select:'-password -refreshToken -createdAt -updatedAt -savedPost'})
+    .populate({path:'comments',populate:{
+      path:'userId',
+      selece:'-password -refreshToken -createdAt -updatedAt -savedPost'
+    }})
 
     if (!posts || !posts.length) {
       return res.status(404).json({
@@ -50,8 +55,10 @@ const getAllPosts = async (req, res) => {
       posts,
       msg: "Post found successfully",
     });
+
   } catch (error) {
     return res.status(500).json({
+      error,
       msg: "Internal server error",
     });
   }

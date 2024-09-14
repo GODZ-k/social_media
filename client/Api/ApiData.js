@@ -2,20 +2,23 @@
 import {ApiURL} from "./ApiConstant.js"
 import axios from "axios"
 import { login, logOut } from "../src/redux/features/authSlice.js"
-// import Toast from "@/components/Toast.jsx"
 import { toast } from "sonner"
-// import toast from "react-hot-toast"
+import { addPost, deletePost, feeds } from "@/redux/features/postSlice.js"
 
 
 
-const SignUpUser = async (userData)=>{
+const SignUpUser = async (userData , navigate , setLoading  )=>{
     try {
+        console.log(userData)
+        setLoading(true)
         const response = await axios.post(ApiURL.registerUser,userData)
         const data = response.data
-
-
+        toast.success(data.msg)
+        setLoading(false)
+        navigate("/signin")
 
     } catch (error) {
+        setLoading(false)
       toast(error.response.data.msg)
 
     }
@@ -26,7 +29,7 @@ const SigninUser = async(userData, dispatch , navigate , setLoading)=>{
     try {
         setLoading(true)
         const response = await axios.post(ApiURL.loginUser,userData)
-        const data = response.data
+        const data = response.data.user
         dispatch(login(data))
         setLoading(false)
         toast.success(data.msg)
@@ -98,6 +101,59 @@ const logOutUser = async(dispatch, navigate) =>{
         toast(error.response.data.msg)
     }
 }
+
+
+
+const createPost = async(postData,dispatch,navigate , setLoading)=>{
+    try {
+        setLoading(true)
+        await axios.post(ApiURL.createPost,postData,{
+            headers:{
+                "Content-Type":"multipart/form-data"
+            },
+            withCredentials:true
+        })
+        .then((res)=>{
+            dispatch(addPost(res.data.post))
+            toast.success(res.data.msg)
+            setLoading(false)
+            navigate("/")
+        })
+    } catch (error) {
+        setLoading(false)
+        toast.warning(error.response.data.msg)
+    }
+}
+
+
+const removePost = async (postId,dispatch,navigate, setLoading)=>{
+    try {
+        await axios.delete(`${ApiURL.deletePost}/${postId}`,{
+            withCredentials:true
+        })
+        .then((res)=>{
+            setLoading(true)
+            dispatch(deletePost(postId))
+            toast.success(res.data.msg)
+            navigate("/")
+        })
+    } catch (error) {
+        toast.warning(error.response.data.msg)
+    }
+}
+
+const getAllPosts = async (dispatch)=>{
+    try {
+        await axios.get(ApiURL.feeds)
+        .then((res)=>{
+            dispatch(feeds(res.data.posts))
+        })
+    } catch (error) {
+        toast.warning(error.response.data.msg)
+    }
+}
+
+
 export {
     SignUpUser,
     SigninUser,
@@ -105,5 +161,8 @@ export {
     getUser,
     getMypost,
     getPost,
-    logOutUser
+    logOutUser,
+    createPost,
+    getAllPosts,
+    removePost
 }

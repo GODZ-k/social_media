@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { memo, useState } from "react";
 import Box from "@mui/joy/Box";
 import Card from "@mui/joy/Card";
 import CardContent from "@mui/joy/CardContent";
@@ -8,9 +8,6 @@ import IconButton from "@mui/joy/IconButton";
 import Input from "@mui/joy/Input";
 import Typography from "@mui/joy/Typography";
 import MoreHoriz from "@mui/icons-material/MoreHoriz";
-import FavoriteBorder from "@mui/icons-material/FavoriteBorder";
-import ModeCommentOutlined from "@mui/icons-material/ModeCommentOutlined";
-import SendOutlined from "@mui/icons-material/SendOutlined";
 import Face from "@mui/icons-material/Face";
 import BookmarkBorderRoundedIcon from "@mui/icons-material/BookmarkBorderRounded";
 import Detailpost from "./Detailpost";
@@ -33,6 +30,9 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
+import { removePost } from "../../Api/ApiData";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 const images = [
   {
@@ -77,20 +77,15 @@ const images = [
   },
 ];
 
-const options = [
-  { name: "Copy link" },
-  { name: "Report" },
-  { name: "Comments" },
-  { name: "Unfollow" },
-  { name: "Save" },
-  { name: "About this Account" },
-  { name: "Delete" },
-];
 
-function PostCard() {
+
+const PostCard = memo(({ post }) => {
   const [isLiked, setLiked] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [text, setText] = useState("");
   const [activeIndex, setActiveIndex] = useState(0); // Track active slide index
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   function handleComment(e) {
     const value = e.target.value;
@@ -100,6 +95,25 @@ function PostCard() {
       setText("");
     }
   }
+
+  async function handleDelete() {
+    try {
+      await removePost(post._id, dispatch, navigate, setLoading);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+
+  const options = [
+    { name: "Copy link" ,onClick:handleDelete},
+    { name: "Report" ,onClick:handleDelete},
+    { name: "Comments" ,onClick:handleDelete},
+    { name: "Unfollow" ,onClick:handleDelete},
+    { name: "Save",onClick:handleDelete },
+    { name: "About this Account",onClick:handleDelete },
+    { name: "Delete" , onClick:handleDelete },
+  ];
   return (
     <>
       <Dialog>
@@ -117,10 +131,13 @@ function PostCard() {
               alignItems: "center",
               display: "flex",
               justifyContent: "space-between",
-              cursor:"pointer",
+              cursor: "pointer",
             }}
           >
-            <HoverComp contentClass={" w-full p-0 "}  content={<HoverUser />}>
+            <HoverComp
+              contentClass={" w-full p-0 "}
+              content={<HoverUser user={post?.createdBy} />}
+            >
               <div className=" flex gap-3 items-center">
                 <Box
                   sx={{
@@ -139,10 +156,10 @@ function PostCard() {
                     },
                   }}
                 >
-                  <AvatarImg src={"https://github.com/shadcn.png"} />
+                  <AvatarImg src={post?.createdBy?.avatar} />
                 </Box>
                 <Typography sx={{ fontWeight: "lg" }}>
-                  tanmaykhatri__
+                  {post?.createdBy?.username}
                 </Typography>
               </div>
             </HoverComp>
@@ -159,32 +176,47 @@ function PostCard() {
             </TriggerOptions>
           </CardContent>
 
-          <CardOverflow className=" h-96 !p-0 -z-0">
-            <div className=" h-full w-full">
-              <Swiper
-                slidesPerView={1}
-                // spaceBetween={30}
-                // loop={true}
-                onSlideChange={(swiper) => setActiveIndex(swiper.activeIndex)}
-                pagination={{
-                  clickable: true,
-                }}
-                modules={[Navigation]}
-                className="mySwiper"
-              >
-                {images?.map((hotel, index) => (
-                  <SwiperSlide key={index}>
+          {post.image ? (
+            <CardOverflow className=" h-96 !p-0 -z-0">
+              <div className=" h-full w-full">
+                <Swiper
+                  slidesPerView={1}
+                  // spaceBetween={30}
+                  // loop={true}
+                  onSlideChange={(swiper) => setActiveIndex(swiper.activeIndex)}
+                  pagination={{
+                    clickable: true,
+                  }}
+                  modules={[Navigation]}
+                  className="mySwiper"
+                >
+                  {/* {post?.map((hotel, index) => ( */}
+                  <SwiperSlide>
                     <img
-                      src={hotel.src}
+                      src={post?.image}
                       className=" w-full h-full object-cover object-center"
                       alt=""
                       srcset=""
+                      loading="lazy"
                     />
                   </SwiperSlide>
-                ))}
-              </Swiper>
-            </div>
-          </CardOverflow>
+                  {/* ))} */}
+                </Swiper>
+              </div>
+            </CardOverflow>
+          ) : (
+            <Typography sx={{ fontSize: "sm" }}>
+              {/* <Link
+                component="button"
+                color="neutral"
+                textColor="text.primary"
+                sx={{ fontWeight: "lg" }}
+              >
+              </Link>{" "} */}
+              {post?.postTitle}
+            </Typography>
+          )}
+
           <CardContent
             orientation="horizontal"
             sx={{ alignItems: "center", mx: -1 }}
@@ -210,7 +242,8 @@ function PostCard() {
                 mx: "auto",
               }}
             >
-              {images.map((_, index) => (
+              {/* future update if single post have multiple images */}
+              {/* {images.map((_, index) => (
                 <Box
                   key={index}
                   sx={{
@@ -223,7 +256,7 @@ function PostCard() {
                         : "background.level3", // Change color for active dot
                   }}
                 />
-              ))}
+              ))} */}
             </Box>
             <Box
               sx={{ width: 0, display: "flex", flexDirection: "row-reverse" }}
@@ -240,37 +273,43 @@ function PostCard() {
               textColor="text.primary"
               sx={{ fontSize: "sm", fontWeight: "lg" }}
             >
-              8.1M Likes
+              {post?.likes} Likes
             </Link>
-            <Typography sx={{ fontSize: "sm" }}>
-              <Link
+            {post?.image && (
+              <>
+                <Typography sx={{ fontSize: "sm" }}>
+                  {/* <Link
                 component="button"
                 color="neutral"
                 textColor="text.primary"
                 sx={{ fontWeight: "lg" }}
-              >
-                MUI
-              </Link>{" "}
-              The React component library you always wanted
-            </Typography>
-            <Link
-              component="button"
-              underline="none"
-              startDecorator="…"
-              sx={{ fontSize: "sm", color: "text.tertiary" }}
-            >
-              more
-            </Link>
-            <DialogTrigger className=" text-start">
-              <Link
-                component="button"
-                underline="none"
-                onClick={() => setIsCommentSection(true)}
-                sx={{ fontSize: "sm", color: "text.tertiary" }}
-              >
-                View all 122 Comments
-              </Link>
-            </DialogTrigger>
+                >
+                </Link>{" "} */}
+                  {post?.postTitle}
+                </Typography>
+
+                <Link
+                  component="button"
+                  underline="none"
+                  startDecorator="…"
+                  sx={{ fontSize: "sm", color: "text.tertiary" }}
+                >
+                  more
+                </Link>
+              </>
+            )}
+            {post?.comments.length > 0 && (
+              <DialogTrigger className=" text-start">
+                <Link
+                  component="button"
+                  underline="none"
+                  onClick={() => setIsCommentSection(true)}
+                  sx={{ fontSize: "sm", color: "text.tertiary" }}
+                >
+                  View all {post?.comments.length} Comments
+                </Link>
+              </DialogTrigger>
+            )}
             <Link
               component="button"
               underline="none"
@@ -292,7 +331,10 @@ function PostCard() {
                 </IconButton>
               </DropdownMenuTrigger>
               <DropdownMenuContent className="p-0 h-96 rounded-md bg-none shadow-none border-none">
-                <EmojiPicker lazyLoadEmojis={true} onEmojiClick={(e)=> setText((prev)=> prev +  e.emoji)} />
+                <EmojiPicker
+                  lazyLoadEmojis={true}
+                  onEmojiClick={(e) => setText((prev) => prev + e.emoji)}
+                />
               </DropdownMenuContent>
             </DropdownMenu>
             <Input
@@ -316,6 +358,6 @@ function PostCard() {
       </Dialog>
     </>
   );
-}
+});
 
 export default PostCard;

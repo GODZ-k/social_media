@@ -1,4 +1,4 @@
-// import { backendApiUrl } from "../../config";
+// import { backendApiUrl } from "../config";
 
 
 const authApiUrl = `/api/v1/auth/user`
@@ -16,7 +16,10 @@ export const ApiURL ={
     // main routes
     getProfile:`${mainApiUrl}/user`,
     getPost:`${mainApiUrl}/post`,
+    feeds:`${mainApiUrl}/posts`,
 
     // post routes
-    getMypost:`${postApiUrl}`
+    // getMypost:`${postApiUrl}`
+    createPost:`${postApiUrl}/create`,
+    deletePost:`${postApiUrl}/delete`,
 }

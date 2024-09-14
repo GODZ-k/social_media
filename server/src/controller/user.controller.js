@@ -10,6 +10,7 @@ import cron from "node-cron";
 import {
   generateAccessAndRefreshToken,
   generateVerificationToken,
+  options,
 } from "../utils/utils.js";
 import { forgotPasswordMail } from "../utils/mails/forgotpasswordmail.js";
 import mongoose from "mongoose";
@@ -33,11 +34,11 @@ const registerUser = async (req, res) => {
       });
     }
 
-    const { username, email, password , confirmPassword , firstName , lastName } = payload.data;
+    const { username, email, password, confirmPassword, firstName, lastName } = payload.data;
 
-    if(password !== confirmPassword){
+    if (password !== confirmPassword) {
       return res.status(400).json({
-        msg:"Confirm password does not match"
+        msg: "Confirm password does not match"
       })
     }
 
@@ -62,6 +63,7 @@ const registerUser = async (req, res) => {
 
     const { data, error } = await verificationMail(email, verificationLink);
 
+    // console.log(error)
     if (error) {
       return res.status(500).json({
         msg: "failed to send verification mail please try again later",
@@ -78,7 +80,7 @@ const registerUser = async (req, res) => {
         verificationToken,
       });
       return res.status(200).json({
-        msg: "user created successfully",
+        msg: "Please verify your account first",
       });
     }
   } catch (error) {
@@ -184,10 +186,13 @@ const loginUser = async (req, res) => {
       existUser._id
     );
 
-    const options = {
-      httpOnly: true,
-      path: "/",
-    };
+    const user = await User.findById(existUser._id)
+
+    if (!user) {
+      return res.status(422).json({
+        msg: "User not found"
+      })
+    }
 
     return res
       .status(200)
@@ -195,6 +200,8 @@ const loginUser = async (req, res) => {
       .cookie("refreshToken", refreshToken, options)
       .json({
         msg: "User loggedin successfully",
+        user
+
       });
 
   } catch (error) {
@@ -240,12 +247,12 @@ const getCurrentUser = async (req, res) => {
       {
         $project: {
           username: 1,
-          firstName:1,
-          lastName:1,
-          bio:1,
+          firstName: 1,
+          lastName: 1,
+          bio: 1,
           email: 1,
           avatar: 1,
-          isVerified:1,
+          isVerified: 1,
           followers: {
             _id: 1,
             username: 1,
@@ -263,16 +270,16 @@ const getCurrentUser = async (req, res) => {
     ]);
 
     if (!profile.length || !profile[0].isVerified) {
-        return res.status(422).json({
-            msg: "Unauthorized access"
-        })
+      return res.status(422).json({
+        msg: "Unauthorized access"
+      })
     }
 
     return res.status(200).json({
-      profile:profile[0],
+      profile: profile[0],
       msg: "User fetched successfully",
     });
-    
+
   } catch (error) {
     return res.status(500).json({
       msg: "Internal server error",
@@ -304,10 +311,6 @@ const logoutUser = async (req, res) => {
         refreshToken: 1,
       },
     });
-    const options = {
-      httpOnly: true,
-      path: "/",
-    };
 
     return res
       .status(200)
@@ -336,11 +339,7 @@ const deleteAccount = async (req, res) => {
 
     await User.findByIdAndDelete(user._id);
 
-    const options = {
-      httpOnly: true,
-      path: "/",
-    };
-
+   
     return res
       .status(200)
       .clearCookie("accessToken", options)
@@ -595,42 +594,43 @@ const followUser = async (req, res) => {
 
 
 // get all followers
-const getFollowers =async(req,res)=>{
+const getFollowers = async (req, res) => {
   try {
     const user = req.user
     const userId = req.params.userId
 
-    if(!user){
+    if (!user) {
       return res.status(422).json({
-        msg:"UnAuthrozed access"
-      })    }
+        msg: "UnAuthrozed access"
+      })
+    }
 
-    const [loggedInUser,newUser] = await Promise.all([
-     await User.findById(user._id),
-     await User.findById(userId)
+    const [loggedInUser, newUser] = await Promise.all([
+      await User.findById(user._id),
+      await User.findById(userId)
     ])
 
-    if(!loggedInUser){
+    if (!loggedInUser) {
       return res.status(422).json({
-        msg:"UnAuthrozed access"
+        msg: "UnAuthrozed access"
       })
     }
 
     const followers = await Promise.all(
-      newUser.followers.map((userId)=>{
-        return User.findById(userId._id).select("-password -refreshToken") 
+      newUser.followers.map((userId) => {
+        return User.findById(userId._id).select("-password -refreshToken")
       })
     )
 
     return res.status(200).json({
       followers,
-      msg:"Followers found successfully"
+      msg: "Followers found successfully"
     })
 
   } catch (error) {
     console.log(error);
     return res.status(500).json({
-      msg:"Internal server error"
+      msg: "Internal server error"
     })
   }
 }
