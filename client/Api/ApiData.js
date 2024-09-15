@@ -3,7 +3,7 @@ import {ApiURL} from "./ApiConstant.js"
 import axios from "axios"
 import { login, logOut } from "../src/redux/features/authSlice.js"
 import { toast } from "sonner"
-import { addPost, deletePost, feeds } from "@/redux/features/postSlice.js"
+import { addPost, deletePost, feeds, updatePost } from "@/redux/features/postSlice.js"
 
 
 
@@ -126,18 +126,36 @@ const createPost = async(postData,dispatch,navigate , setLoading)=>{
 }
 
 
+const editPost = async (data,postId,dispatch,setLoading)=>{
+    try {
+        setLoading(true)
+        await axios.put(`${ApiURL.editPost}/${postId}` , data ,{
+            withCredentials:true
+        })
+        .then((res)=>{
+            setLoading(false)
+            dispatch(updatePost(res.data.updatedPost))
+            toast.success(res.data.msg)
+        })
+    } catch (error) {
+        setLoading(false)
+        toast.warning(error.response.data.msg)
+    }
+}
 const removePost = async (postId,dispatch,navigate, setLoading)=>{
     try {
+        setLoading(true)
         await axios.delete(`${ApiURL.deletePost}/${postId}`,{
             withCredentials:true
         })
         .then((res)=>{
-            setLoading(true)
+            setLoading(false)
             dispatch(deletePost(postId))
             toast.success(res.data.msg)
             navigate("/")
         })
     } catch (error) {
+        setLoading(false)
         toast.warning(error.response.data.msg)
     }
 }
@@ -164,5 +182,6 @@ export {
     logOutUser,
     createPost,
     getAllPosts,
-    removePost
+    removePost,
+    editPost
 }

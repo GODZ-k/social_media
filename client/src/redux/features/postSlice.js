@@ -6,16 +6,21 @@ const postSlice = createSlice({
     name:"post",
     initialState,
     reducers:{
-       feeds:(state , actions)=>{
-        return state = actions.payload
+       feeds:(state , action)=>{
+        return state = action.payload
        },
-       addPost:(state,actions)=>{
-        state.push(actions.payload)
+       addPost:(state,action)=>{
+        state.push(action.payload)
        },
-       deletePost:(state,actions)=>{
-        return state =  state.filter(post => post._id !== actions.payload)
+       deletePost:(state,action)=>{
+        return state =  state.filter(post => post._id !== action.payload)
        },
-       editPost:(state,actions)=>{
+       updatePost:(state,action)=>{
+         
+        const {_id , postTitle} = action.payload
+
+        const post = state.find((e)=> e._id.toString() === _id.toString())
+        post.postTitle = postTitle
 
        }
     }
@@ -23,5 +28,5 @@ const postSlice = createSlice({
 
 
 
-export const { feeds , addPost , deletePost ,  editPost} = postSlice. actions
+export const { feeds , addPost , deletePost ,  updatePost} = postSlice. actions
 export default postSlice.reducer

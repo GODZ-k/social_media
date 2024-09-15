@@ -19,8 +19,21 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import ProfileTabs from "./ProfileTabs";
+import { logOutUser } from "../../Api/ApiData";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 function Profile() {
+const dispatch = useDispatch()
+const navigate = useNavigate()
+
+  async function handleLogout(){
+    try {
+      await logOutUser(dispatch, navigate)
+    } catch (error) {
+      console.log(error)
+    }
+  }
   return (
     <Container>
       <div className=" flex justify-between gap-4 w-full">
@@ -124,7 +137,7 @@ function Profile() {
                       <DropdownMenuItem>Profile</DropdownMenuItem>
                       <DropdownMenuItem>Billing</DropdownMenuItem>
                       <DropdownMenuItem>Team</DropdownMenuItem>
-                      <DropdownMenuItem>Subscription</DropdownMenuItem>
+                      <DropdownMenuItem onClick={handleLogout} className={" text-red-600 font-semibold"}>Logout</DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>
                 </div>

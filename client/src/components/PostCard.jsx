@@ -1,4 +1,4 @@
-import React, { memo, useState } from "react";
+import React, { memo, useEffect, useState } from "react";
 import Box from "@mui/joy/Box";
 import Card from "@mui/joy/Card";
 import CardContent from "@mui/joy/CardContent";
@@ -11,7 +11,7 @@ import MoreHoriz from "@mui/icons-material/MoreHoriz";
 import Face from "@mui/icons-material/Face";
 import BookmarkBorderRoundedIcon from "@mui/icons-material/BookmarkBorderRounded";
 import Detailpost from "./Detailpost";
-import { Dialog, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import ShareButton from "./ShareButton";
 import CommentButton from "./CommentButton";
 import LikeButton from "./LikeButton";
@@ -30,52 +30,10 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
-import { removePost } from "../../Api/ApiData";
+import { editPost, removePost } from "../../Api/ApiData";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-
-const images = [
-  {
-    src: "https://res.cloudinary.com/dlkzk9g9k/image/upload/v1725101426/WhatsApp_Image_2024-08-31_at_10.39.13_AM_1_ydad1h.jpg",
-    content: "",
-    to: "",
-  },
-  {
-    src: "https://res.cloudinary.com/dlkzk9g9k/image/upload/v1725101343/WhatsApp_Image_2024-08-31_at_10.33.12_AM_2_bbdyxd.jpg",
-    content: "",
-    to: "",
-  },
-  {
-    src: "https://res.cloudinary.com/dlkzk9g9k/image/upload/v1725101345/WhatsApp_Image_2024-08-31_at_10.33.14_AM_1_lbjnq5.jpg",
-    content: "",
-    to: "",
-  },
-  {
-    src: "https://res.cloudinary.com/dlkzk9g9k/image/upload/v1725101424/WhatsApp_Image_2024-08-31_at_10.39.10_AM_1_z0t3p0.jpg",
-    content: "",
-    to: "",
-  },
-  {
-    src: "https://res.cloudinary.com/dlkzk9g9k/image/upload/v1725101425/WhatsApp_Image_2024-08-31_at_10.39.09_AM_1_bnrtey.jpg",
-    content: "",
-    to: "",
-  },
-  {
-    src: "https://res.cloudinary.com/dlkzk9g9k/image/upload/v1725101427/WhatsApp_Image_2024-08-31_at_10.39.12_AM_3_fxgqod.jpg",
-    content: "",
-    to: "",
-  },
-  {
-    src: "https://res.cloudinary.com/dlkzk9g9k/image/upload/v1725101343/WhatsApp_Image_2024-08-31_at_10.33.11_AM_t4bacp.jpg",
-    content: "",
-    to: "",
-  },
-  {
-    src: "https://res.cloudinary.com/dlkzk9g9k/image/upload/v1725101425/WhatsApp_Image_2024-08-31_at_10.39.11_AM_1_cifu4w.jpg",
-    content: "",
-    to: "",
-  },
-];
+import MiniLoader from "./MiniLoader";
 
 
 
@@ -83,9 +41,19 @@ const PostCard = memo(({ post }) => {
   const [isLiked, setLiked] = useState(true);
   const [loading, setLoading] = useState(false);
   const [text, setText] = useState("");
+  const [title , setTitle] = useState(post?.postTitle || "")
   const [activeIndex, setActiveIndex] = useState(0); // Track active slide index
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const [isOpen, setIsOpen] = useState(false);
+
+  // Close the dialog when loading becomes false
+  useEffect(() => {
+    if (!loading) {
+      setIsOpen(false);
+    }
+  }, [loading]);
 
   function handleComment(e) {
     const value = e.target.value;
@@ -104,16 +72,24 @@ const PostCard = memo(({ post }) => {
     }
   }
 
-
-  const options = [
-    { name: "Copy link" ,onClick:handleDelete},
-    { name: "Report" ,onClick:handleDelete},
-    { name: "Comments" ,onClick:handleDelete},
-    { name: "Unfollow" ,onClick:handleDelete},
-    { name: "Save",onClick:handleDelete },
-    { name: "About this Account",onClick:handleDelete },
-    { name: "Delete" , onClick:handleDelete },
-  ];
+  async function handleEdit() {
+    try {
+      const data = {
+        postTitle:title
+      }
+      await editPost(data,post._id , dispatch,setLoading)
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  // const options = [
+  //   { name: "Copy link", onClick: () => console.log("hello") },
+  //   { name: "Report", onClick: () => console.log("hello") },
+  //   { name: "Edit", onClick: handleEdit },
+  //   { name: "Unfollow", onClick: () => console.log("hello") },
+  //   { name: "Save", onClick: () => console.log("hello") },
+  //   { name: "Delete", onClick: handleDelete },
+  // ];
   return (
     <>
       <Dialog>
@@ -164,16 +140,133 @@ const PostCard = memo(({ post }) => {
               </div>
             </HoverComp>
 
-            <TriggerOptions items={options}>
-              <IconButton
-                variant="plain"
-                color="neutral"
-                size="sm"
-                sx={{ ml: "auto" }}
+            {/* <TriggerOptions items={options} loading={loading}>
+
+            </TriggerOptions> */}
+            <Dialog
+              open={isOpen}
+              onOpenChange={setIsOpen}
+              className=" w-fit max-w-xl"
+            >
+              <DialogTrigger>
+                <IconButton
+                  variant="plain"
+                  color="neutral"
+                  size="sm"
+                  sx={{ ml: "auto" }}
+                >
+                  <MoreHoriz />
+                </IconButton>
+              </DialogTrigger>
+              <DialogContent
+                className=" max-w-xs rounded-xl py-2"
+                isClose={false}
               >
-                <MoreHoriz />
-              </IconButton>
-            </TriggerOptions>
+                <div className=" w-full">
+                  <ul>
+                    <button
+                      className={
+                        "text-red-600 w-full py-2 hover:bg-gray-50 border-b border-b-gray-300"
+                      }
+                    >
+                      <li>Unfollow</li>
+                    </button>
+                    <button
+                      className={
+                        "text-gray-800 w-full py-2 hover:bg-gray-50 border-b border-b-gray-300"
+                      }
+                    >
+                      <li>Copy link</li>
+                    </button>
+                    <button
+                      className={
+                        "text-gray-800 w-full py-2 hover:bg-gray-50 border-b border-b-gray-300"
+                      }
+                    >
+                      <li>Report</li>
+                    </button>
+                    {/* edit post */}
+                    <Dialog>
+                      <DialogTrigger className=" w-full">
+                        <button
+                          className={
+                            "text-gray-800 w-full py-2 hover:bg-gray-50 border-b border-b-gray-300"
+                          }
+                        >
+                          <li>Edit</li>
+                        </button>
+                      </DialogTrigger>
+                      <DialogContent
+                        className={
+                          " overflow-hidden p-0 sm:min-w-96 min-h-32 gap-0 "
+                        }
+                      >
+                        <div className=" p-2">
+                          {/* <div>
+                            <button
+                              className=" hover:bg-gray-200 rounded-md py-1 px-2"
+                            >
+                              <i className="fa-solid fa-chevron-left"></i>
+                            </button>
+                          </div> */}
+                          <div className=" mt-2 flex flex-col gap-4">
+                            <div className=" flex flex-col gap-2">
+                              {post.image && (
+                                <div className=" w-full h-64 rounded-xl overflow-hidden">
+                                  {/* <AspectRatio ratio={16/9}> */}
+                                  <img
+                                    src={post.image}
+                                    className=" w-full h-full object-cover object-center"
+                                    alt={post._id}
+                                    srcset={post.image}
+                                    loading="lazy"
+                                  />
+                                  {/* </AspectRatio> */}
+                                </div>
+                              )}
+                              <div className=" flex flex-col gap-2">
+                                <div className=" flex gap-2 items-center font-semibold">
+                                  <AvatarImg src={post?.createdBy?.avatar} />
+                                  <p>{post?.createdBy?.username}</p>
+                                </div>
+                                <textarea
+                                  onChange={(e)=> setTitle(e.target.value )}
+                                  value={title}
+                                  className=" min-h-40 w-full border-none resize-none placeholder:text-sm"
+                                  placeholder="Enter your Comment"
+                                  name="comment"
+                                ></textarea>
+                              </div>
+                            </div>
+                            <div className=" flex gap-3">
+                              <button
+                                onClick={handleEdit}
+                                className=" cursor-pointer px-8 w-fit bg-blue-600 rounded-md py-2 text-white"
+                              >
+                                {loading ? <MiniLoader/> : "Update"}
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      </DialogContent>
+                    </Dialog>
+                    <button
+                      className={
+                        "text-gray-800 w-full py-2 hover:bg-gray-50 border-b border-b-gray-300"
+                      }
+                    >
+                      <li>Save</li>
+                    </button>
+                    <button
+                      onClick={handleDelete}
+                      className={"text-red-600 w-full py-2 hover:bg-gray-50"}
+                    >
+                      <li>{loading ? "Deleting ..." : "Delete"}</li>
+                    </button>
+                  </ul>
+                </div>
+              </DialogContent>
+            </Dialog>
           </CardContent>
 
           {post.image ? (
