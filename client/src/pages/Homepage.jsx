@@ -24,7 +24,7 @@ const Homepage = memo(()=>{
 
 
     return ()=>clearInterval(interval)
-  }, []);
+  }, [dispatch]);
 
   useRenderLogger()
   return (

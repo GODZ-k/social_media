@@ -3,7 +3,7 @@ import {ApiURL} from "./ApiConstant.js"
 import axios from "axios"
 import { login, logOut } from "../src/redux/features/authSlice.js"
 import { toast } from "sonner"
-import { addPost, deletePost, feeds, updatePost } from "@/redux/features/postSlice.js"
+import { addPost, deletePost, feeds, likeDislikePost, updatePost } from "@/redux/features/postSlice.js"
 
 
 
@@ -185,6 +185,23 @@ const getAllUsers = async(filter,setUsers)=>{
         toast.warning(error.response.data.msg)
     }
 }
+
+
+
+const likePost =   async(postId,dispatch , user)=>{
+    try {
+        await axios.get(`${ApiURL.likePost}/${postId}`,{
+            withCredentials:true
+        }).then((res)=>{
+
+            dispatch(likeDislikePost({user,postId}))
+            toast.success(res.data.msg)
+        })
+    } catch (error) {
+        toast.warning(error.response.data.msg)
+
+    }
+}
 export {
     SignUpUser,
     SigninUser,
@@ -197,5 +214,6 @@ export {
     getAllPosts,
     removePost,
     editPost,
-    getAllUsers
+    getAllUsers,
+    likePost
 }

@@ -23,5 +23,6 @@ export const ApiURL ={
     // getMypost:`${postApiUrl}`
     createPost:`${postApiUrl}/create`,
     deletePost:`${postApiUrl}/delete`,
-    editPost:`${postApiUrl}/update`
+    editPost:`${postApiUrl}/update`,
+    likePost:`${postApiUrl}/like`
 }

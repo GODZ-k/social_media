@@ -30,15 +30,16 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
-import { editPost, removePost } from "../../Api/ApiData";
-import { useDispatch } from "react-redux";
+import { editPost, likePost, removePost } from "../../Api/ApiData";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import MiniLoader from "./MiniLoader";
 
 
 
 const PostCard = memo(({ post }) => {
-  const [isLiked, setLiked] = useState(true);
+  const user = useSelector(state => state.auth.userData)
+  const [isLiked, setLiked] = useState(post.likedBy.some(like => like.userId === user._id) || false);
   const [loading, setLoading] = useState(false);
   const [text, setText] = useState("");
   const [title , setTitle] = useState(post?.postTitle || "")
@@ -48,12 +49,24 @@ const PostCard = memo(({ post }) => {
 
   const [isOpen, setIsOpen] = useState(false);
 
+
   // Close the dialog when loading becomes false
   useEffect(() => {
     if (!loading) {
       setIsOpen(false);
     }
   }, [loading]);
+
+  function handleLike(){
+    try {
+      setLiked(prevLiked => !prevLiked); // Optimistically update the UI
+      likePost(post._id,dispatch ,user)
+    } catch (error) {
+      console.log(error)
+      setLiked(prevLiked => !prevLiked); // Revert if the request fails
+
+    }
+  }
 
   function handleComment(e) {
     const value = e.target.value;
@@ -186,7 +199,9 @@ const PostCard = memo(({ post }) => {
                       <li>Report</li>
                     </button>
                     {/* edit post */}
-                    <Dialog>
+                   {
+                    post.createdBy._id.toString() === user._id.toString() && (
+                      <Dialog>
                       <DialogTrigger className=" w-full">
                         <button
                           className={
@@ -250,19 +265,25 @@ const PostCard = memo(({ post }) => {
                         </div>
                       </DialogContent>
                     </Dialog>
+                    )
+                   }
                     <button
                       className={
-                        "text-gray-800 w-full py-2 hover:bg-gray-50 border-b border-b-gray-300"
+                        "text-gray-800 w-full py-2 hover:bg-gray-50"
                       }
                     >
                       <li>Save</li>
                     </button>
+                    {
+                      post.createdBy._id.toString() === user._id.toString() && (
                     <button
                       onClick={handleDelete}
-                      className={"text-red-600 w-full py-2 hover:bg-gray-50"}
+                      className={"text-red-600 w-full py-2 hover:bg-gray-50  border-t border-t-gray-300"}
                     >
                       <li>{loading ? "Deleting ..." : "Delete"}</li>
                     </button>
+                      )
+                    }
                   </ul>
                 </div>
               </DialogContent>
@@ -315,7 +336,7 @@ const PostCard = memo(({ post }) => {
             sx={{ alignItems: "center", mx: -1 }}
           >
             <Box sx={{ width: 0, display: "flex", gap: 0.5 }}>
-              <IconButton variant="plain" color="neutral" size="sm">
+              <IconButton onClick={handleLike} variant="plain" color="neutral" size="sm">
                 <LikeButton isLiked={isLiked} />
               </IconButton>
               <DialogTrigger>
@@ -366,7 +387,7 @@ const PostCard = memo(({ post }) => {
               textColor="text.primary"
               sx={{ fontSize: "sm", fontWeight: "lg" }}
             >
-              {post?.likes} Likes
+              {post?.likedBy.length} Likes
             </Link>
             {post?.image && (
               <>
