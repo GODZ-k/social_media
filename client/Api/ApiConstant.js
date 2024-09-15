@@ -17,6 +17,7 @@ export const ApiURL ={
     getProfile:`${mainApiUrl}/user`,
     getPost:`${mainApiUrl}/post`,
     feeds:`${mainApiUrl}/posts`,
+    getAllUsers:`${mainApiUrl}/users`,
 
     // post routes
     // getMypost:`${postApiUrl}`

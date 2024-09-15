@@ -1,25 +1,27 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import UserShortCard from "./UserShortCard";
 import { Input } from "./ui/input";
+import { getAllUsers } from "../../Api/ApiData";
 
 function Searching() {
+  const [users, setUsers] = useState([])
+  const [input , setInput] = useState("")
+
+  useEffect(()=>{
+    getAllUsers(input,setUsers)
+  },[input])
   return (
     <>
-      <Input placeholder="Search" />
-      <UserShortCard
-        name="tanmay khatri"
-        username={"tanmaykhatri__"}
-        image={"https://github.com/shadcn.png"}
-        type={"follow"}
-      />
-      <UserShortCard
-        name="tanmay khatri"
-        username={"tanmaykhatri__"}
-        image={"https://github.com/shadcn.png"}
-        type={"follow"}
-      />
-     
-  
+      <Input placeholder="Search" onChange={(e)=> setInput(e.target.value)} />
+     {users && users?.length >0 ? users?.map((user)=>(
+       <UserShortCard
+       key={user?._id}
+       name={user?.firstName}
+       username={user?.username}
+       image={user?.avatar}
+       type={"follow"}
+     />
+     )): "No data found"}
     </>
   );
 }

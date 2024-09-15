@@ -70,6 +70,7 @@ const registerUser = async (req, res) => {
       });
     }
 
+    // const data = true
     if (data) {
       await User.create({
         email,

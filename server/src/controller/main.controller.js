@@ -125,5 +125,44 @@ const getComment = async (req, res) => {
 };
 
 
+const getAllUsers = async (req,res)=>{
+  try {
+    const filter = req.query.filter || ""
+    const users = await User.find({ 
+          $or:[
+            {
+              username:{
+                $regex:filter
+              }
+            },
+            {
+              firstName:{
+                $regex:filter
+              }
+            }
+          ]
+    }).select('-password -refreshToken')
 
-export { getProfile, getAllPosts, getPost, getComment  };
+    if(!users){
+      return res.status(404).json({
+        msg:"User not found"
+      })
+    }
+
+    return res.status(200).json({
+      users,
+      msg:"Users found successfully"
+    })
+    
+  } catch (error) {
+    console.log(error);
+    
+    return res.status(500).json({
+      msg:"Internal server error"
+    })
+  }
+}
+
+
+
+export { getProfile, getAllPosts, getPost, getComment ,getAllUsers };

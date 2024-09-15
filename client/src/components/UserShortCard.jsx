@@ -4,7 +4,7 @@ import { logOutUser } from "../../Api/ApiData";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 
-function UserShortCard({ type, name, username, image , className }) {
+function UserShortCard({ key, type, name, username, image , className }) {
   const navigate =  useNavigate()
   const dispatch = useDispatch()
 
@@ -12,7 +12,7 @@ function UserShortCard({ type, name, username, image , className }) {
     await logOutUser(dispatch,navigate)
   }
   return (
-    <div className={`${className} flow-root my-4 md:my-0`}>
+    <div key={key} className={`${className} flow-root my-4 md:my-0`}>
       <ul className="divide-y divide-gray-200 dark:divide-gray-700">
         <li className="py-1">
           <div className="flex items-center space-x-4">

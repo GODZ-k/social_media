@@ -142,6 +142,7 @@ const editPost = async (data,postId,dispatch,setLoading)=>{
         toast.warning(error.response.data.msg)
     }
 }
+
 const removePost = async (postId,dispatch,navigate, setLoading)=>{
     try {
         setLoading(true)
@@ -172,6 +173,18 @@ const getAllPosts = async (dispatch)=>{
 }
 
 
+
+const getAllUsers = async(filter,setUsers)=>{
+    try {
+        console.log(filter)
+        await axios.get(`${ApiURL.getAllUsers}?filter=${filter}`)
+        .then((res)=>{
+            setUsers(res.data.users)
+        })
+    } catch (error) {
+        toast.warning(error.response.data.msg)
+    }
+}
 export {
     SignUpUser,
     SigninUser,
@@ -183,5 +196,6 @@ export {
     createPost,
     getAllPosts,
     removePost,
-    editPost
+    editPost,
+    getAllUsers
 }
