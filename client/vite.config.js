@@ -18,7 +18,8 @@ export default defineConfig({
     // get rid of the CORS error
     proxy:{
       "/api":{
-        target:"http://localhost:3000",
+        // target:"http://localhost:3000",
+        target:"social-media-s7t3.vercel.app",
         changeOrigin:true,
         secure:false
       }
