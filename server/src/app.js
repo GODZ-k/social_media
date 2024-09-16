@@ -21,7 +21,9 @@ cloudinary.config({
 
 app.use(cors({
   credentials: true,
-  origin: "*",
+  origin: "https://social-media-bmt3.vercel.app",
+  methods: 'GET,POST,PUT,DELETE,PATCH',  // Allow the methods you're using
+  allowedHeaders: 'Content-Type,Authorization'  // Headers to allow
 }))
 
 app.use(express.json())

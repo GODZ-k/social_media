@@ -46,12 +46,12 @@ const generateVerificationToken = async (user) => {
 // cookie options ---->
 
 const options = {
-    httpOnly: true,
-    path: "/",
-    SameSite:'none',
-    Secure:true
+    httpOnly: true,    // Ensures the cookie is only accessible via HTTP, not JavaScript
+    path: "/",         // Sets the cookie for the root path of your domain
+    sameSite: 'None',  // Allows cross-origin cookies (required for cross-origin requests)
+    secure: true       // Ensures the cookie is only sent over HTTPS
   };
-
+  
 export {
     generateAccessAndRefreshToken,
     generateVerificationToken,
