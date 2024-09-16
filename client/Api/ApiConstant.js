@@ -1,9 +1,9 @@
-// import { backendApiUrl } from "../config";
+import { backendApiUrl } from "../config";
 
 
-const authApiUrl = `/api/v1/auth/user`
-const mainApiUrl  = `/api/v1`
-const postApiUrl = `/api/v1/user/post`
+const authApiUrl = `${backendApiUrl}/api/v1/auth/user`
+const mainApiUrl  = `${backendApiUrl}/api/v1`
+const postApiUrl = `${backendApiUrl}/api/v1/user/post`
 // const authApiUrl = `${backendApiUrl}/auth/user`
 
 export const ApiURL ={
