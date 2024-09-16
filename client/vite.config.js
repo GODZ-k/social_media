@@ -19,7 +19,7 @@ export default defineConfig({
     proxy:{
       "/api":{
         // target:"http://localhost:3000",
-        target:"social-media-s7t3.vercel.app",
+        target:"https://social-media-s7t3.vercel.app",
         changeOrigin:true,
         secure:false
       }
