@@ -1,15 +1,14 @@
 import React from "react";
 import Post from "./Post";
 
-function PostsTab({type , className}) {
+function PostsTab({type , className, posts}) {
   return (
     <div className=" w-full grid gap-2 grid-cols-3 md:grid-cols-4 ">
-      <Post className={className} type={type}/>
-      <Post className={className} type={type}/>
-      <Post className={className} type={type}/>
-      <Post className={className} type={type}/>
-      <Post className={className} type={type}/>
-      <Post className={className} type={type}/>
+      {
+        posts && posts?.length >0 ? posts?.map((post)=>(
+           <Post post={post} key={post?._id} className={className} type={type}/>
+        ))
+      :"No post found"}
     </div>
   );
 }

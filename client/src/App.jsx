@@ -1,19 +1,18 @@
 import React, { lazy, Suspense, useEffect } from "react";
 import { Route, Routes } from "react-router-dom";
 const Layout = lazy(() => import("./Layout"));
-const Homepage  = lazy(()=> import("./pages/Homepage"))
-const Signup_page = lazy(()=> import("./pages/Signup_page"))
-const Signin_page = lazy(()=> import("./pages/Signin_page"))
-import { ProtectedRoutes, TopLoadingBar } from "./components";
-const ProfilePage = lazy(()=> import("./pages/ProfilePage"))
-const SearchPage = lazy(()=> import("./pages/SearchPage"))
-const Explorepage = lazy(()=> import("./pages/Explorepage"))
+const Homepage = lazy(() => import("./pages/Homepage"));
+const Signup_page = lazy(() => import("./pages/Signup_page"));
+const Signin_page = lazy(() => import("./pages/Signin_page"));
+import { ProtectedRoutes, PublicRoutes, TopLoadingBar } from "./components";
+const ProfilePage = lazy(() => import("./pages/ProfilePage"));
+const SearchPage = lazy(() => import("./pages/SearchPage"));
+const Explorepage = lazy(() => import("./pages/Explorepage"));
 import { getProfile } from "../Api/ApiData";
 import { useDispatch } from "react-redux";
 
 function App() {
-  
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   useEffect(() => {
     getProfile(dispatch);
@@ -30,29 +29,57 @@ function App() {
             </Suspense>
           }
         >
+
+          {/* protected routes */}
           <Route
             index
             element={
               <Suspense fallback={<TopLoadingBar />}>
-                <Homepage />
+                {/* <ProtectedRoutes> */}
+                  <Homepage />
+                {/* </ProtectedRoutes> */}
               </Suspense>
             }
           />
-          <Route path="/profile" element={<Suspense fallback={<TopLoadingBar/>}>
-            <ProfilePage />
-          </Suspense>} />
-          <Route path="/search" element={<Suspense fallback={<TopLoadingBar/>}>
-            <SearchPage />
-          </Suspense>} />
-          <Route path="/explore" element={<Suspense fallback={<TopLoadingBar/>}><Explorepage /></Suspense>} />
+          <Route
+            path="/profile/:username"
+            element={
+              <Suspense fallback={<TopLoadingBar />}>
+                <ProtectedRoutes>
+                  <ProfilePage />
+                </ProtectedRoutes>
+              </Suspense>
+            }
+          />
+          <Route
+            path="/search"
+            element={
+              <Suspense fallback={<TopLoadingBar />}>
+                <ProtectedRoutes>
+                  <SearchPage />
+                </ProtectedRoutes>
+              </Suspense>
+            }
+          />
+          <Route
+            path="/explore"
+            element={
+              <Suspense fallback={<TopLoadingBar />}>
+                <ProtectedRoutes>
+                  <Explorepage />
+                </ProtectedRoutes>
+              </Suspense>
+            }
+          />
         </Route>
+        {/* public roiutes */}
         <Route
           path="/signup"
           element={
             <Suspense fallback={<TopLoadingBar />}>
-            {/* <ProtectedRoutes> */}
-            <Signup_page />
-            {/* </ProtectedRoutes> */}
+              <PublicRoutes>
+              <Signup_page />
+              </PublicRoutes>
             </Suspense>
           }
         />
@@ -60,9 +87,9 @@ function App() {
           path="/signin"
           element={
             <Suspense fallback={<TopLoadingBar />}>
-              {/* <ProtectedRoutes> */}
+              <PublicRoutes>
               <Signin_page />
-              {/* </ProtectedRoutes> */}
+              </PublicRoutes>
             </Suspense>
           }
         />

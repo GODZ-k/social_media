@@ -7,7 +7,7 @@ import {
 
 function HoverComp({content,children , className , contentClass}) {
   return (
-    <HoverCard className={className}>
+    <HoverCard isOpen={true} className={`${className}`}>
       <HoverCardTrigger>
         {children}
       </HoverCardTrigger>

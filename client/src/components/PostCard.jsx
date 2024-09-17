@@ -3,7 +3,6 @@ import Box from "@mui/joy/Box";
 import Card from "@mui/joy/Card";
 import CardContent from "@mui/joy/CardContent";
 import CardOverflow from "@mui/joy/CardOverflow";
-import Link from "@mui/joy/Link";
 import IconButton from "@mui/joy/IconButton";
 import Input from "@mui/joy/Input";
 import Typography from "@mui/joy/Typography";
@@ -32,7 +31,7 @@ import {
 } from "./ui/dropdown-menu";
 import { editPost, likePost, removePost } from "../../Api/ApiData";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import MiniLoader from "./MiniLoader";
 
 
@@ -60,7 +59,7 @@ const PostCard = memo(({ post }) => {
   function handleLike(){
     try {
       setLiked(prevLiked => !prevLiked); // Optimistically update the UI
-      likePost(post._id,dispatch ,user)
+      likePost(post._id,dispatch ,user,isLiked)
     } catch (error) {
       console.log(error)
       setLiked(prevLiked => !prevLiked); // Revert if the request fails
@@ -123,8 +122,10 @@ const PostCard = memo(({ post }) => {
               cursor: "pointer",
             }}
           >
+            <Link to={`/profile/${post?.createdBy?.username}`}>
             <HoverComp
-              contentClass={" w-full p-0 "}
+            // onClick={handleRouteProfile}
+              contentClass={" bg-white w-full p-0 "}
               content={<HoverUser user={post?.createdBy} />}
             >
               <div className=" flex gap-3 items-center">
@@ -152,6 +153,7 @@ const PostCard = memo(({ post }) => {
                 </Typography>
               </div>
             </HoverComp>
+            </Link>
 
             {/* <TriggerOptions items={options} loading={loading}>
 
@@ -200,7 +202,7 @@ const PostCard = memo(({ post }) => {
                     </button>
                     {/* edit post */}
                    {
-                    post.createdBy._id.toString() === user._id.toString() && (
+                    post?.createdBy?._id === user?._id && (
                       <Dialog>
                       <DialogTrigger className=" w-full">
                         <button
@@ -275,7 +277,7 @@ const PostCard = memo(({ post }) => {
                       <li>Save</li>
                     </button>
                     {
-                      post.createdBy._id.toString() === user._id.toString() && (
+                      post?.createdBy?._id === user?._id && (
                     <button
                       onClick={handleDelete}
                       className={"text-red-600 w-full py-2 hover:bg-gray-50  border-t border-t-gray-300"}
@@ -331,11 +333,9 @@ const PostCard = memo(({ post }) => {
             </Typography>
           )}
 
-          <CardContent
-            orientation="horizontal"
-            sx={{ alignItems: "center", mx: -1 }}
-          >
-            <Box sx={{ width: 0, display: "flex", gap: 0.5 }}>
+          <div
+          className=" flex justify-between items-center">
+            <Box sx={{ width: 0, display: "flex", gap: 0.5,  }}>
               <IconButton onClick={handleLike} variant="plain" color="neutral" size="sm">
                 <LikeButton isLiked={isLiked} />
               </IconButton>
@@ -379,16 +379,13 @@ const PostCard = memo(({ post }) => {
                 <BookmarkBorderRoundedIcon />
               </IconButton>
             </Box>
-          </CardContent>
-          <CardContent>
-            <Link
-              component="button"
-              underline="none"
-              textColor="text.primary"
-              sx={{ fontSize: "sm", fontWeight: "lg" }}
+          </div>
+          <div className=" flex justify-start items-start gap-1 flex-col">
+            <p
+              className=" text-sm font-semibold"
             >
               {post?.likedBy.length} Likes
-            </Link>
+            </p>
             {post?.image && (
               <>
                 <Typography sx={{ fontSize: "sm" }}>
@@ -402,37 +399,29 @@ const PostCard = memo(({ post }) => {
                   {post?.postTitle}
                 </Typography>
 
-                <Link
-                  component="button"
-                  underline="none"
-                  startDecorator="…"
-                  sx={{ fontSize: "sm", color: "text.tertiary" }}
+                <p
+                 className=" text-sm text-gray-500"
                 >
                   more
-                </Link>
+                </p>
               </>
             )}
             {post?.comments.length > 0 && (
               <DialogTrigger className=" text-start">
-                <Link
-                  component="button"
-                  underline="none"
-                  onClick={() => setIsCommentSection(true)}
-                  sx={{ fontSize: "sm", color: "text.tertiary" }}
+                <div
+                  onClick={() => setIsCommentSection(true)
+
+                  }
                 >
                   View all {post?.comments.length} Comments
-                </Link>
+                </div>
               </DialogTrigger>
             )}
-            <Link
-              component="button"
-              underline="none"
-              sx={{ fontSize: "10px", color: "text.tertiary", my: 0.5 }}
-            >
+            <p className=" text-xs text-gray-500 font-medium">
               2 DAYS AGO
-            </Link>
-          </CardContent>
-          <CardContent orientation="horizontal" sx={{ gap: 1 }}>
+            </p>
+          </div>
+          <div className=" flex">
             <DropdownMenu>
               <DropdownMenuTrigger>
                 <IconButton
@@ -464,7 +453,7 @@ const PostCard = memo(({ post }) => {
                 Post
               </button>
             )}
-          </CardContent>
+          </div>
         </Card>
 
         {/* detail post */}

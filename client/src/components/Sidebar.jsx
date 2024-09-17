@@ -7,56 +7,6 @@ import { PostManager } from ".";
 import SearchComp from "./SearchComp";
 import { useSelector } from "react-redux";
 
-const navItems = [
-  {
-    label: "Home",
-    isMobile: true,
-    icon: "https://cdn.lordicon.com/cnpvyndp.json",
-    to: "/",
-  },
-  {
-    label: "Search",
-    icon: "https://cdn.lordicon.com/kkvxgpti.json",
-    isPopUp: true,
-    type:"search"
-  },
-  {
-    label: "Create",
-    isMobile: true,
-    icon: "https://cdn.lordicon.com/hqymfzvj.json",
-    isPopUp: true,
-    type:"create"
-  },
-  {
-    label: "Explore",
-    isMobile: true,
-    icon: "https://cdn.lordicon.com/xunzgeah.json",
-    to: "/explore",
-  },
-  {
-    label: "Reels",
-    isMobile: true,
-    icon: "https://cdn.lordicon.com/aklfruoc.json",
-    to: "/reels",
-  },
-  {
-    label: "Messages",
-    icon: "https://cdn.lordicon.com/fdxqrdfe.json",
-    to: "/chat",
-  },
-  {
-    label: "Notification",
-    icon: "https://cdn.lordicon.com/vspbqszr.json",
-    to: "/notification",
-  },
-
-  {
-    label: "Profile",
-    isMobile: true,
-    isProfile: true,
-    to: "/profile",
-  },
-];
 
 
 function Sidebar() {
@@ -64,6 +14,57 @@ function Sidebar() {
   const user = useSelector(state=> state.auth.userData)
   // console.log("user data on sidebar ===>" , user)
 
+  const navItems = [
+    {
+      label: "Home",
+      isMobile: true,
+      icon: "https://cdn.lordicon.com/cnpvyndp.json",
+      to: "/",
+    },
+    {
+      label: "Search",
+      icon: "https://cdn.lordicon.com/kkvxgpti.json",
+      isPopUp: true,
+      type:"search"
+    },
+    {
+      label: "Create",
+      isMobile: true,
+      icon: "https://cdn.lordicon.com/hqymfzvj.json",
+      isPopUp: true,
+      type:"create"
+    },
+    {
+      label: "Explore",
+      isMobile: true,
+      icon: "https://cdn.lordicon.com/xunzgeah.json",
+      to: "/explore",
+    },
+    {
+      label: "Reels",
+      isMobile: true,
+      icon: "https://cdn.lordicon.com/aklfruoc.json",
+      to: "/reels",
+    },
+    {
+      label: "Messages",
+      icon: "https://cdn.lordicon.com/fdxqrdfe.json",
+      to: "/chat",
+    },
+    {
+      label: "Notification",
+      icon: "https://cdn.lordicon.com/vspbqszr.json",
+      to: "/notification",
+    },
+  
+    {
+      label: "Profile",
+      isMobile: true,
+      isProfile: true,
+      to: `/profile/${user?.username}`,
+    },
+  ];
+  
   
   function handleComponent(type) {
     setOpenDialog(type);

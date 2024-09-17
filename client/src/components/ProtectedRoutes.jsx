@@ -1,21 +1,18 @@
+import React, { useEffect } from 'react';
+import { useSelector } from 'react-redux';
+import { Navigate, useLocation } from 'react-router-dom';
 
+function ProtectedRoutes({ children }) {
+  const user = useSelector(state => state.auth.status);
+  const location = useLocation();
 
-import React, { useEffect } from 'react'
-import { useSelector } from 'react-redux'
-import { Navigate, useNavigate } from 'react-router-dom'
+  if (!user) {
+    // Redirect unauthenticated users to the sign-in page
+    return <Navigate to="/signin" state={{ from: location }} replace />;
+  }
 
-function ProtectedRoutes({children}) {
-    const navigate = useNavigate()
-    const user = useSelector(state=> state.auth.status)
-  
-    useEffect(() => {
-        if (!user) {
-          navigate('/');
-        }
-      }, [user, navigate]);
-
-      
-   return !user ? children : null
+  // Render the protected route
+  return children;
 }
 
-export default ProtectedRoutes
+export default ProtectedRoutes;

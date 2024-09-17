@@ -13,7 +13,7 @@ const getProfile = async (req, res) => {
       });
     }
 
-    const profile = await User.findOne({username}).select('-password -verificationToken -refreshToken')
+    const profile = await User.findOne({username}).populate('posts').select('-password -verificationToken -refreshToken')
 
 
     if (!profile || profile.length === 0 || !profile.isVerified ) {

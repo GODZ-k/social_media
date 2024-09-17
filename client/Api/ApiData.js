@@ -187,14 +187,22 @@ const getAllUsers = async(filter,setUsers)=>{
 }
 
 
+// const getUser = async()=>{
+//     try {
+        
+//     } catch (error) {
+//         toast.warning(error)
+//     }
+// }
 
-const likePost =   async(postId,dispatch , user)=>{
+
+const likePost =   async(postId,dispatch , user,isLiked)=>{
     try {
         await axios.get(`${ApiURL.likePost}/${postId}`,{
             withCredentials:true
         }).then((res)=>{
 
-            dispatch(likeDislikePost({user,postId}))
+            dispatch(likeDislikePost({user,postId,isLiked}))
             toast.success(res.data.msg)
         })
     } catch (error) {
@@ -215,5 +223,5 @@ export {
     removePost,
     editPost,
     getAllUsers,
-    likePost
+    likePost,
 }
