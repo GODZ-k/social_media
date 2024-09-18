@@ -30,7 +30,7 @@ const postSlice = createSlice({
                     const userIndex = post.likedBy.indexOf(user._id);
                     // User has already liked the post, remove like
                     post.likedBy.splice(userIndex, 1);
-                    post.likedBy = post.likedBy.filter((post) => post.userId !== user._id)
+                    // post.likedBy = post.likedBy.filter((post) => post.userId !== user._id)
                     // post.likes -= 1;
             } else {
                     // User is liking the post

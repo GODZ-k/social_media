@@ -18,12 +18,12 @@ const Homepage = memo(()=>{
   useEffect(() => {
      getAllPosts(dispatch);
 
-    const interval = setInterval(() => {
-      getAllPosts(dispatch);
-    }, 20000);
+    // const interval = setInterval(() => {
+    //   getAllPosts(dispatch);
+    // }, 20000);
 
 
-    return ()=>clearInterval(interval)
+    // return ()=>clearInterval(interval)
   }, [dispatch]);
 
   useRenderLogger()

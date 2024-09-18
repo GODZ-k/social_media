@@ -13,7 +13,6 @@ const app = express()
 export const resend = new Resend(process.env.RESEND_API_KEY);
 
 const __dirname = path.resolve();
-console.log(__dirname)
 
 cloudinary.config({
     cloud_name: process.env.CLOUDINARY_NAME,
