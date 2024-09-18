@@ -15,10 +15,10 @@ function HoverUser({user}) {
         <div className=' flex flex-col gap-2'>
         <div className=' text-sm gap-3 font-semibold flex justify-between items-center'>
           <div>
-            200 Posts
+            {user?.posts?.length} Posts
           </div>
           <div>
-            {user?.followers.length} Followers
+            {user?.followers?.length} Followers
           </div>
         </div>
         <div className=' flex gap-4 items-center'>

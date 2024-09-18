@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import UserShortCard from "./UserShortCard";
 import { Input } from "./ui/input";
 import { getAllUsers } from "../../Api/ApiData";
+import { NoData } from ".";
 
 function Searching() {
   const [users, setUsers] = useState([])
@@ -21,7 +22,7 @@ function Searching() {
        image={user?.avatar}
        type={"follow"}
      />
-     )): "No data found"}
+     )): <NoData/>}
     </>
   );
 }

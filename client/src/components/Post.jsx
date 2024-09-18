@@ -1,7 +1,13 @@
 import React from "react";
+import { Dialog, DialogTrigger } from "./ui/dialog";
+import { Detailpost } from ".";
 
 function Post({ type , className, post ,key }) {
-  return type === "image" ? (
+
+  console.log("post card post ====>", post)
+  return <Dialog>
+ <DialogTrigger>
+ {type === "image" ? (
     <div key={key} className=" cursor-pointer rounded-xl overflow-hidden w-full h-28 sm:h-32 lg:h-36 xl:h-40 inline-block ">
       <img
         src={post?.image}
@@ -26,7 +32,10 @@ function Post({ type , className, post ,key }) {
         />
       </video>
     </div>
-  );
+  )}
+ </DialogTrigger>
+  <Detailpost post={post} />  
+    </Dialog>
 }
 
 export default Post;

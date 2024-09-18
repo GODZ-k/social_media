@@ -94,14 +94,7 @@ const PostCard = memo(({ post }) => {
       console.log(error);
     }
   }
-  // const options = [
-  //   { name: "Copy link", onClick: () => console.log("hello") },
-  //   { name: "Report", onClick: () => console.log("hello") },
-  //   { name: "Edit", onClick: handleEdit },
-  //   { name: "Unfollow", onClick: () => console.log("hello") },
-  //   { name: "Save", onClick: () => console.log("hello") },
-  //   { name: "Delete", onClick: handleDelete },
-  // ];
+
   return (
     <>
       <Dialog>
@@ -457,7 +450,7 @@ const PostCard = memo(({ post }) => {
         </Card>
 
         {/* detail post */}
-        <Detailpost />
+        <Detailpost post={post}/>
       </Dialog>
     </>
   );

@@ -8,7 +8,7 @@ import { ProtectedRoutes, PublicRoutes, TopLoadingBar } from "./components";
 const ProfilePage = lazy(() => import("./pages/ProfilePage"));
 const SearchPage = lazy(() => import("./pages/SearchPage"));
 const Explorepage = lazy(() => import("./pages/Explorepage"));
-import { getProfile } from "../Api/ApiData";
+import { getProfile,getAllPosts } from "../Api/ApiData";
 import { useDispatch } from "react-redux";
 
 function App() {
@@ -16,6 +16,19 @@ function App() {
 
   useEffect(() => {
     getProfile(dispatch);
+  }, [dispatch]);
+
+  // console.log("all posts from redux ====> ",feeds)
+
+  useEffect(() => {
+     getAllPosts(dispatch);
+
+    // const interval = setInterval(() => {
+    //   getAllPosts(dispatch);
+    // }, 20000);
+
+
+    // return ()=>clearInterval(interval)
   }, [dispatch]);
 
   return (

@@ -3,7 +3,7 @@ import {ApiURL} from "./ApiConstant.js"
 import axios from "axios"
 import { login, logOut } from "../src/redux/features/authSlice.js"
 import { toast } from "sonner"
-import { addPost, deletePost, feeds, likeDislikePost, updatePost } from "@/redux/features/postSlice.js"
+import { addPost, deletePost, allPosts, likeDislikePost, updatePost } from "@/redux/features/postSlice.js"
 
 
 
@@ -161,11 +161,24 @@ const removePost = async (postId,dispatch,navigate, setLoading)=>{
     }
 }
 
+// const getAllFeeds = async (dispatch)=>{
+//     try {
+//         await axios.get(ApiURL.feeds,{
+//             withCredentials:true
+//         })
+//         .then((res)=>{
+//             dispatch(feeds(res.data.posts))
+//         })
+//     } catch (error) {
+//         toast.warning(error.response.data.msg)
+//     }
+// }
+
 const getAllPosts = async (dispatch)=>{
     try {
-        await axios.get(ApiURL.feeds)
+        await axios.get(ApiURL.getAllPosts)
         .then((res)=>{
-            dispatch(feeds(res.data.posts))
+            dispatch(allPosts(res.data.posts))
         })
     } catch (error) {
         toast.warning(error.response.data.msg)

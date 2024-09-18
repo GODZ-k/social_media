@@ -18,6 +18,7 @@ import Signin  from "./Signin";
 import ProtectedRoutes from "./ProtectedRoutes";
 import Signup from "./Signup";
 import PublicRoutes from "./PublicRoutes";
+import NoData from "./NoData";
 export {
     Input,
     Sidebar,
@@ -39,5 +40,6 @@ export {
     HoverUser,
     Explorepage_comp,
     ProtectedRoutes,
-    PublicRoutes
+    PublicRoutes,
+    NoData
 }

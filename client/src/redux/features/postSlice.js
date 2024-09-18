@@ -6,7 +6,7 @@ const postSlice = createSlice({
     name: "post",
     initialState,
     reducers: {
-        feeds: (state, action) => {
+        allPosts: (state, action) => {
             return state = action.payload
         },
         addPost: (state, action) => {
@@ -34,7 +34,14 @@ const postSlice = createSlice({
                     // post.likes -= 1;
             } else {
                     // User is liking the post
-                    post.likedBy.push(user._id);
+                    const likedUser ={
+                        userId:user?._id,
+                        avatar:user?.avatar,
+                        username:user?.username,
+                        _id:postId
+
+                    }
+                    post.likedBy.push(likedUser);
                     // post.likes += 1;
                 // }
             }
@@ -44,5 +51,5 @@ const postSlice = createSlice({
 
 
 
-export const { feeds, addPost, deletePost, updatePost, likeDislikePost } = postSlice.actions
+export const { allPosts, addPost, deletePost, updatePost, likeDislikePost } = postSlice.actions
 export default postSlice.reducer

@@ -3,29 +3,13 @@ import {
   PostCard,
   Container as MainContainer,
   RightSuggestaion,
+  NoData,
 } from "../components";
-import { getAllPosts } from "../../Api/ApiData";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import useRenderLogger from "@/components/RenderLogger";
 
 const Homepage = memo(()=>{
-  const dispatch = useDispatch();
   const feeds = useSelector((state) => state.posts);
-
-
-  // console.log("all posts from redux ====> ",feeds)
-
-  useEffect(() => {
-     getAllPosts(dispatch);
-
-    // const interval = setInterval(() => {
-    //   getAllPosts(dispatch);
-    // }, 20000);
-
-
-    // return ()=>clearInterval(interval)
-  }, [dispatch]);
-
   useRenderLogger()
   return (
     <MainContainer>
@@ -33,7 +17,7 @@ const Homepage = memo(()=>{
         <div className=" w-full sm:w-[30rem] h-screen flex flex-col gap-11">
           {feeds && feeds?.length > 0 ? feeds?.map((feed)=>(
             <PostCard post={feed} />
-          )) : "No post found"}
+          )) : <NoData/>}
         </div>
         <div className=" w-96 lg:block hidden h-fit">
           <RightSuggestaion />

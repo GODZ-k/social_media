@@ -21,7 +21,7 @@ export const ApiURL ={
     // main routes
     getProfile:`${mainApiUrl}/user`,
     getPost:`${mainApiUrl}/post`,
-    feeds:`${mainApiUrl}/posts`,
+    getAllPosts:`${mainApiUrl}/posts`,
     getAllUsers:`${mainApiUrl}/users`,
 
     // post routes
@@ -29,5 +29,6 @@ export const ApiURL ={
     createPost:`${postApiUrl}/create`,
     deletePost:`${postApiUrl}/delete`,
     editPost:`${postApiUrl}/update`,
-    likePost:`${postApiUrl}/like`
+    likePost:`${postApiUrl}/like`,
+    feeds:`${postApiUrl}/feed`,
 }
