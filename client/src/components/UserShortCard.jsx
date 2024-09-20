@@ -1,7 +1,7 @@
 import React from "react";
 import AvatarImg from "./AvatarImg";
 import { logOutUser } from "../../Api/ApiData";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 
 function UserShortCard({ key, type, name, username, image , className }) {
@@ -15,8 +15,10 @@ function UserShortCard({ key, type, name, username, image , className }) {
     <div key={key} className={`${className} flow-root my-4 md:my-0`}>
       <ul className="divide-y divide-gray-200 dark:divide-gray-700">
         <li className="py-1">
+          <div className=" flex  justify-between items-center">
+          <Link to={`/profile/${username}`}>
           <div className="flex items-center space-x-4">
-            <div className="shrink-0">
+           <div className="shrink-0">
               <AvatarImg src={image} />
             </div>
             <div className="min-w-0 flex-1">
@@ -27,6 +29,8 @@ function UserShortCard({ key, type, name, username, image , className }) {
                 {username}
               </p>
             </div>
+           </div>
+           </Link>
             {type === "logout" ? (
               <button onClick={handleLogout} className="inline-flex items-center text-sm font-normal text-red-600 dark:text-white">
                 Logout

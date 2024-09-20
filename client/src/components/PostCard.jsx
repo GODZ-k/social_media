@@ -29,7 +29,7 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
-import { editPost, likePost, removePost } from "../../Api/ApiData";
+import { editPost, insertComment, likePost, removePost } from "../../Api/ApiData";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import MiniLoader from "./MiniLoader";
@@ -38,7 +38,7 @@ import MiniLoader from "./MiniLoader";
 
 const PostCard = memo(({ post }) => {
   const user = useSelector(state => state.auth.userData)
-  const [isLiked, setLiked] = useState(post.likedBy.some(like => like.userId === user._id) || false);
+  const [isLiked, setLiked] = useState(post?.likedBy.some(like => like.userId === user._id) || false);
   const [loading, setLoading] = useState(false);
   const [text, setText] = useState("");
   const [title , setTitle] = useState(post?.postTitle || "")
@@ -48,6 +48,12 @@ const PostCard = memo(({ post }) => {
 
   const [isOpen, setIsOpen] = useState(false);
 
+  useEffect(() => {
+    if (post) {
+      setTitle(post?.postTitle);
+      setLiked(post?.likedBy.some((like) => like.userId === user._id) || false);
+    }
+  }, [post]); // Re-run this effect when 'post' changes
 
   // Close the dialog when loading becomes false
   useEffect(() => {
@@ -95,6 +101,16 @@ const PostCard = memo(({ post }) => {
     }
   }
 
+  async function handlePostComment(){
+    try {
+      const data = {
+        'comment':text
+      }
+      await insertComment(data,post._id,dispatch,setLoading)
+    } catch (error) {
+      console.log(error)
+    }
+  }
   return (
     <>
       <Dialog>
@@ -442,7 +458,7 @@ const PostCard = memo(({ post }) => {
               sx={{ flex: 1, px: 0, "--Input-focusedThickness": "0px" }}
             />
             {text.length > 0 && (
-              <button className=" text-blue-600" underline="none" role="button">
+              <button onClick={handlePostComment} className=" text-blue-600" underline="none" role="button">
                 Post
               </button>
             )}
@@ -450,7 +466,7 @@ const PostCard = memo(({ post }) => {
         </Card>
 
         {/* detail post */}
-        <Detailpost post={post}/>
+        <Detailpost Post={post}/>
       </Dialog>
     </>
   );

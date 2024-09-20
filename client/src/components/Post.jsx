@@ -4,7 +4,7 @@ import { Detailpost } from ".";
 
 function Post({ type , className, post ,key }) {
 
-  console.log("post card post ====>", post)
+  // console.log("post card post ====>", post)
   return <Dialog>
  <DialogTrigger>
  {type === "image" ? (
@@ -34,7 +34,7 @@ function Post({ type , className, post ,key }) {
     </div>
   )}
  </DialogTrigger>
-  <Detailpost post={post} />  
+  <Detailpost Post={post} />  
     </Dialog>
 }
 

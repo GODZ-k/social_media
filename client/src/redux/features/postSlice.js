@@ -21,7 +21,6 @@ const postSlice = createSlice({
             post.postTitle = postTitle
 
         },
-      
         likeDislikePost: (state, action) => {
             const { user, postId ,isLiked} = action.payload;
             const post = state.find(post => post._id === postId);
@@ -46,10 +45,14 @@ const postSlice = createSlice({
                 // }
             }
         },
+
+        postComment:(state,action)=>{
+          console.log(state)
+        }
     }
 })
 
 
 
-export const { allPosts, addPost, deletePost, updatePost, likeDislikePost } = postSlice.actions
+export const { allPosts, addPost, deletePost, updatePost, likeDislikePost,postComment } = postSlice.actions
 export default postSlice.reducer

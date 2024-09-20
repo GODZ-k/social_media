@@ -3,7 +3,7 @@ import {ApiURL} from "./ApiConstant.js"
 import axios from "axios"
 import { login, logOut } from "../src/redux/features/authSlice.js"
 import { toast } from "sonner"
-import { addPost, deletePost, allPosts, likeDislikePost, updatePost } from "@/redux/features/postSlice.js"
+import { addPost, deletePost, allPosts, likeDislikePost, updatePost, postComment } from "@/redux/features/postSlice.js"
 
 
 
@@ -59,6 +59,7 @@ const getProfile = async(dispatch)=>{
 const getUser = async(username,setUser)=>{
     try {
         const response = await axios.get(`${ApiURL.getProfile}/${username}`)
+        // console.log(response.data)
         setUser(response.data.profile)
     } catch (error) {
         toast.warning(error.response.data.msg)
@@ -107,6 +108,7 @@ const logOutUser = async(dispatch, navigate) =>{
 const createPost = async(postData,dispatch,navigate , setLoading)=>{
     try {
         setLoading(true)
+        console.log(postData)
         await axios.post(ApiURL.createPost,postData,{
             headers:{
                 "Content-Type":"multipart/form-data"
@@ -209,18 +211,39 @@ const getAllUsers = async(filter,setUsers)=>{
 // }
 
 
-const likePost =   async(postId,dispatch , user,isLiked)=>{
+const likePost =   async(postId,dispatch,user,isLiked)=>{
     try {
         await axios.get(`${ApiURL.likePost}/${postId}`,{
             withCredentials:true
         }).then((res)=>{
-
             dispatch(likeDislikePost({user,postId,isLiked}))
             toast.success(res.data.msg)
         })
     } catch (error) {
         toast.warning(error.response.data.msg)
 
+    }
+}
+
+
+
+const insertComment = async(data, postId , dispatch,setLoading)=>{
+    try {
+        setLoading(true)
+        console.log(data,postId)
+        await axios.post(`${ApiURL.comments}/${postId}`,data , {
+            withCredentials:true,
+        })
+        .then((res)=>{
+            setLoading(false)
+            console.log(res)
+            toast.success(res.data.msg)
+            dispatch(postComment())
+        })
+    } catch (error) {
+        console.log(error)
+        setLoading(false)
+        // toast.warning(error.response.data.msg)
     }
 }
 export {
@@ -237,4 +260,5 @@ export {
     editPost,
     getAllUsers,
     likePost,
+    insertComment
 }

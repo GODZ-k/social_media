@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { memo, useEffect, useState } from "react";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import Comment from "./Comment";
 import { DialogTrigger } from "@radix-ui/react-dialog";
@@ -12,6 +12,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { editPost, likePost, removePost } from "../../Api/ApiData";
 import { useNavigate } from "react-router-dom";
 import MiniLoader from "./MiniLoader";
+import useRenderLogger from "./RenderLogger";
 
 const comments = [
   {
@@ -25,11 +26,10 @@ const comments = [
 ];
 
 
-function Detailpost({ post }) {
+const Detailpost = memo(({ Post })=>{
   const user = useSelector((state) => state.auth.userData);
-  const [isLiked, setLiked] = useState(
-    post?.likedBy.some((like) => like.userId === user._id) || false
-  );
+  const post = useSelector(state => state.posts.find((p)=> p?._id === Post?._id))
+  const [isLiked, setLiked] = useState(post?.likedBy.some((like) => like.userId === user._id) || false);
   const [loading, setLoading] = useState(false);
   const [title , setTitle] = useState(post?.postTitle || "")
   const [text, setText] = useState("");
@@ -45,6 +45,8 @@ function Detailpost({ post }) {
     }
   }
 
+  console.log('detail post',post)
+
   function handleLike() {
     try {
       setLiked((prevLiked) => !prevLiked); // Optimistically update the UI
@@ -54,6 +56,14 @@ function Detailpost({ post }) {
       setLiked((prevLiked) => !prevLiked); // Revert if the request fails
     }
   }
+
+  useEffect(() => {
+    if (post) {
+      setTitle(post?.postTitle);
+      setLiked(post?.likedBy.some((like) => like.userId === user._id) || false);
+    }
+  }, [post,navigate,dispatch]); // Re-run this effect when 'post' changes
+
 
   async function handleDelete() {
     try {
@@ -74,10 +84,20 @@ function Detailpost({ post }) {
     }
   }
 
+  // useRenderLogger()
+  // if (!post) {
+  //   return <DialogContent className=" md:max-w-5xl w-full p-0 sm:h-auto h-full overflow-hidden">Post not found</DialogContent>; // Handle case where the post is not available
+  // }
+
   return (
     <DialogContent className=" md:max-w-5xl w-full p-0 sm:h-auto h-full overflow-hidden">
       <div className=" h-full w-full bg-white gap-2 justify-between overflow-hidden flex">
-        <div className=" h-full w-0 md:min-w-[25rem] md:visible invisible md:block hidden "></div>
+        
+        {post?.image && (
+        <div className=" h-full w-0 md:min-w-[25rem] md:visible invisible md:block hidden ">
+          <img src={post?.image} className=" w-full h-full object-cover object-center" alt="" />
+        </div>
+        )}
         <div className=" w-full justify-between px-4 py-4 mt-4 flex flex-col">
           <div className=" w-full flex flex-col gap-4">
             <div className="flex items-center space-x-4">
@@ -87,10 +107,10 @@ function Detailpost({ post }) {
               <div className="min-w-0 w-full flex justify-between">
                 <div>
                   <p className="truncate text-sm font-semibold text-gray-900 dark:text-white">
-                    Neil Sims
+                   {post?.createdBy.firstName}
                   </p>
                   <p className="truncate text-xs text-gray-500 dark:text-gray-400">
-                    email@windster.com
+                    {post?.createdBy.username}
                   </p>
                 </div>
                 {/* post options */}
@@ -275,6 +295,6 @@ function Detailpost({ post }) {
       </div>
     </DialogContent>
   );
-}
+})
 
 export default Detailpost;

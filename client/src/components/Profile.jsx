@@ -39,9 +39,8 @@ function Profile() {
 
   useEffect(() => {
     getUser(username, setUser);
-  }, []);
+  }, [navigate]);
 
-  // console.log(user);
   return (
     <Container>
       <div className=" flex justify-between gap-4 w-full">

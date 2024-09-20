@@ -31,4 +31,5 @@ export const ApiURL ={
     editPost:`${postApiUrl}/update`,
     likePost:`${postApiUrl}/like`,
     feeds:`${postApiUrl}/feed`,
+    comments:`${postApiUrl}/comment`
 }
