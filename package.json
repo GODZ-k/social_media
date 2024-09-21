@@ -7,8 +7,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon server/index.js",
-    "build":"npm install && npm install --prefix client && npm run build --prefix client",
-    "start":"nodemon server/index.js"
+    "build": "npm install && npm install --prefix client && npm run build --prefix client",
+    "start": "nodemon server/index.js"
   },
   "keywords": [],
   "author": "",
@@ -29,6 +29,7 @@
     "nodemon": "^3.1.4",
     "resend": "^3.4.0",
     "sharp": "^0.33.4",
+    "vercel": "^37.5.3",
     "zod": "^3.23.8"
   }
 }
