@@ -107,6 +107,7 @@ const PostCard = memo(({ post }) => {
         'comment':text
       }
       await insertComment(data,post._id,dispatch,setLoading)
+      setText('')
     } catch (error) {
       console.log(error)
     }

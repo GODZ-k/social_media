@@ -342,6 +342,7 @@ const commentPost = async (req, res) => {
     await post.save({ validateBeforeSave: false });
 
     return res.status(200).json({
+      userComment,
       msg: "Comment added successfully",
     });
   } catch (error) {

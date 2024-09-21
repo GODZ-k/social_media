@@ -1,5 +1,6 @@
 import React from 'react'
 import AvatarImg from './AvatarImg'
+import moment from 'moment/moment'
 
 function Comment({username , comment ,  likes , time , avatar , isCaption }) {
   return (
@@ -15,7 +16,7 @@ function Comment({username , comment ,  likes , time , avatar , isCaption }) {
                   <div>{comment}</div>
                 </div>
                 <div className=" text-sm flex gap-3">
-                  <div className=" text-gray-600">{time} d</div>
+                  <div className=" text-gray-600">{moment(time).fromNow()}</div>
                 {likes &&   <div className=" font-semibold text-gray-700">{likes} likes</div>}
                 </div>
               </div>

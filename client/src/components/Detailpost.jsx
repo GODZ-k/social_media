@@ -9,7 +9,7 @@ import Input from "@mui/joy/Input";
 import AvatarImg from "./AvatarImg";
 import { TriggerOptions } from ".";
 import { useDispatch, useSelector } from "react-redux";
-import { editPost, likePost, removePost } from "../../Api/ApiData";
+import { editPost, insertComment, likePost, removePost } from "../../Api/ApiData";
 import { useNavigate } from "react-router-dom";
 import MiniLoader from "./MiniLoader";
 import useRenderLogger from "./RenderLogger";
@@ -45,7 +45,7 @@ const Detailpost = memo(({ Post })=>{
     }
   }
 
-  console.log('detail post',post)
+  // console.log('detail post',post)
 
   function handleLike() {
     try {
@@ -81,6 +81,18 @@ const Detailpost = memo(({ Post })=>{
       await editPost(data, post._id, dispatch, setLoading);
     } catch (error) {
       console.log(error);
+    }
+  }
+
+  async function handlePostComment(){
+    try {
+      const data = {
+        'comment':text
+      }
+      await insertComment(data,post._id,dispatch,setLoading)
+      setText('')
+    } catch (error) {
+      console.log(error)
     }
   }
 
@@ -247,14 +259,14 @@ const Detailpost = memo(({ Post })=>{
                 avatar={post?.createdBy?.avatar}
               />
               {/* comments */}
-              {comments && comments.length > 0
-                ? comments?.map((comment) => (
+              {post?.comments && post?.comments.length > 0
+                ? post?.comments?.map((comment) => (
                     <Comment
-                      username={comment.username}
-                      comment={comment.comment}
+                      username={comment?.username}
+                      comment={comment?.comment}
                       likes={comment.likes}
-                      time={comment.likes}
-                      avatar={comment.avatar}
+                      time={comment?.createdAt}
+                      avatar={comment?.avatar}
                     />
                   ))
                 : "No comment"}
@@ -285,7 +297,7 @@ const Detailpost = memo(({ Post })=>{
                   }}
                 />
                 {text && (
-                  <button className=" text-blue-500 text-sm">Post</button>
+                  <button onClick={handlePostComment} className=" text-blue-500 text-sm">Post</button>
                 )}
               </div>
             </div>

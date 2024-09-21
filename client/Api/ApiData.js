@@ -191,7 +191,6 @@ const getAllPosts = async (dispatch)=>{
 
 const getAllUsers = async(filter,setUsers)=>{
     try {
-        console.log(filter)
         await axios.get(`${ApiURL.getAllUsers}?filter=${filter}`)
         .then((res)=>{
             setUsers(res.data.users)
@@ -230,7 +229,6 @@ const likePost =   async(postId,dispatch,user,isLiked)=>{
 const insertComment = async(data, postId , dispatch,setLoading)=>{
     try {
         setLoading(true)
-        console.log(data,postId)
         await axios.post(`${ApiURL.comments}/${postId}`,data , {
             withCredentials:true,
         })
@@ -238,7 +236,7 @@ const insertComment = async(data, postId , dispatch,setLoading)=>{
             setLoading(false)
             console.log(res)
             toast.success(res.data.msg)
-            dispatch(postComment())
+            dispatch(postComment({comment:res.data.userComment , postId}))
         })
     } catch (error) {
         console.log(error)
@@ -246,6 +244,8 @@ const insertComment = async(data, postId , dispatch,setLoading)=>{
         // toast.warning(error.response.data.msg)
     }
 }
+
+
 export {
     SignUpUser,
     SigninUser,

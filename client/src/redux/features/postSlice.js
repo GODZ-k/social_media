@@ -47,7 +47,11 @@ const postSlice = createSlice({
         },
 
         postComment:(state,action)=>{
-          console.log(state)
+            const post = state.find((post)=> post._id === action.payload.postId)
+            if(post){
+                post?.comments.push(action.payload.comment)
+            }
+
         }
     }
 })

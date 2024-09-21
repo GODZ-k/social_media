@@ -15,7 +15,7 @@ const commentSchema = new Schema({
   username: {
     type: String,
   },
-});
+},{timestamps:true});
 
 
 const Comment = mongoose.model("Comment", commentSchema)
