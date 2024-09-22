@@ -7,6 +7,7 @@ import { CssVarsProvider } from "@mui/joy/styles";
 import { ChakraProvider } from '@chakra-ui/react'
 import { Toaster } from 'react-hot-toast'
 import store from './redux/store/store.js'
+import { Analytics } from "@vercel/analytics/react"
 import { Provider } from 'react-redux'
 import { Toaster as Toast} from "@/components/ui/sonner.jsx"
 import 'swiper/css';
@@ -22,6 +23,7 @@ createRoot(document.getElementById('root')).render(
           <App />
         </CssVarsProvider>
           <Toaster />
+          <Analytics/>
           <Toast position="top-right"   closeButton/>
         </ChakraProvider>
       </BrowserRouter>
