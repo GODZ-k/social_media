@@ -3,7 +3,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import PostsTab from './PostsTab'
 
 function ProfileTabs({posts}) {
-  // console.log(' post data ====> ',posts)
   return (
     <Tabs defaultValue="posts" className=" flex justify-between flex-col items-center w-full">
     <TabsList className=" w-full flex justify-evenly">

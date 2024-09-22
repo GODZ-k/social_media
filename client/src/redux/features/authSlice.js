@@ -23,11 +23,20 @@ const authSlice = createSlice({
         logOut:(state, action)=>{
             state.status = false,
             state.userData =  null
+        },
+        followUnfollowUser:(state,action)=>{
+            const user = state.userData.following.find((user)=> user._id === action.payload._id)
+            if(user){
+                const userIndex = state.userData.following.indexOf(action.payload._id);
+                state.userData.following.splice(userIndex, 1);
+            }else{
+               state.userData.following.push(action.payload)
+            }
         }
     }
 })
 
 
 
-export const { login , logout , logOut} = authSlice. actions
+export const { login , logout , logOut,followUnfollowUser} = authSlice. actions
 export default authSlice.reducer

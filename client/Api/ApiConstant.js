@@ -3,6 +3,7 @@
 
 // backend url from config
 const authApiUrl = `/api/v1/auth/user`
+const userApiUrl = `/api/v1/user`
 const mainApiUrl  = `/api/v1`
 const postApiUrl = `/api/v1/user/post`
 
@@ -17,6 +18,10 @@ export const ApiURL ={
     loginUser:`${authApiUrl}/login`,
     currentUser:`${authApiUrl}/profile`,
     logOutUser:`${authApiUrl}/logout`,
+
+    // user routes
+    followUnfollow:`${userApiUrl}/follow`,
+    suggestions:`${userApiUrl}/suggestions`,
 
     // main routes
     getProfile:`${mainApiUrl}/user`,

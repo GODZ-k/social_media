@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Container, RightSuggestaion } from ".";
+import { Container, ProtectUserContent, RightSuggestaion } from ".";
 import AvatarImg from "./AvatarImg";
 import {
   Dialog,
@@ -19,16 +19,22 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import ProfileTabs from "./ProfileTabs";
-import { getUser, logOutUser } from "../../Api/ApiData";
-import { useDispatch } from "react-redux";
+import { followUnfollow, getUser, logOutUser } from "../../Api/ApiData";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
+import MiniLoader from "./MiniLoader";
 
 function Profile() {
+  const loggedInUser = useSelector(state=> state.auth.userData)
+  const { username } = useParams();
+  const [loading , setLoading] = useState(false)
+  const [user, setUser] = useState({});
+  const [isFollowed, setIsFollowed] = useState(false); // Initialize as false
+  // const [isFollowed , setIsFollowed] = useState(loggedInUser?.following.some((loggedInUser)=> loggedInUser?._id === user?._id) || false)
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [user, setUser] = useState({});
-  const { username } = useParams();
 
+  console.log("islogged in",  loggedInUser, user )
   async function handleLogout() {
     try {
       await logOutUser(dispatch, navigate);
@@ -37,9 +43,27 @@ function Profile() {
     }
   }
 
+  useEffect(()=>{
+    if(user && loggedInUser){
+      setIsFollowed(loggedInUser?.following.some((followedUser) => followedUser._id === user._id))
+    }
+  },[user, loggedInUser])
+
   useEffect(() => {
     getUser(username, setUser);
-  }, [navigate]);
+  }, [navigate,loggedInUser,username]);
+
+  async function handleFollowUnfollow(){
+    setLoading(true); 
+    try{
+      await followUnfollow(user, dispatch, setLoading);
+      setIsFollowed(prev => !prev); 
+    } catch(error){
+      console.log(error);
+    } finally {
+      setLoading(false); 
+    }
+  }
 
   return (
     <Container>
@@ -120,21 +144,23 @@ function Profile() {
                   <span className="">{user?.following?.length}</span> following
                 </div>
               </div>
+              {
+                loggedInUser._id === user._id ? (
+                  
               <div className=" flex justify-between items-center">
                 <div className=" flex gap-4 my-2">
-                  <button className=" bg-blue-500 border border-blue-500 py-1 text-white px-3 rounded-md text-sm flex gap-2 items-center ">
-                    <i className=" fa-solid fa-user-plus"></i>
-                    <div>Follow</div>
+                  <button className=" bg-black border border-black py-1 text-white px-3 rounded-md text-sm flex gap-2 items-center ">
+                    <div>Edit profile</div>
                   </button>
                   <button className="  bg-white py-1 text-black px-3 border border-black rounded-md text-sm ">
-                    Message
+                    Share Profile
                   </button>
                 </div>
                 <div>
                   <DropdownMenu>
                     <DropdownMenuTrigger>
                       {" "}
-                      <button>
+                      <button className=" p-2">
                         <i class="fa-solid fa-ellipsis-vertical"></i>
                       </button>
                     </DropdownMenuTrigger>
@@ -155,11 +181,35 @@ function Profile() {
                   </DropdownMenu>
                 </div>
               </div>
+                ) :(
+                  <div className=" flex justify-between items-center">
+                  <div className=" flex gap-4 my-2">
+                    <button onClick={handleFollowUnfollow} className={`${isFollowed ? ' bg-red-500' :'bg-blue-500'} py-1 text-white px-3 rounded-md text-sm flex gap-2 items-center `}>
+                      {!isFollowed && <i className=" fa-solid fa-user-plus"></i>}
+                      {loading ? <MiniLoader/> : (isFollowed ? 'Unfollow' : 'Follow')}
+                    </button>
+                    {
+                      isFollowed && <button className="  bg-white py-1 text-black px-3 border border-black rounded-md text-sm ">
+                      Message
+                    </button>
+                    }
+                  </div>
+                </div>
+                )
+              }
             </div>
           </div>
-          <div className=" w-full">
+          {
+            isFollowed || (loggedInUser._id === user._id)? (
+              <div className=" w-full">
             <ProfileTabs posts={user?.posts} />
           </div>
+            ):(
+            <ProtectUserContent className=" h-36 text-red-500 flex justify-center items-center w-full font-semibold">
+              Please follow this account first to see the posts
+            </ProtectUserContent>
+            )
+          }
         </div>
         <div className=" w-96 lg:block hidden h-fit">
           <RightSuggestaion />

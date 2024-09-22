@@ -1,7 +1,7 @@
 // import toast from "react-hot-toast"
 import {ApiURL} from "./ApiConstant.js"
 import axios from "axios"
-import { login, logOut } from "../src/redux/features/authSlice.js"
+import { followUnfollowUser, login, logOut } from "../src/redux/features/authSlice.js"
 import { toast } from "sonner"
 import { addPost, deletePost, allPosts, likeDislikePost, updatePost, postComment } from "@/redux/features/postSlice.js"
 
@@ -246,6 +246,41 @@ const insertComment = async(data, postId , dispatch,setLoading)=>{
 }
 
 
+
+
+const followUnfollow =  async(user ,  dispatch , setLoading)=>{
+    try {
+        setLoading(true)
+        await axios.get(ApiURL.followUnfollow + '/' +user._id.toString(),{
+            withCredentials:true
+        }).then((res)=>{
+            setLoading(false)
+            dispatch(followUnfollowUser(user))  // pending
+            toast.success(res.data.msg)
+        })
+
+    } catch (error) {
+        setLoading(false)
+        toast.warning(error.response.data.msg)
+    }
+}
+
+
+const getAllSuggestions = async(setUsers,setLoading)=>{
+    try {
+        setLoading(true)
+        await axios.get(ApiURL.suggestions,{
+            withCredentials:true
+        }).then((res)=>{
+            setLoading(false)
+            setUsers(res.data.users)
+        })
+    } catch (error) {
+        toast.warning(error.response.data.msg)
+        setLoading(false)
+    }
+}
+
 export {
     SignUpUser,
     SigninUser,
@@ -260,5 +295,7 @@ export {
     editPost,
     getAllUsers,
     likePost,
-    insertComment
+    insertComment,
+    followUnfollow,
+    getAllSuggestions
 }

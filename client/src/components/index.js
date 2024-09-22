@@ -19,6 +19,7 @@ import ProtectedRoutes from "./ProtectedRoutes";
 import Signup from "./Signup";
 import PublicRoutes from "./PublicRoutes";
 import NoData from "./NoData";
+import ProtectUserContent from "./ProtectUserContent";
 export {
     Input,
     Sidebar,
@@ -41,5 +42,6 @@ export {
     Explorepage_comp,
     ProtectedRoutes,
     PublicRoutes,
-    NoData
+    NoData,
+    ProtectUserContent
 }

@@ -9,7 +9,7 @@ import Input from "@mui/joy/Input";
 import AvatarImg from "./AvatarImg";
 import { TriggerOptions } from ".";
 import { useDispatch, useSelector } from "react-redux";
-import { editPost, insertComment, likePost, removePost } from "../../Api/ApiData";
+import { editPost, followUnfollow, insertComment, likePost, removePost } from "../../Api/ApiData";
 import { useNavigate } from "react-router-dom";
 import MiniLoader from "./MiniLoader";
 import useRenderLogger from "./RenderLogger";
@@ -30,6 +30,7 @@ const Detailpost = memo(({ Post })=>{
   const user = useSelector((state) => state.auth.userData);
   const post = useSelector(state => state.posts.find((p)=> p?._id === Post?._id))
   const [isLiked, setLiked] = useState(post?.likedBy.some((like) => like.userId === user._id) || false);
+  const [isFollowed , setIsFollowed] = useState(user?.following.some((loggedInUser)=> loggedInUser._id === post?.createdBy._id) || false)
   const [loading, setLoading] = useState(false);
   const [title , setTitle] = useState(post?.postTitle || "")
   const [text, setText] = useState("");
@@ -96,6 +97,22 @@ const Detailpost = memo(({ Post })=>{
     }
   }
 
+  async function handleFollowUnfollow(){
+    try{
+      const user = {
+        _id:post?.createdBy._id,
+        username:post?.createdBy.username,
+        avatar:post?.createdBy.avatar,
+        email:post?.createdBy.email,
+      }
+      await followUnfollow(user ,  dispatch , setLoading)
+      setIsFollowed(prev=> !isFollowed)
+    }catch(error){
+      // setIsFollowed(prev=> !isFollowed)
+      console.log(error)
+    }
+  }
+
   // useRenderLogger()
   // if (!post) {
   //   return <DialogContent className=" md:max-w-5xl w-full p-0 sm:h-auto h-full overflow-hidden">Post not found</DialogContent>; // Handle case where the post is not available
@@ -136,13 +153,24 @@ const Detailpost = memo(({ Post })=>{
                   >
                     <div className=" w-full">
                       <ul>
+                      {
+                      post?.createdBy?._id !== user?._id && (
                         <button
+                        onClick={handleFollowUnfollow}
                           className={
-                            "text-red-600 w-full py-2 hover:bg-gray-50 border-b border-b-gray-300"
+                            " w-full py-2 hover:bg-gray-50 border-b border-b-gray-300"
                           }
                         >
-                          <li>Unfollow</li>
+                          {
+                            isFollowed ? (
+                              <li className="text-red-600">Unfollow</li>
+                            ):(
+                              <li className="text-blue-600">Follow</li>
+                            )
+                          }
                         </button>
+                      )
+                    }
                         <button
                           className={
                             "text-gray-800 w-full py-2 hover:bg-gray-50 border-b border-b-gray-300"

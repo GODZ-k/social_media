@@ -29,7 +29,7 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
-import { editPost, insertComment, likePost, removePost } from "../../Api/ApiData";
+import { editPost, followUnfollow, insertComment, likePost, removePost } from "../../Api/ApiData";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import MiniLoader from "./MiniLoader";
@@ -39,6 +39,7 @@ import MiniLoader from "./MiniLoader";
 const PostCard = memo(({ post }) => {
   const user = useSelector(state => state.auth.userData)
   const [isLiked, setLiked] = useState(post?.likedBy.some(like => like.userId === user._id) || false);
+  const [isFollowed , setIsFollowed] = useState(user?.following.some((loggedInUser)=> loggedInUser._id === post?.createdBy._id) || false)
   const [loading, setLoading] = useState(false);
   const [text, setText] = useState("");
   const [title , setTitle] = useState(post?.postTitle || "")
@@ -112,6 +113,25 @@ const PostCard = memo(({ post }) => {
       console.log(error)
     }
   }
+
+
+  async function handleFollowUnfollow(){
+    try{
+      const user = {
+        _id:post?.createdBy._id,
+        username:post?.createdBy.username,
+        avatar:post?.createdBy.avatar,
+        email:post?.createdBy.email,
+      }
+      await followUnfollow(user ,  dispatch , setLoading)
+      setIsFollowed(prev=> !isFollowed)
+    }catch(error){
+      // setIsFollowed(prev=> !isFollowed)
+      console.log(error)
+    }
+  }
+
+  
   return (
     <>
       <Dialog>
@@ -189,13 +209,24 @@ const PostCard = memo(({ post }) => {
               >
                 <div className=" w-full">
                   <ul>
-                    <button
-                      className={
-                        "text-red-600 w-full py-2 hover:bg-gray-50 border-b border-b-gray-300"
-                      }
-                    >
-                      <li>Unfollow</li>
-                    </button>
+                    {
+                      post?.createdBy?._id !== user?._id && (
+                        <button
+                        onClick={handleFollowUnfollow}
+                          className={
+                            " w-full py-2 hover:bg-gray-50 border-b border-b-gray-300"
+                          }
+                        >
+                          {
+                            isFollowed ? (
+                              <li className="text-red-600">Unfollow</li>
+                            ):(
+                              <li className="text-blue-600">Follow</li>
+                            )
+                          }
+                        </button>
+                      )
+                    }
                     <button
                       className={
                         "text-gray-800 w-full py-2 hover:bg-gray-50 border-b border-b-gray-300"
@@ -203,13 +234,17 @@ const PostCard = memo(({ post }) => {
                     >
                       <li>Copy link</li>
                     </button>
-                    <button
-                      className={
-                        "text-gray-800 w-full py-2 hover:bg-gray-50 border-b border-b-gray-300"
-                      }
-                    >
-                      <li>Report</li>
-                    </button>
+                    {
+                       post?.createdBy?._id !== user?._id &&(
+                        <button
+                          className={
+                            "text-gray-800 w-full py-2 hover:bg-gray-50 border-b border-b-gray-300"
+                          }
+                        >
+                          <li>Report</li>
+                        </button>
+                       )
+                    }
                     {/* edit post */}
                    {
                     post?.createdBy?._id === user?._id && (

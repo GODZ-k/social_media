@@ -340,7 +340,7 @@ const deleteAccount = async (req, res) => {
 
     await User.findByIdAndDelete(user._id);
 
-   
+
     return res
       .status(200)
       .clearCookie("accessToken", options)
@@ -637,6 +637,47 @@ const getFollowers = async (req, res) => {
 }
 
 
+// get all suggetions ---
+const getSuggestions = async (req, res) => {
+  try {
+    const user = req.user
+
+    if (!user) {
+      return res.status(422).json({
+        msg: "unauthorized access"
+      })
+    }
+
+    const loggedInUser = await User.findById(user._id)
+
+    if (!loggedInUser) {
+      return res.status(422).json({
+        msg: "unauthorized access"
+      })
+    }
+
+    const users = await User.find({_id:{
+      $ne:loggedInUser._id
+    }}).select('-password -refreshToken')
+
+    if(!users){
+      return res.status(404).json({
+        msg:"Users not found"
+      })
+    }
+
+
+    return  res.status(200).json({
+      users,
+      msg:"Users found successfully"
+    })
+  } catch (error) {
+    return res.status(500).json({
+      msg: "Internal server error"
+    })
+  }
+}
+
 // cron job ----------------
 
 // delete unverified user - after 24h -------------------------------------
@@ -664,5 +705,6 @@ export {
   forgotPassword,
   resetPassword,
   followUser,
-  getFollowers
+  getFollowers,
+  getSuggestions
 };

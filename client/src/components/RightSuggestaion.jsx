@@ -8,7 +8,7 @@ const RightSuggestaion = memo(()=> {
   const user = useSelector(state=>state.auth.userData)
   return (
     <Card className=" w-full h-full">
-      <UserShortCard type="logout" image={user?.avatar} username={user?.username} name="tanmay khatri"/>
+      <UserShortCard type="logout" avatar={user?.avatar} username={user?.username} firstName="tanmay khatri"/>
       <Suggestions />
     </Card>
   );

@@ -1,5 +1,5 @@
 import React, { lazy, Suspense, useEffect } from "react";
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useNavigate } from "react-router-dom";
 const Layout = lazy(() => import("./Layout"));
 const Homepage = lazy(() => import("./pages/Homepage"));
 const Signup_page = lazy(() => import("./pages/Signup_page"));
@@ -13,23 +13,24 @@ import { useDispatch } from "react-redux";
 
 function App() {
   const dispatch = useDispatch();
+  const navigate = useNavigate()
 
   useEffect(() => {
     getProfile(dispatch);
-  }, [dispatch]);
+  }, [dispatch,navigate]);
 
   // console.log("all posts from redux ====> ",feeds)
 
   useEffect(() => {
      getAllPosts(dispatch);
 
-    // const interval = setInterval(() => {
-    //   getAllPosts(dispatch);
-    // }, 20000);
+    const interval = setInterval(() => {
+      getAllPosts(dispatch);
+    }, 20000);
 
 
-    // return ()=>clearInterval(interval)
-  }, [dispatch]);
+    return ()=>clearInterval(interval)
+  }, [dispatch,navigate]);
 
   return (
     <Suspense fallback={<TopLoadingBar />}>

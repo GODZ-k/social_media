@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from "react";
 import UserShortCard from "./UserShortCard";
-import { getAllUsers } from "../../Api/ApiData";
+import { getAllSuggestions } from "../../Api/ApiData";
 import { NoData } from ".";
 import { useSelector } from "react-redux";
 
 function Suggestions() {
   const [users, setUsers] = useState([]);
-  const [input, setInput] = useState("");
+const [loading,setLoading] = useState(false)
 
   useEffect(() => {
-    getAllUsers(input, setUsers);
-  }, [input]);
+    getAllSuggestions(setUsers,setLoading);
+  }, []);
 
   return (
     <>
@@ -29,9 +29,11 @@ function Suggestions() {
         users?.map((user) => (
           <UserShortCard
             type={"follow"}
-            name={user?.firstName}
+            _id={user?._id}
+            email={user?.email}
+            firstName={user?.firstName}
             username={user?.username}
-            image={user?.avatar}
+            avatar={user?.avatar}
           />
         ))
       ) : (
