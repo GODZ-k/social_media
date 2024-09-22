@@ -13,6 +13,9 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  build: {
+    outDir: 'dist', // Explicitly set the output directory
+  },
   server:{
     port:5173,
     // get rid of the CORS error
