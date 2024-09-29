@@ -1,13 +1,15 @@
 import {z} from 'zod'
 
 
+
 const signUpSchema = z.object({
     username:z.string(),
     email:z.string().email(),
     password:z.string().min(6).max(20),
     confirmPassword:z.string().min(6).max(20),
     firstName:z.string().max(20),
-    lastName:z.string().max(20).optional()
+    lastName:z.string().max(20).optional(),
+    gender:z.enum(['male','female','custom'])
 })
 
 const signInSchema = z.object({
@@ -18,8 +20,9 @@ const signInSchema = z.object({
 
 const updateProfileType = z.object({
     username:z.string().optional(),
-    name:z.string().optional(),
-    bio:z.string().max(300).optional()
+    firstName:z.string().optional(),
+    bio:z.string().max(300).optional(),
+    gender:z.enum(['male','female','custom']).optional()
 })
 
 

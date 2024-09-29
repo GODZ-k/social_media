@@ -1,17 +1,17 @@
 // import toast from "react-hot-toast"
-import {ApiURL} from "./ApiConstant.js"
+import { ApiURL } from "./ApiConstant.js"
 import axios from "axios"
-import { followUnfollowUser, login, logOut } from "../src/redux/features/authSlice.js"
+import { followUnfollowUser, login, logOut , removeAvatar } from "../src/redux/features/authSlice.js"
 import { toast } from "sonner"
 import { addPost, deletePost, allPosts, likeDislikePost, updatePost, postComment } from "@/redux/features/postSlice.js"
 
 
 
-const SignUpUser = async (userData , navigate , setLoading  )=>{
+const SignUpUser = async (userData, navigate, setLoading) => {
     try {
         console.log(userData)
         setLoading(true)
-        const response = await axios.post(ApiURL.registerUser,userData)
+        const response = await axios.post(ApiURL.registerUser, userData)
         const data = response.data
         toast.success(data.msg)
         setLoading(false)
@@ -19,22 +19,22 @@ const SignUpUser = async (userData , navigate , setLoading  )=>{
 
     } catch (error) {
         setLoading(false)
-      toast(error.response.data.msg)
+        toast(error.response.data.msg)
 
     }
 }
 
 
-const SigninUser = async(userData, dispatch , navigate , setLoading)=>{
+const SigninUser = async (userData, dispatch, navigate, setLoading) => {
     try {
         setLoading(true)
-        const response = await axios.post(ApiURL.loginUser,userData)
+        const response = await axios.post(ApiURL.loginUser, userData)
         const data = response.data.user
         dispatch(login(data))
         setLoading(false)
         toast.success(data.msg)
         navigate("/")
-        
+
     } catch (error) {
         setLoading(false)
         toast(error.response.data.msg)
@@ -43,10 +43,10 @@ const SigninUser = async(userData, dispatch , navigate , setLoading)=>{
 
 
 
-const getProfile = async(dispatch)=>{
+const getProfile = async (dispatch) => {
     try {
         const response = await axios.get(ApiURL.currentUser, {
-            withCredentials:true
+            withCredentials: true
         })
         const data = response.data.profile
         dispatch(login(data))
@@ -56,7 +56,61 @@ const getProfile = async(dispatch)=>{
 }
 
 
-const getUser = async(username,setUser)=>{
+const updateProfile = async (data, dispatch, setLoading) => {
+    try {
+        setLoading(true)
+        await axios.put(ApiURL.updateUser, data, {
+            withCredentials: true
+        }).then((res) => {
+            toast.success(res.data.msg)
+            setLoading(false)
+        })
+
+    } catch (error) {
+        toast.warning(error.response.data.msg)
+        setLoading(false)
+    } finally {
+        setLoading(false)
+    }
+}
+
+
+const updateAvatar = async (data, setLoading) => {
+    try {
+        await axios.put(ApiURL.updateProfileImage,data ,{
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+            withCredentials:true
+        }).then((res)=>{
+            toast.success(res.data.msg)
+        })
+    } catch (error) {
+        toast.warning(error.response.data.msg)
+        setLoading(false)
+    } finally {
+        setLoading(false)
+    }
+}
+
+
+const deleteAvatar = async (dispatch, setLoading) => {
+    try {
+        await axios.delete(ApiURL.deleteProfileImage,{
+            withCredentials:true
+        }).then((res)=>{
+            dispatch(removeAvatar())
+            toast.success(res.data.msg)
+        })
+    } catch (error) {
+        toast.warning(error.response.data.msg)
+        setLoading(false)
+    } finally {
+        setLoading(false)
+    }
+}
+
+const getUser = async (username, setUser) => {
     try {
         const response = await axios.get(`${ApiURL.getProfile}/${username}`)
         // console.log(response.data)
@@ -68,22 +122,22 @@ const getUser = async(username,setUser)=>{
 }
 
 
-const getMypost = async(setPosts)=>{
+const getMypost = async (setPosts) => {
     try {
-        const response =  await axios.get(ApiURL.getMypost,{
-            withCredentials:true
+        const response = await axios.get(ApiURL.getMypost, {
+            withCredentials: true
         })
         setPosts(response.data.posts)
 
     } catch (error) {
-         toast.warning(error.response.data.msg)
+        toast.warning(error.response.data.msg)
     }
 }
 
 
-const getPost = async(setPost,pid)=>{
+const getPost = async (setPost, pid) => {
     try {
-        const response =  await axios.get(`${ApiURL.getPost}/${pid}`)
+        const response = await axios.get(`${ApiURL.getPost}/${pid}`)
         setPost(response.data.post)
     } catch (error) {
         toast(error.response.data.msg)
@@ -91,10 +145,10 @@ const getPost = async(setPost,pid)=>{
 }
 
 
-const logOutUser = async(dispatch, navigate) =>{
+const logOutUser = async (dispatch, navigate) => {
     try {
-        await axios.get(ApiURL.logOutUser,{
-            withCredentials:true
+        await axios.get(ApiURL.logOutUser, {
+            withCredentials: true
         })
         dispatch(logOut())
         navigate('/signin')
@@ -105,22 +159,22 @@ const logOutUser = async(dispatch, navigate) =>{
 
 
 
-const createPost = async(postData,dispatch,navigate , setLoading)=>{
+const createPost = async (postData, dispatch, navigate, setLoading) => {
     try {
         setLoading(true)
         console.log(postData)
-        await axios.post(ApiURL.createPost,postData,{
-            headers:{
-                "Content-Type":"multipart/form-data"
+        await axios.post(ApiURL.createPost, postData, {
+            headers: {
+                "Content-Type": "multipart/form-data"
             },
-            withCredentials:true
+            withCredentials: true
         })
-        .then((res)=>{
-            dispatch(addPost(res.data.post))
-            toast.success(res.data.msg)
-            setLoading(false)
-            navigate("/")
-        })
+            .then((res) => {
+                dispatch(addPost(res.data.post))
+                toast.success(res.data.msg)
+                setLoading(false)
+                navigate("/")
+            })
     } catch (error) {
         setLoading(false)
         toast.warning(error.response.data.msg)
@@ -128,35 +182,35 @@ const createPost = async(postData,dispatch,navigate , setLoading)=>{
 }
 
 
-const editPost = async (data,postId,dispatch,setLoading)=>{
+const editPost = async (data, postId, dispatch, setLoading) => {
     try {
         setLoading(true)
-        await axios.put(`${ApiURL.editPost}/${postId}` , data ,{
-            withCredentials:true
+        await axios.put(`${ApiURL.editPost}/${postId}`, data, {
+            withCredentials: true
         })
-        .then((res)=>{
-            setLoading(false)
-            dispatch(updatePost(res.data.updatedPost))
-            toast.success(res.data.msg)
-        })
+            .then((res) => {
+                setLoading(false)
+                dispatch(updatePost(res.data.updatedPost))
+                toast.success(res.data.msg)
+            })
     } catch (error) {
         setLoading(false)
         toast.warning(error.response.data.msg)
     }
 }
 
-const removePost = async (postId,dispatch,navigate, setLoading)=>{
+const removePost = async (postId, dispatch, navigate, setLoading) => {
     try {
         setLoading(true)
-        await axios.delete(`${ApiURL.deletePost}/${postId}`,{
-            withCredentials:true
+        await axios.delete(`${ApiURL.deletePost}/${postId}`, {
+            withCredentials: true
         })
-        .then((res)=>{
-            setLoading(false)
-            dispatch(deletePost(postId))
-            toast.success(res.data.msg)
-            navigate("/")
-        })
+            .then((res) => {
+                setLoading(false)
+                dispatch(deletePost(postId))
+                toast.success(res.data.msg)
+                navigate("/")
+            })
     } catch (error) {
         setLoading(false)
         toast.warning(error.response.data.msg)
@@ -176,12 +230,12 @@ const removePost = async (postId,dispatch,navigate, setLoading)=>{
 //     }
 // }
 
-const getAllPosts = async (dispatch)=>{
+const getAllPosts = async (dispatch) => {
     try {
         await axios.get(ApiURL.getAllPosts)
-        .then((res)=>{
-            dispatch(allPosts(res.data.posts))
-        })
+            .then((res) => {
+                dispatch(allPosts(res.data.posts))
+            })
     } catch (error) {
         toast.warning(error.response.data.msg)
     }
@@ -189,12 +243,12 @@ const getAllPosts = async (dispatch)=>{
 
 
 
-const getAllUsers = async(filter,setUsers)=>{
+const getAllUsers = async (filter, setUsers) => {
     try {
         await axios.get(`${ApiURL.getAllUsers}?filter=${filter}`)
-        .then((res)=>{
-            setUsers(res.data.users)
-        })
+            .then((res) => {
+                setUsers(res.data.users)
+            })
     } catch (error) {
         toast.warning(error.response.data.msg)
     }
@@ -203,19 +257,19 @@ const getAllUsers = async(filter,setUsers)=>{
 
 // const getUser = async()=>{
 //     try {
-        
+
 //     } catch (error) {
 //         toast.warning(error)
 //     }
 // }
 
 
-const likePost =   async(postId,dispatch,user,isLiked)=>{
+const likePost = async (postId, dispatch, user, isLiked) => {
     try {
-        await axios.get(`${ApiURL.likePost}/${postId}`,{
-            withCredentials:true
-        }).then((res)=>{
-            dispatch(likeDislikePost({user,postId,isLiked}))
+        await axios.get(`${ApiURL.likePost}/${postId}`, {
+            withCredentials: true
+        }).then((res) => {
+            dispatch(likeDislikePost({ user, postId, isLiked }))
             toast.success(res.data.msg)
         })
     } catch (error) {
@@ -226,18 +280,18 @@ const likePost =   async(postId,dispatch,user,isLiked)=>{
 
 
 
-const insertComment = async(data, postId , dispatch,setLoading)=>{
+const insertComment = async (data, postId, dispatch, setLoading) => {
     try {
         setLoading(true)
-        await axios.post(`${ApiURL.comments}/${postId}`,data , {
-            withCredentials:true,
+        await axios.post(`${ApiURL.comments}/${postId}`, data, {
+            withCredentials: true,
         })
-        .then((res)=>{
-            setLoading(false)
-            console.log(res)
-            toast.success(res.data.msg)
-            dispatch(postComment({comment:res.data.userComment , postId}))
-        })
+            .then((res) => {
+                setLoading(false)
+                console.log(res)
+                toast.success(res.data.msg)
+                dispatch(postComment({ comment: res.data.userComment, postId }))
+            })
     } catch (error) {
         console.log(error)
         setLoading(false)
@@ -248,12 +302,12 @@ const insertComment = async(data, postId , dispatch,setLoading)=>{
 
 
 
-const followUnfollow =  async(user ,  dispatch , setLoading)=>{
+const followUnfollow = async (user, dispatch, setLoading) => {
     try {
         setLoading(true)
-        await axios.get(ApiURL.followUnfollow + '/' +user._id.toString(),{
-            withCredentials:true
-        }).then((res)=>{
+        await axios.get(ApiURL.followUnfollow + '/' + user._id.toString(), {
+            withCredentials: true
+        }).then((res) => {
             setLoading(false)
             dispatch(followUnfollowUser(user))  // pending
             toast.success(res.data.msg)
@@ -266,12 +320,12 @@ const followUnfollow =  async(user ,  dispatch , setLoading)=>{
 }
 
 
-const getAllSuggestions = async(setUsers,setLoading)=>{
+const getAllSuggestions = async (setUsers, setLoading) => {
     try {
         setLoading(true)
-        await axios.get(ApiURL.suggestions,{
-            withCredentials:true
-        }).then((res)=>{
+        await axios.get(ApiURL.suggestions, {
+            withCredentials: true
+        }).then((res) => {
             setLoading(false)
             setUsers(res.data.users)
         })
@@ -297,5 +351,8 @@ export {
     likePost,
     insertComment,
     followUnfollow,
-    getAllSuggestions
+    getAllSuggestions,
+    updateProfile,
+    updateAvatar,
+    deleteAvatar
 }

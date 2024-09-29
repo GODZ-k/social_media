@@ -18,6 +18,10 @@ export const ApiURL ={
     loginUser:`${authApiUrl}/login`,
     currentUser:`${authApiUrl}/profile`,
     logOutUser:`${authApiUrl}/logout`,
+    updateUser:`${authApiUrl}/update/profile`,
+    updateProfileImage:`${authApiUrl}/update/profile-image`,
+    deleteProfileImage:`${authApiUrl}/remove-profile-image`,
+
 
     // user routes
     followUnfollow:`${userApiUrl}/follow`,

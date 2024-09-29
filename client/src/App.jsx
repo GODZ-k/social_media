@@ -1,4 +1,4 @@
-import React, { lazy, Suspense, useEffect } from "react";
+import  { lazy, Suspense, useEffect } from "react";
 import { Route, Routes, useNavigate } from "react-router-dom";
 const Layout = lazy(() => import("./Layout"));
 const Homepage = lazy(() => import("./pages/Homepage"));
@@ -10,6 +10,8 @@ const SearchPage = lazy(() => import("./pages/SearchPage"));
 const Explorepage = lazy(() => import("./pages/Explorepage"));
 import { getProfile,getAllPosts } from "../Api/ApiData";
 import { useDispatch } from "react-redux";
+import SavedPostpage from "./pages/SavedPostpage";
+import EditProfile_page from "./pages/EditProfile_page";
 
 function App() {
   const dispatch = useDispatch();
@@ -19,14 +21,12 @@ function App() {
     getProfile(dispatch);
   }, [dispatch,navigate]);
 
-  // console.log("all posts from redux ====> ",feeds)
-
   useEffect(() => {
      getAllPosts(dispatch);
 
     const interval = setInterval(() => {
       getAllPosts(dispatch);
-    }, 20000);
+    }, 30000);
 
 
     return ()=>clearInterval(interval)
@@ -81,6 +81,26 @@ function App() {
               <Suspense fallback={<TopLoadingBar />}>
                 <ProtectedRoutes>
                   <Explorepage />
+                </ProtectedRoutes>
+              </Suspense>
+            }
+          />
+          <Route
+            path="/saved-post"
+            element={
+              <Suspense fallback={<TopLoadingBar />}>
+                <ProtectedRoutes>
+                  <SavedPostpage />
+                </ProtectedRoutes>
+              </Suspense>
+            }
+          />
+           <Route
+            path="/edit-profile"
+            element={
+              <Suspense fallback={<TopLoadingBar />}>
+                <ProtectedRoutes>
+                  <EditProfile_page />
                 </ProtectedRoutes>
               </Suspense>
             }

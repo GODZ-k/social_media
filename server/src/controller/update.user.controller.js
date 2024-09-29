@@ -25,7 +25,7 @@ const updateProfile = async (req, res) => {
             })
         }
 
-        const { username, name, bio } = payload.data
+        const { username, firstName, bio , gender } = payload.data
         const loggedInUser = await User.findById(user._id)
 
         if (!loggedInUser) {
@@ -39,11 +39,14 @@ const updateProfile = async (req, res) => {
         if (username) {
             updatableData.username = username
         }
-        if (name) {
-            updatableData.name = name
+        if (firstName) {
+            updatableData.firstName = firstName
         }
         if (bio) {
             updatableData.bio = bio
+        }
+        if (gender) {
+            updatableData.gender = gender
         }
 
         await loggedInUser.updateOne(updatableData)

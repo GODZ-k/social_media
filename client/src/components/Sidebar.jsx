@@ -121,7 +121,7 @@ function Sidebar() {
                             <AvatarImg src={user?.avatar} fallback={user?.username[0]} />
                           ) : (
                             <lord-icon
-                              src={item.icon}
+                              src={user?.avatar}
                               trigger="in"
                               delay="1000"
                               style={{ width: "30px", height: "30px" }}
@@ -173,7 +173,7 @@ function Sidebar() {
                             {item.isProfile ? (
                               <img
                                 className=" w-7 h-7 rounded-full"
-                                src={item.icon}
+                                src={user?.avatar}
                                 alt="profile"
                               />
                             ) : (

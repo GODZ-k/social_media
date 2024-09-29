@@ -1,4 +1,6 @@
-import React, { memo, useEffect, useState } from "react";
+/* eslint-disable react/prop-types */
+/* eslint-disable react/display-name */
+import  { memo, useEffect, useState } from "react";
 import Box from "@mui/joy/Box";
 import Card from "@mui/joy/Card";
 import CardContent from "@mui/joy/CardContent";
@@ -22,7 +24,6 @@ import "swiper/css/pagination";
 import AvatarImg from "./AvatarImg";
 import HoverComp from "./HoverComp";
 import HoverUser from "./HoverUser";
-import { TriggerOptions } from ".";
 import EmojiPicker from "emoji-picker-react";
 import {
   DropdownMenu,
@@ -36,7 +37,7 @@ import MiniLoader from "./MiniLoader";
 
 
 
-const PostCard = memo(({ post }) => {
+const PostCard = memo(({ post,key }) => {
   const user = useSelector(state => state.auth.userData)
   const [isLiked, setLiked] = useState(post?.likedBy.some(like => like.userId === user._id) || false);
   const [isFollowed , setIsFollowed] = useState(user?.following.some((loggedInUser)=> loggedInUser._id === post?.createdBy._id) || false)
@@ -134,7 +135,7 @@ const PostCard = memo(({ post }) => {
   
   return (
     <>
-      <Dialog>
+      <Dialog key={key}>
         <Card
           variant="plain"
           className=" border-b border-b-gray-300 shadow-md p-3 rounded-xl"
@@ -217,13 +218,15 @@ const PostCard = memo(({ post }) => {
                             " w-full py-2 hover:bg-gray-50 border-b border-b-gray-300"
                           }
                         >
-                          {
-                            isFollowed ? (
-                              <li className="text-red-600">Unfollow</li>
-                            ):(
-                              <li className="text-blue-600">Follow</li>
-                            )
+                          { loading ? <MiniLoader/> : (
+                              isFollowed ? (
+                                <li className="text-red-600">Unfollow</li>
+                              ):(
+                                <li className="text-blue-600">Follow</li>
+                              )
+                          )
                           }
+
                         </button>
                       )
                     }
@@ -264,13 +267,6 @@ const PostCard = memo(({ post }) => {
                         }
                       >
                         <div className=" p-2">
-                          {/* <div>
-                            <button
-                              className=" hover:bg-gray-200 rounded-md py-1 px-2"
-                            >
-                              <i className="fa-solid fa-chevron-left"></i>
-                            </button>
-                          </div> */}
                           <div className=" mt-2 flex flex-col gap-4">
                             <div className=" flex flex-col gap-2">
                               {post.image && (
@@ -452,7 +448,7 @@ const PostCard = memo(({ post }) => {
               </>
             )}
             {post?.comments.length > 0 && (
-              <DialogTrigger className=" text-start">
+              <DialogTrigger className=" text-sm text-gray-500 text-start">
                 <div
                   onClick={() => setIsCommentSection(true)
 

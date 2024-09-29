@@ -20,6 +20,9 @@ import Signup from "./Signup";
 import PublicRoutes from "./PublicRoutes";
 import NoData from "./NoData";
 import ProtectUserContent from "./ProtectUserContent";
+import Search from "./Search";
+import SavedPost from "./SavedPost";
+import EditProfile from "./EditProfile";
 export {
     Input,
     Sidebar,
@@ -43,5 +46,8 @@ export {
     ProtectedRoutes,
     PublicRoutes,
     NoData,
-    ProtectUserContent
+    ProtectUserContent,
+    Search,
+    SavedPost,
+    EditProfile
 }

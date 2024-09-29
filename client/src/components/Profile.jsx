@@ -1,12 +1,9 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Container, ProtectUserContent, RightSuggestaion } from ".";
 import AvatarImg from "./AvatarImg";
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
 
@@ -14,14 +11,12 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import ProfileTabs from "./ProfileTabs";
 import { followUnfollow, getUser, logOutUser } from "../../Api/ApiData";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import MiniLoader from "./MiniLoader";
 
 function Profile() {
@@ -125,10 +120,10 @@ function Profile() {
                 <div className=" font-semibold text-lg">{user?.firstName}</div>
                 <div className=" text-xl flex gap-4 items-center">
                   <button>
-                    <i class="fa-brands fa-instagram"></i>
+                    <i className="fa-brands fa-instagram"></i>
                   </button>
                   <button>
-                    <i class="fa-brands fa-linkedin-in"></i>
+                    <i className="fa-brands fa-linkedin-in"></i>
                   </button>
                 </div>
               </div>
@@ -149,9 +144,9 @@ function Profile() {
                   
               <div className=" flex justify-between items-center">
                 <div className=" flex gap-4 my-2">
-                  <button className=" bg-black border border-black py-1 text-white px-3 rounded-md text-sm flex gap-2 items-center ">
+                  <Link to="/edit-profile" className=" bg-black border border-black py-1 text-white px-3 rounded-md text-sm flex gap-2 items-center ">
                     <div>Edit profile</div>
-                  </button>
+                  </Link>
                   <button className="  bg-white py-1 text-black px-3 border border-black rounded-md text-sm ">
                     Share Profile
                   </button>
@@ -161,19 +156,19 @@ function Profile() {
                     <DropdownMenuTrigger>
                       {" "}
                       <button className=" p-2">
-                        <i class="fa-solid fa-ellipsis-vertical"></i>
+                        <i className="fa-solid fa-ellipsis-vertical"></i>
                       </button>
                     </DropdownMenuTrigger>
 
-                    <DropdownMenuContent className=" mr-4">
-                      <DropdownMenuLabel>My Account</DropdownMenuLabel>
-                      <DropdownMenuSeparator />
-                      <DropdownMenuItem>Profile</DropdownMenuItem>
-                      <DropdownMenuItem>Billing</DropdownMenuItem>
-                      <DropdownMenuItem>Team</DropdownMenuItem>
+                    <DropdownMenuContent className=" mr-4 w-48">
+                      <Link to={"/saved-post"}>
+                        <DropdownMenuItem className=' cursor-pointer !p-3'>
+                          Saved post
+                        </DropdownMenuItem>
+                      </Link>
                       <DropdownMenuItem
                         onClick={handleLogout}
-                        className={" text-red-600 font-semibold"}
+                        className={" cursor-pointer text-red-600 font-semibold !p-3"}
                       >
                         Logout
                       </DropdownMenuItem>

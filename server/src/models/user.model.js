@@ -3,6 +3,7 @@ import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 
 
+
 const hash_rounds = 10
 
 const userSchema = new Schema({
@@ -32,6 +33,15 @@ const userSchema = new Schema({
         type: String,
         default: ""
 
+    },
+    gender:{
+        type: String,
+        enum: ['male', 'female', 'custom'], 
+        required: true, 
+    },
+    coverImage:{
+        type:String,
+        default:""
     },
     followers: [
         {

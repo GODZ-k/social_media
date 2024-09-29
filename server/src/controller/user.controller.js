@@ -34,7 +34,7 @@ const registerUser = async (req, res) => {
       });
     }
 
-    const { username, email, password, confirmPassword, firstName, lastName } = payload.data;
+    const { username, email, password, confirmPassword, firstName, lastName , gender } = payload.data;
 
     if (password !== confirmPassword) {
       return res.status(400).json({
@@ -79,6 +79,7 @@ const registerUser = async (req, res) => {
         username,
         password,
         verificationToken,
+        gender
       });
       return res.status(200).json({
         msg: "Please verify your account first",
@@ -223,61 +224,20 @@ const getCurrentUser = async (req, res) => {
       });
     }
 
-    // const currentUser = await User.findById(user._id).select(
-    //   "-password -refreshToken"
-    // );
+    const profile = await User.findById(user._id).populate({
+      path:'posts'
+    }).select(
+      "-password -refreshToken"
+    );
 
-    const profile = await User.aggregate([
-      { $match: { _id: new mongoose.Types.ObjectId(user._id) } },
-      {
-        $lookup: {
-          from: "users",
-          localField: "followers",
-          foreignField: "_id",
-          as: "followers",
-        },
-      },
-      {
-        $lookup: {
-          from: "users",
-          localField: "following",
-          foreignField: "_id",
-          as: "following",
-        },
-      },
-      {
-        $project: {
-          username: 1,
-          firstName: 1,
-          lastName: 1,
-          bio: 1,
-          email: 1,
-          avatar: 1,
-          isVerified: 1,
-          followers: {
-            _id: 1,
-            username: 1,
-            email: 1,
-            avatar: 1,
-          },
-          following: {
-            _id: 1,
-            username: 1,
-            email: 1,
-            avatar: 1,
-          },
-        },
-      },
-    ]);
-
-    if (!profile.length || !profile[0].isVerified) {
+    if (!profile || !profile.isVerified) {
       return res.status(422).json({
         msg: "Unauthorized access"
       })
     }
 
     return res.status(200).json({
-      profile: profile[0],
+      profile,
       msg: "User fetched successfully",
     });
 

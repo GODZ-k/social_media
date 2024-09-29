@@ -3,8 +3,9 @@ import AvatarImg from "./AvatarImg";
 import { followUnfollow, logOutUser } from "../../Api/ApiData";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import MiniLoader from "./MiniLoader";
 
-function UserShortCard({ key, type,_id, firstName, username, avatar , email , className }) {
+function UserShortCard({ type,_id, firstName, username, avatar , email , className }) {
   const loggedinUser = useSelector(state => state.auth.userData)
 
   const navigate =  useNavigate()
@@ -38,7 +39,7 @@ function UserShortCard({ key, type,_id, firstName, username, avatar , email , cl
   }
 
   return (
-    <div key={key} className={`${className} flow-root my-4 md:my-0`}>
+    <div key={_id} className={`${className} hover:bg-gray-50 rounded-md p-1 flow-root my-4 md:my-0`}>
       <ul className="divide-y divide-gray-200 dark:divide-gray-700">
         <li className="py-1">
           <div className=" flex  justify-between items-center">
@@ -61,11 +62,15 @@ function UserShortCard({ key, type,_id, firstName, username, avatar , email , cl
               <button onClick={handleLogout} className="inline-flex items-center text-sm font-normal text-red-600 dark:text-white">
                 Logout
               </button>
-            ) : (
-              <button onClick={handleFollowUnfollow} className={`${isFollowed ? 'text-red-600' : 'text-sky-600 dark:text-white'} inline-flex items-center text-sm font-normal `}>
-                {isFollowed ? 'Unfollow' : ' follow'}
+            ) : type === "follow" ? (
+              loggedinUser._id !== _id && (
+                  <button onClick={handleFollowUnfollow} className={`${isFollowed ? 'text-red-600' : 'text-sky-600 dark:text-white'} inline-flex items-center text-sm font-normal `}>
+               {loading ? <MiniLoader/> :(
+                isFollowed ? 'Unfollow' : ' follow'
+               )}
               </button>
-            )}
+                )
+            ) : null}
           </div>
         </li>
       </ul>

@@ -11,16 +11,17 @@ function Searching() {
   useEffect(()=>{
     getAllUsers(input,setUsers)
   },[input])
+
   return (
     <>
       <Input placeholder="Search" onChange={(e)=> setInput(e.target.value)} />
      {users && users?.length >0 ? users?.map((user)=>(
        <UserShortCard
-       key={user?._id}
-       name={user?.firstName}
+       _id={user?._id}
+       firstName={user?.firstName}
        username={user?.username}
-       image={user?.avatar}
-       type={"follow"}
+       avatar={user?.avatar}
+      //  type={"follow"}
      />
      )): <NoData/>}
     </>
