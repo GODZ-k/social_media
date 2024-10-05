@@ -1,7 +1,7 @@
 // import toast from "react-hot-toast"
 import { ApiURL } from "./ApiConstant.js"
 import axios from "axios"
-import { followUnfollowUser, login, logOut , removeAvatar } from "../src/redux/features/authSlice.js"
+import { followUnfollowUser, login, logOut , removeAvatar ,updateProfileImage } from "../src/redux/features/authSlice.js"
 import { toast } from "sonner"
 import { addPost, deletePost, allPosts, likeDislikePost, updatePost, postComment } from "@/redux/features/postSlice.js"
 
@@ -56,7 +56,7 @@ const getProfile = async (dispatch) => {
 }
 
 
-const updateProfile = async (data, dispatch, setLoading) => {
+const updateProfile = async (data, setLoading) => {
     try {
         setLoading(true)
         await axios.put(ApiURL.updateUser, data, {
@@ -75,7 +75,7 @@ const updateProfile = async (data, dispatch, setLoading) => {
 }
 
 
-const updateAvatar = async (data, setLoading) => {
+const updateAvatar = async (data,dispatch, setLoading) => {
     try {
         await axios.put(ApiURL.updateProfileImage,data ,{
             headers: {
@@ -83,6 +83,7 @@ const updateAvatar = async (data, setLoading) => {
             },
             withCredentials:true
         }).then((res)=>{
+            dispatch(updateProfileImage(res.data.avatar))
             toast.success(res.data.msg)
         })
     } catch (error) {
@@ -230,6 +231,22 @@ const removePost = async (postId, dispatch, navigate, setLoading) => {
 //     }
 // }
 
+const deleteUserAccount = async(navigate , setLoading)=>{
+    try {
+        setLoading(true)
+        await axios.delete(ApiURL.deleteAccount,{
+            withCredentials:true
+        })
+        .then((res)=>{
+            toast.success(res.data.msg)
+            setLoading(false)
+            navigate('/signup')
+        })
+    } catch (error) {
+        setLoading(false)
+        toast.warning(error.response.data.msg)
+    }
+}
 const getAllPosts = async (dispatch) => {
     try {
         await axios.get(ApiURL.getAllPosts)
@@ -354,5 +371,6 @@ export {
     getAllSuggestions,
     updateProfile,
     updateAvatar,
-    deleteAvatar
+    deleteAvatar,
+deleteUserAccount
 }

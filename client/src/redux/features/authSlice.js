@@ -33,13 +33,17 @@ const authSlice = createSlice({
                state.userData.following.push(action.payload)
             }
         },
+        updateProfileImage:(state,action)=>{
+            console.log('action payload ' , action.payload)
+            state.userData.avatar = action.payload
+        },
         removeAvatar:(state,action)=>{
-            state.userData.avatar = null
+            state.userData.avatar = ""
         },
     }
 })
 
 
 
-export const { login , logout , logOut,followUnfollowUser,removeAvatar} = authSlice. actions
+export const { login , logout , logOut,followUnfollowUser,removeAvatar,updateProfileImage} = authSlice. actions
 export default authSlice.reducer

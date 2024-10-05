@@ -136,10 +136,10 @@ const Detailpost = memo(({ Post })=>{
               <div className="min-w-0 w-full flex justify-between">
                 <div>
                   <p className="truncate text-sm font-semibold text-gray-900 dark:text-white">
-                   {post?.createdBy.firstName}
+                   {post?.createdBy?.firstName}
                   </p>
                   <p className="truncate text-xs text-gray-500 dark:text-gray-400">
-                    {post?.createdBy.username}
+                    {post?.createdBy?.username}
                   </p>
                 </div>
                 {/* post options */}

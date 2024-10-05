@@ -183,6 +183,7 @@ const updateAvatar = async (req, res) => {
         })
 
         return res.status(200).json({
+            avatar:avatar.url,
             msg: "Profile image updated successfully"
         })
 

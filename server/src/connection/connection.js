@@ -8,6 +8,7 @@ const connectDB =  async()=>{
         console.log(`Database is connected on host ${res.connection.host}`)
     }).catch((err)=>{
         console.log('Error listning on host ')
+        process.exit(1)
     })
 }
 

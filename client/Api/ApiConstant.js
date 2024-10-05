@@ -21,6 +21,7 @@ export const ApiURL ={
     updateUser:`${authApiUrl}/update/profile`,
     updateProfileImage:`${authApiUrl}/update/profile-image`,
     deleteProfileImage:`${authApiUrl}/remove-profile-image`,
+    deleteAccount:`${authApiUrl}/delete`,
 
 
     // user routes

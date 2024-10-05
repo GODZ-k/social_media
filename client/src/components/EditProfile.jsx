@@ -13,20 +13,22 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useDispatch, useSelector } from "react-redux";
-import { updateAvatar, updateProfile , deleteAvatar } from "../../Api/ApiData";
+import { updateAvatar, updateProfile , deleteAvatar, deleteUserAccount } from "../../Api/ApiData";
 import MiniLoader from "./MiniLoader";
+import { toast } from "sonner";
+import { useNavigate } from "react-router-dom";
 
 function EditProfile() {
   const user = useSelector((state) => state.auth.userData);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const [username, setUsername] = useState(user?.username || "");
-  const [avatar, setAvatar] = useState(null || user?.avatar);
+  const [avatar, setAvatar] = useState(user?.avatar || "");
   const [selectedImage, setSelectedImage] = useState(null);
   const [firstName, setFirstName] = useState(user?.firstName || "");
   const [bio, setBio] = useState(user?.bio || "");
-  const [loadingProfile, setLoadingProfile] = useState(false);
-  const [loadingAvatar, setLoadingAvatar] = useState(false);
+  const [Loading, setLoading] = useState(false);
   const [gender, setGender] = useState(user?.gender || "");
 
   const handleGenderChange = (value) => {
@@ -43,57 +45,65 @@ function EditProfile() {
           bio,
           gender,
         },
-        setLoadingProfile
+        setLoading
       );
 
 
     } catch (error) {
-      console.log(error);
-      setLoadingProfile(false);
+      setLoading(false);
 
     }finally{
-        setLoadingProfile(false);
+      setLoading(false);
     }
   };
-
  
   const handleProfileImage = async () => {
-    if (!selectedImage) return;
+    if (!selectedImage) {
+      toast.warning("Please select the image first")
+    };
 
     try {
-      setLoadingAvatar(true);
-
+      setLoading(true);
       await updateAvatar({
         avatar:selectedImage
-      }, setLoadingAvatar);
+      }, dispatch , setLoading);
+      setAvatar("")
+      setSelectedImage(null)
     } catch (error) {
       console.log(error);
-      setLoadingAvatar(false);
+      setLoading(false);
 
     } finally {
-        setLoadingAvatar(false);
-
+      setLoading(false);
     }
   };
 
   const handleDeleteProfileImage = async () => {
     try {
-      await deleteAvatar(dispatch, setLoadingAvatar);
+      await deleteAvatar(dispatch, setLoading);
     } catch (error) {
       console.log(error);
-      setLoadingAvatar(false);
+      setLoading(false);
 
     } finally {
-      setLoadingAvatar(false);
+      setLoading(false);
 
     }
   };
+
+  const handleDeleteAccount = async()=>{
+    try {
+      await deleteUserAccount(navigate , setLoading)
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
 useEffect(() => {
     if (selectedImage) {
       const imagePreviewUrl = URL.createObjectURL(selectedImage);
       setAvatar(imagePreviewUrl);
-      return () => URL.revokeObjectURL(imagePreviewUrl); // Cleanup
+      return () => URL.revokeObjectURL(imagePreviewUrl);
     }
   }, [selectedImage]);
 
@@ -115,10 +125,20 @@ useEffect(() => {
                 onChange={(e) => setSelectedImage(e.target.files[0])}
                 className="absolute   inset-0 w-full h-full opacity-0 cursor-pointer"
                 id="file-input"
-              />
+            />
            </div>
-            <Button className="!bg-blue-700" onClick={handleProfileImage} disabled={loadingAvatar}>{loadingAvatar ? <MiniLoader/> : "Update avatar"}</Button>
-            <Button className=" !bg-red-700" onClick={handleDeleteProfileImage} disabled={loadingAvatar}>{loadingAvatar ? <MiniLoader/> : "Delete avatar"}</Button>
+          <div className=' flex gap-3 items-center'>
+            {
+              selectedImage && (
+               <Button className=" !bg-blue-700" onClick={handleProfileImage} disabled={Loading}>Update Avatar</Button>
+              )
+            }
+            {
+            user?.avatar && (
+              <Button className=" !bg-red-700" onClick={handleDeleteProfileImage} disabled={Loading}>Delete avatar</Button>
+            )
+          } 
+          </div>
           </div>
           <div className="my-3">
             <Label htmlFor="name">Your name</Label>
@@ -163,13 +183,23 @@ useEffect(() => {
             </div>
           </div>
           <Button onClick={handleUpdateProfile} className=" my-5">
-            {loadingProfile ? <MiniLoader /> : " Update Profile"}
+             Update Profile
           </Button>
-          <Button onClick={handleUpdateProfile} className=" !bg-red-700 m-5">
-            {loadingProfile ? <MiniLoader /> : "Delete Account"}
+          <Button onClick={handleDeleteAccount} className=" !bg-red-700 m-5">
+           Delete Account
           </Button>
         </div>
       </div>
+      {
+        Loading && (
+          <div className=" absolute bg-[#00000043] top-0 right-0 h-screen w-full">
+        <div className=' flex justify-center items-center h-full w-full'>
+          <MiniLoader/>
+        </div>
+      </div>
+        )
+      }
+     
     </Container>
   );
 }
