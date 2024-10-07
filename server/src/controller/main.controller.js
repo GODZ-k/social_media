@@ -1,6 +1,9 @@
 import Comment from "../models/comments.post.model.js";
 import Post from "../models/post.model.js";
 import User from "../models/user.model.js";
+import client ,{Cache} from "../utils/client.js";
+
+const cache = new Cache()
 
 // get profile --------
 const getProfile = async (req, res) => {
@@ -10,6 +13,15 @@ const getProfile = async (req, res) => {
     if (!username) {
       return res.status(404).json({
         msg: "All fileds must be require",
+      });
+    }
+
+    const cacheProfile = await cache.getCachedData('profile')
+
+    if(cacheProfile){
+      return res.status(200).json({
+        profile:cacheProfile,
+        msg: "Profile fetched successfully",
       });
     }
 
@@ -30,6 +42,8 @@ const getProfile = async (req, res) => {
       });
     }
 
+    await cache.setAndExpire('profile',profile)
+
     return res.status(200).json({
       profile,
       msg: "Profile fetched successfully",
@@ -46,6 +60,15 @@ const getProfile = async (req, res) => {
 // get all posts ----
 const getAllPosts = async (req, res) => {
   try {
+
+    const cachedPosts = await cache.getCachedData('Allposts')
+
+    if(cachedPosts){
+      return res.status(200).json({
+        posts:cachedPosts,
+        msg: "Post found successfully",
+      })
+    }
     const posts = await Post.find({ createdBy: { $ne:null} }).sort({ createdAt: -1 })
     .populate({path:'createdBy',select:'-password -refreshToken -createdAt -updatedAt -savedPost'})
     .populate({path:'comments',populate:{
@@ -58,6 +81,8 @@ const getAllPosts = async (req, res) => {
         msg: "Posts not found",
       });
     }
+
+    await cache.setAndExpire('Allposts',posts)
 
     return res.status(200).json({
       posts,
@@ -83,6 +108,15 @@ const getPost = async (req, res) => {
       });
     }
 
+    const cachedPost = await cache.getCachedData('post');
+
+    if (cachedPost) {
+      return res.status(200).json({
+        post: cachedPost,
+        msg: "post found successfully",
+      });
+    }
+
     const post = await Post.findById(postId);
 
     if (!post) {
@@ -90,6 +124,8 @@ const getPost = async (req, res) => {
         msg: "Post not found",
       });
     }
+
+    await cache.setAndExpire('post',post)
 
     return res.status(200).json({
       post,
@@ -113,6 +149,15 @@ const getComment = async (req, res) => {
       });
     }
 
+    const cachedComment  =  await cache.getCachedData('comment')
+
+    if(cachedComment){
+      return res.status(200).json({
+        comment:cachedComment,
+        msg: "Comment found successfully",
+      });
+    }
+
     const comment = await Comment.findById(commentId);
 
     if (!comment) {
@@ -120,6 +165,8 @@ const getComment = async (req, res) => {
         msg: "Comment not found",
       });
     }
+
+    await cache.setAndExpire('comment',comment)
 
     return res.status(200).json({
       comment,
@@ -136,6 +183,16 @@ const getComment = async (req, res) => {
 const getAllUsers = async (req,res)=>{
   try {
     const filter = req.query.filter || ""
+
+    const cachedUser = await cache.getCachedData('users')
+
+    if(cachedUser){
+      return res.status(200).json({
+        users:cachedUser,
+        msg:"Users found successfully"
+      })
+    }
+
     const users = await User.find({ 
           $or:[
             {
@@ -156,6 +213,8 @@ const getAllUsers = async (req,res)=>{
         msg:"User not found"
       })
     }
+
+    await cache.setAndExpire('users',users)
 
     return res.status(200).json({
       users,

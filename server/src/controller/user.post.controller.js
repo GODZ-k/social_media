@@ -7,6 +7,8 @@ import {
   createPostType,
   updatePostType,
 } from "../utils/Types/post.type.js";
+import { Cache } from "../utils/client.js";
+const cache =  new Cache()
 
 // create posts ------
 const createPost = async (req, res) => {
@@ -529,6 +531,14 @@ const getUserPosts = async(req,res)=>{
       })
     }
 
+    const cachedPost = await cache.getCachedData('userPosts')
+
+    if(cachedPost){
+      return res.status(200).json({
+        posts:cachedPost,
+        msg:"Post found successfully"
+      })
+    }
     // const posts = await Post.find({createdBy:loggedInUser._id}).sort({ createdAt: -1 });
     const posts = loggedInUser.populate('posts')
 
@@ -537,6 +547,8 @@ const getUserPosts = async(req,res)=>{
         msg:"Posts not found"
       })
     }
+
+    await cache.setAndExpire('userPosts',posts)
 
     return res.status(200).json({
       posts,
@@ -569,6 +581,16 @@ const getFeedPosts = async(req,res)=>{
       })
     }
 
+    const feedPosts = await cache.getCachedData('feeds')
+
+    if(feedPosts){
+      
+    return res.status(200).json({
+      posts:feedPosts,
+      msg:"Feed found succcessfully"
+    }) 
+    }
+
     const combinedUserIds = [
       ...loggedInUser.following,
       ...loggedInUser.followers
@@ -586,6 +608,7 @@ const getFeedPosts = async(req,res)=>{
       })
     }
 
+    await cache.setAndExpire('feeds',posts)
     return res.status(200).json({
       posts,
       msg:"Feed found succcessfully"

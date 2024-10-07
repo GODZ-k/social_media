@@ -13,7 +13,8 @@ import {
   options,
 } from "../utils/utils.js";
 import { forgotPasswordMail } from "../utils/mails/forgotpasswordmail.js";
-import mongoose from "mongoose";
+import { Cache } from "../utils/client.js";
+const cache = new Cache()
 
 // register  -----
 const registerUser = async (req, res) => {
@@ -224,6 +225,15 @@ const getCurrentUser = async (req, res) => {
       });
     }
 
+    const cachedUser = await cache.getCachedData('currentUser')
+
+    if(cachedUser){
+      return res.status(200).json({
+        profile:cachedUser,
+        msg: "User fetched successfully",
+      });
+    }
+
     const profile = await User.findById(user._id).populate({
       path:'posts'
     }).select(
@@ -235,6 +245,8 @@ const getCurrentUser = async (req, res) => {
         msg: "Unauthorized access"
       })
     }
+
+    await cache.setAndExpire('currentUser',profile)
 
     return res.status(200).json({
       profile,
@@ -566,6 +578,16 @@ const getFollowers = async (req, res) => {
       })
     }
 
+    const cachedFollowers = await cache.getCachedData('followers')
+
+    if(cachedFollowers){
+      return res.status(200).json({
+        followers:cachedFollowers,
+        msg: "Followers found successfully"
+      })
+  
+    }
+
     const [loggedInUser, newUser] = await Promise.all([
       await User.findById(user._id),
       await User.findById(userId)
@@ -582,6 +604,8 @@ const getFollowers = async (req, res) => {
         return User.findById(userId._id).select("-password -refreshToken")
       })
     )
+
+    await cache.setAndExpire('followers',followers)
 
     return res.status(200).json({
       followers,
@@ -616,6 +640,15 @@ const getSuggestions = async (req, res) => {
       })
     }
 
+    const cachedSuggestion = await cache.getCachedData('suggestion')
+
+    if(cachedSuggestion){
+      return  res.status(200).json({
+        users:cachedSuggestion,
+        msg:"Users found successfully"
+      })
+    }
+
     const users = await User.find({_id:{
       $ne:loggedInUser._id
     }}).select('-password -refreshToken')
@@ -626,6 +659,7 @@ const getSuggestions = async (req, res) => {
       })
     }
 
+    await cache.setAndExpire('suggestion',users)
 
     return  res.status(200).json({
       users,
