@@ -3,7 +3,7 @@ import connectDB from "./src/connection/connection.js";
 import cluster from 'cluster'
 import os from 'os'
 
-const port = process.env.PORT || 3000
+const port = process.env.PORT || 4000
 const cpuCount = os.cpus().length
 
 
