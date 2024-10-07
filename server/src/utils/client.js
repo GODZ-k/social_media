@@ -3,8 +3,7 @@ import {Redis} from "ioredis";
 
 
 
-const client = new Redis()
-
+const client = new Redis(process.env.REDIS_URL)
 
 export class Cache {
 
@@ -49,5 +48,13 @@ export class Cache {
         }
     }
 }
+
+client.on('connect', () => {
+    console.log('Connected to Redis successfully!');
+});
+
+client.on('error', (err) => {
+    console.error('Redis connection error:', err);
+});
 
 export default client
