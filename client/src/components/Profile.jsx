@@ -84,7 +84,7 @@ function Profile() {
                   <div className=" rounded-2xl  w-full h-96 overflow-hidden">
                     <img
                       src={user?.avatar}
-                      className=" w-full h-full object-cover object-top"
+                      className=" w-full h-full object-cover object-center"
                       alt=""
                       loading="lazy"
                     />
@@ -97,7 +97,7 @@ function Profile() {
                     <AvatarImg
                       src={user?.avatar}
                       className={
-                        "lg:!h-40 !w-24 !h-24 sm:!w-36 sm:!h-36 lg:!w-40"
+                        "lg:!h-40 !w-24 !h-24 sm:!w-36 sm:!h-36 lg:!w-40 object-cover object-center"
                       }
                     />
                   </div>
@@ -109,7 +109,7 @@ function Profile() {
                   <div className=" h-60 w-60 ">
                     <AvatarImg
                       src={user?.avatar}
-                      className={" !w-full !h-full"}
+                      className={" !w-full !h-full object-cover object-center"}
                     />
                   </div>
                 </DialogContent>

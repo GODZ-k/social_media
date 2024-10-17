@@ -1,13 +1,20 @@
 
+import dotenv from 'dotenv'
 import {Redis} from "ioredis";
 
+dotenv.config({})
 
+const client = new Redis({
+    port: process.env.REDIS_PORT,
+    host: process.env.REDIS_HOST,
+    password: process.env.REDIS_PASSWORD,
+})
 
-const client = new Redis(process.env.REDIS_URL)
+const expire_cache = process.env.REDIS_CACHE_EXPIRY
 
 export class Cache {
 
-    constructor(expiredAt = 1000) {
+    constructor(expiredAt = expire_cache) {
         this.expiredAt = expiredAt; // Default expiration is 600 seconds (can be overridden)
       }
     

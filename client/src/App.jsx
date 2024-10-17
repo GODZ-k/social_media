@@ -8,10 +8,12 @@ import { ProtectedRoutes, PublicRoutes, TopLoadingBar } from "./components";
 const ProfilePage = lazy(() => import("./pages/ProfilePage"));
 const SearchPage = lazy(() => import("./pages/SearchPage"));
 const Explorepage = lazy(() => import("./pages/Explorepage"));
+const SavedPostpage = lazy(() => import("./pages/SavedPostpage"));
+const EditProfile_page = lazy(() => import("./pages/EditProfile_page"));
+const Chat_page = lazy(() => import("./pages/Chat_page"));
+const Chatting_page = lazy(() => import("./pages/Chatting_page"));
 import { getProfile,getAllPosts } from "../Api/ApiData";
 import { useDispatch } from "react-redux";
-import SavedPostpage from "./pages/SavedPostpage";
-import EditProfile_page from "./pages/EditProfile_page";
 
 function App() {
   const dispatch = useDispatch();
@@ -105,7 +107,28 @@ function App() {
               </Suspense>
             }
           />
+           <Route
+            path="/direct/inbox/"
+            element={
+              <Suspense fallback={<TopLoadingBar />}>
+                <ProtectedRoutes>
+                  <Chat_page />
+                </ProtectedRoutes>
+              </Suspense>
+            }
+          />
+           <Route
+            path="/direct/t/:username"
+            element={
+              <Suspense fallback={<TopLoadingBar />}>
+                <ProtectedRoutes>
+                  <Chatting_page />
+                </ProtectedRoutes>
+              </Suspense>
+            }
+          />
         </Route>
+       
         {/* public roiutes */}
         <Route
           path="/signup"

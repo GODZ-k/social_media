@@ -23,6 +23,10 @@ import ProtectUserContent from "./ProtectUserContent";
 import Search from "./Search";
 import SavedPost from "./SavedPost";
 import EditProfile from "./EditProfile";
+import Chat from "./Chat";
+import ChatSidebar from "./ChatSidebar";
+import Chatting from "./Chatting";
+
 export {
     Input,
     Sidebar,
@@ -49,5 +53,8 @@ export {
     ProtectUserContent,
     Search,
     SavedPost,
-    EditProfile
+    EditProfile,
+    Chat,
+    ChatSidebar,
+    Chatting
 }

@@ -10,7 +10,7 @@ import { useSelector } from "react-redux";
 
 
 
-function Sidebar() {
+function Sidebar({isExpend}) {
   const [openDialog, setOpenDialog] = useState(null); // Control which dialog is open
   const user = useSelector(state=> state.auth.userData)
   // console.log("user data on sidebar ===>" , user)
@@ -50,7 +50,7 @@ function Sidebar() {
     {
       label: "Messages",
       icon: "https://cdn.lordicon.com/fdxqrdfe.json",
-      to: "/chat",
+      to: `/direct/inbox`,
     },
     {
       label: "Notification",
@@ -74,11 +74,15 @@ function Sidebar() {
   return (
     <>
       <Dialog open={!!openDialog} onOpenChange={() => setOpenDialog(null)}>
-        <div className=" md:block hidden p-5  w-64 h-screen static top-0 left-0">
+        <div className={`${!isExpend && 'w-64'} md:block hidden p-5 h-screen static top-0 left-0`}>
           <div className=" py-4">
-            <div className=" w-40">
-              {/* <Logo /> */}
+           {
+            !isExpend && (
+              <div className=" w-40">
+              <Logo />
             </div>
+            )
+           }
           </div>
           <div>
             <ul className=" flex flex-col gap-2">
@@ -100,7 +104,7 @@ function Sidebar() {
                                 state="in-home"
                               ></lord-icon>
                           </div>
-                          <div className="  text-lg">{item.label}</div>
+                          {!isExpend && <div className="  text-lg">{item.label}</div>}
                         </li>
                       </button>
                     </>
@@ -130,8 +134,8 @@ function Sidebar() {
                             ></lord-icon>
                           )}
                         </div>
-                        <div className="  text-lg">{item.label}</div>
-                      </li>
+                        {!isExpend && <div className="  text-lg">{item.label}</div>}
+                        </li>
                     </NavLink>
                   )}
                 </DialogTrigger>
