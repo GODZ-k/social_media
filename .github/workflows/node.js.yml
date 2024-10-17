@@ -12,7 +12,6 @@ jobs:
     strategy:
       matrix:
         node-version: [22.x]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
     - uses: actions/checkout@v4
@@ -26,3 +25,4 @@ jobs:
         touch .env
         echo "${{ secrets.PRODUCTION }}" > .env
     - run: npm run build  
+    - run: pm2 restart social_media
