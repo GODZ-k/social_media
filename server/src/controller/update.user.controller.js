@@ -1,8 +1,10 @@
 import User from "../models/user.model.js"
+import { Cache } from "../utils/client.js"
 import {uploadOnCloudinary} from "../utils/cloudinary.js"
 import { updatePasswordType, updateProfileType } from "../utils/Types/user.type.js"
 
 
+const cache = new Cache()
 
 
 // update profile ----
@@ -52,6 +54,10 @@ const updateProfile = async (req, res) => {
         await loggedInUser.updateOne(updatableData)
 
         const updatedUser = await User.findById(user._id)
+
+        // await cache.hSet(`user:${updatedUser._id}`,updatedUser._id,updatedUser)
+        // await cache.hSet(`user:${updatedUser.name}`,updatedUser._id,updatedUser)
+        // await cache.hSet(`user:${updatedUser.username}`,updatedUser._id,updatedUser)
 
         return res.status(200).json({
             updatedUser,
@@ -181,6 +187,10 @@ const updateAvatar = async (req, res) => {
                 avatar:avatar.url
             }
         })
+
+        // await cache.hSet(`user:${loggedInUser._id}`,loggedInUser._id,loggedInUser)
+        // await cache.hSet(`user:${loggedInUser.name}`,loggedInUser._id,loggedInUser)
+        // await cache.hSet(`user:${loggedInUser.username}`,loggedInUser._id,loggedInUser)
 
         return res.status(200).json({
             avatar:avatar.url,

@@ -1,14 +1,14 @@
 dotenv.config({})
 
-import express from "express"
+import { app ,server } from "../socket.js"
 import cors from "cors"
 import dotenv from 'dotenv'
+import express from "express"
 import cookieParser from 'cookie-parser'
 import { v2 as cloudinary } from "cloudinary"
 import mainRouter from './routes/main.route.js'
 import path from 'path'
 import { Resend } from "resend"
-const app = express()
 
 export const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -52,4 +52,7 @@ app.use((err, req, res, next) => {
 });
 
 
-export default app
+export  {
+  app,
+  server
+}

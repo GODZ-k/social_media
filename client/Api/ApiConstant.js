@@ -41,5 +41,9 @@ export const ApiURL ={
     editPost:`${postApiUrl}/update`,
     likePost:`${postApiUrl}/like`,
     feeds:`${postApiUrl}/feed`,
-    comments:`${postApiUrl}/comment`
+    comments:`${postApiUrl}/comment`,
+
+    // messages routes 
+    sendMessage:`${userApiUrl}/message/send`,
+    allMessages:`${userApiUrl}/message/all`
 }

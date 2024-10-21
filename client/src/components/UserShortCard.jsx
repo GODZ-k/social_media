@@ -5,7 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import MiniLoader from "./MiniLoader";
 
-function UserShortCard({ type,_id, firstName, username, avatar , email , className }) {
+function UserShortCard({ key, type,_id, firstName, username, avatar , email , className }) {
   const loggedinUser = useSelector(state => state.auth.userData)
 
   const navigate =  useNavigate()
@@ -19,19 +19,19 @@ function UserShortCard({ type,_id, firstName, username, avatar , email , classNa
   }
 
   useEffect(()=>{
-    setIsFollowed(loggedinUser?.following.some((user)=> user._id === _id))
+    setIsFollowed(loggedinUser?.following.some((user)=> user === _id))
   },[loggedinUser])
 
   async function handleFollowUnfollow(){
     try{
-      const user = {
-        _id,
-        username,
-        avatar,
-        email,
-      }
-      await followUnfollow(user ,  dispatch , setLoading)
-      setIsFollowed(prev=> !isFollowed)
+      // const user = {
+      //   _id,
+      //   username,
+      //   avatar,
+      //   email,
+      // }
+      await followUnfollow( _id ,  dispatch , setLoading)
+      setIsFollowed(prev => !isFollowed)
     }catch(error){
       // setIsFollowed(prev=> !isFollowed)
       console.log(error)
@@ -39,7 +39,7 @@ function UserShortCard({ type,_id, firstName, username, avatar , email , classNa
   }
 
   return (
-    <div key={_id} className={`${className} hover:bg-gray-50 rounded-md p-1 flow-root my-4 md:my-0`}>
+    <div key={key} className={`${className} hover:bg-gray-50 rounded-md p-1 flow-root my-4 md:my-0`}>
       <ul className="divide-y divide-gray-200 dark:divide-gray-700">
         <li className="py-1">
           <div className=" flex  justify-between items-center">

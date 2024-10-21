@@ -40,7 +40,7 @@ import MiniLoader from "./MiniLoader";
 const PostCard = memo(({ post,key }) => {
   const user = useSelector(state => state.auth.userData)
   const [isLiked, setLiked] = useState(post?.likedBy.some(like => like.userId === user._id) || false);
-  const [isFollowed , setIsFollowed] = useState(user?.following.some((loggedInUser)=> loggedInUser._id === post?.createdBy._id) || false)
+  const [isFollowed , setIsFollowed] = useState(user?.following.some((loggedInUser)=> loggedInUser?._id === post?.createdBy?._id) || false)
   const [loading, setLoading] = useState(false);
   const [text, setText] = useState("");
   const [title , setTitle] = useState(post?.postTitle || "")

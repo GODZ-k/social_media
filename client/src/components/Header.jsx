@@ -12,7 +12,7 @@ function Header() {
     },
     {
       icon: "https://cdn.lordicon.com/fdxqrdfe.json",
-      to: "/chat",
+      to: "/direct/inbox",
     },
   ];
   return (

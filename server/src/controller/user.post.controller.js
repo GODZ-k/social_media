@@ -8,6 +8,7 @@ import {
   updatePostType,
 } from "../utils/Types/post.type.js";
 import { Cache } from "../utils/client.js";
+import getReceiverSocketId, { io } from "../../socket.js";
 const cache =  new Cache()
 
 // create posts ------
@@ -78,6 +79,9 @@ const createPost = async (req, res) => {
       });
     }
 
+    // await cache.del("Allposts")
+    // await cache.hSet(`post:${post._id}`,post._id,post)
+
     loggedInUser.posts.push(post._id)
     await loggedInUser.save({validateBeforeSave:false})
 
@@ -129,6 +133,8 @@ const deletePost = async (req, res) => {
     }
 
     await post.deleteOne();
+    // await cache.del(`Allposts`)
+    // await cache.del(`post:${postId}`)
 
     loggedInUser.posts = loggedInUser.posts.filter(p => p.toString() !== postId);
     await loggedInUser.save({validateBeforeSave:false})
@@ -202,6 +208,9 @@ const updatePost = async (req, res) => {
 
     const updatedPost = await Post.findById(postId);
 
+    // await cache.del("Allposts")
+    // await cache.hSet(`post:${updatePost._id}`,updatePost._id,updatedPost)
+
     return res.status(200).json({
       updatedPost,
       msg: "Post updated successfully",
@@ -225,9 +234,9 @@ const likePost = async (req, res) => {
     }
 
     const [loggedInUser, post] = await Promise.all([
-      User.findById(user._id),
+      User.findById(user._id).select('-password -refreshToken'),
       Post.findById(postId),
-    ]);
+    ])
 
     if (!loggedInUser) {
       return res.status(422).json({
@@ -258,10 +267,32 @@ const likePost = async (req, res) => {
         avatar: loggedInUser?.avatar,
         username: loggedInUser.username,
       });
+
+      if(loggedInUser._id.toString() !== post.createdBy.toString()){
+        const notification = {
+          type:'like',
+          userId:loggedInUser._id,
+          userDetail:{
+            username:loggedInUser.username,
+            avatar:loggedInUser?.avatar
+          },
+          postId,
+          message:`${loggedInUser.username} liked your post`
+
+        }
+
+        const postOwnerSocketId = getReceiverSocketId(post.createdBy.toString())
+        io.to(postOwnerSocketId).emit('notification',notification)
+        
+      }
+      
     }
 
     post.likes = post.likedBy.length;
     await post.save({ validateBeforeSave: false });
+
+    // await cache.del("Allposts")
+    // await cache.del(`post:${postId}`)
 
     return res.status(200).json({
       msg: isLiked ? "Post Unliked successfully" : "Post liked successfully",
@@ -343,6 +374,10 @@ const commentPost = async (req, res) => {
 
     await post.save({ validateBeforeSave: false });
 
+    // await cache.del("Allposts")
+    // await cache.del(`post:${postId}`)
+    // await cache.hSet(`comment:${userComment._id}`,userComment._id,userComment)
+
     return res.status(200).json({
       userComment,
       msg: "Comment added successfully",
@@ -410,7 +445,6 @@ const deleteComment = async (req, res) => {
       });
     }
 
-    console.log("start");
     console.log(commentId);
     await comment.deleteOne();
     post.comments = post.comments.filter(
@@ -422,6 +456,11 @@ const deleteComment = async (req, res) => {
     //   console.log(comment._id)
     // })
     await post.save({ validateBeforeSave: false });
+
+    // await cache.del("Allposts")
+    // await cache.del(`post:${postId}`)
+    // await cache.del(`comment:${commentId}`)
+
 
     return res.status(200).json({
       msg: "comment deleted successfully",
@@ -500,6 +539,9 @@ const replyComment = async (req, res) => {
     comment.replies.push(reply._id);
     await comment.save({ validateBeforeSave: false });
 
+    // await cache.del("Allposts")
+    // await cache.del(`comment:${commentId}`)
+
     return res.status(200).json({
       msg: "Reply added successfully",
     });
@@ -531,14 +573,14 @@ const getUserPosts = async(req,res)=>{
       })
     }
 
-    const cachedPost = await cache.getCachedData('userPosts')
+    // const cachedPost = await cache.hGet(`post:${user._id}`,user._id)
 
-    if(cachedPost){
-      return res.status(200).json({
-        posts:cachedPost,
-        msg:"Post found successfully"
-      })
-    }
+    // if(cachedPost){
+    //   return res.status(200).json({
+    //     posts:cachedPost,
+    //     msg:"Post found successfully"
+    //   })
+    // }
     // const posts = await Post.find({createdBy:loggedInUser._id}).sort({ createdAt: -1 });
     const posts = loggedInUser.populate('posts')
 
@@ -548,7 +590,7 @@ const getUserPosts = async(req,res)=>{
       })
     }
 
-    await cache.setAndExpire('userPosts',posts)
+    // await cache.hSet(`post:${user._id}`,user._id,posts)
 
     return res.status(200).json({
       posts,
@@ -581,15 +623,14 @@ const getFeedPosts = async(req,res)=>{
       })
     }
 
-    const feedPosts = await cache.getCachedData('feeds')
+    // const feedPosts = await cache.hGet(`post:${user._id}`,user._id)
 
-    if(feedPosts){
-      
-    return res.status(200).json({
-      posts:feedPosts,
-      msg:"Feed found succcessfully"
-    }) 
-    }
+    // if(feedPosts){
+    // return res.status(200).json({
+    //   posts:feedPosts,
+    //   msg:"Feed found succcessfully"
+    // }) 
+    // }
 
     const combinedUserIds = [
       ...loggedInUser.following,
@@ -608,7 +649,7 @@ const getFeedPosts = async(req,res)=>{
       })
     }
 
-    await cache.setAndExpire('feeds',posts)
+    // await cache.hSet(`post:${user._id}`,user._id,posts)
     return res.status(200).json({
       posts,
       msg:"Feed found succcessfully"

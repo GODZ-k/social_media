@@ -9,19 +9,24 @@ function Searching() {
   const [input , setInput] = useState("")
 
   useEffect(()=>{
-    getAllUsers(input,setUsers)
+    (async()=>{
+      const data = await getAllUsers(input);
+      setUsers(data)
+    })()
   },[input])
+ 
 
   return (
     <>
       <Input placeholder="Search" onChange={(e)=> setInput(e.target.value)} />
      {users && users?.length >0 ? users?.map((user)=>(
        <UserShortCard
+       key={user._id}
        _id={user?._id}
        firstName={user?.firstName}
        username={user?.username}
        avatar={user?.avatar}
-      //  type={"follow"}
+       type={"follow"}
      />
      )): <NoData/>}
     </>

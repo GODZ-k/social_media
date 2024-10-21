@@ -4,6 +4,7 @@ import axios from "axios"
 import { followUnfollowUser, login, logOut , removeAvatar ,updateProfileImage } from "../src/redux/features/authSlice.js"
 import { toast } from "sonner"
 import { addPost, deletePost, allPosts, likeDislikePost, updatePost, postComment } from "@/redux/features/postSlice.js"
+import { Message } from "@mui/icons-material"
 
 
 
@@ -118,6 +119,7 @@ const getUser = async (username, setUser) => {
         setUser(response.data.profile)
     } catch (error) {
         toast.warning(error.response.data.msg)
+        setUser({})
 
     }
 }
@@ -260,12 +262,12 @@ const getAllPosts = async (dispatch) => {
 
 
 
-const getAllUsers = async (filter, setUsers) => {
+const getAllUsers = async (filter) => {
     try {
-        await axios.get(`${ApiURL.getAllUsers}?filter=${filter}`)
-            .then((res) => {
-                setUsers(res.data.users)
-            })
+        const response = await axios.get(`${ApiURL.getAllUsers}?filter=${filter}`)
+        const data = await response.data
+        return data.users
+
     } catch (error) {
         toast.warning(error.response.data.msg)
     }
@@ -319,14 +321,14 @@ const insertComment = async (data, postId, dispatch, setLoading) => {
 
 
 
-const followUnfollow = async (user, dispatch, setLoading) => {
+const followUnfollow = async (id, dispatch, setLoading) => {
     try {
         setLoading(true)
-        await axios.get(ApiURL.followUnfollow + '/' + user._id.toString(), {
+        await axios.get(ApiURL.followUnfollow + '/' + id , {
             withCredentials: true
         }).then((res) => {
             setLoading(false)
-            dispatch(followUnfollowUser(user))  // pending
+            dispatch(followUnfollowUser(id))  // pending
             toast.success(res.data.msg)
         })
 
@@ -352,7 +354,42 @@ const getAllSuggestions = async (setUsers, setLoading) => {
     }
 }
 
+
+const sendMessage  = async(message,id,setLoading)=>{
+    try {
+        console.log(id,message)
+        // return
+        setLoading(true)
+        const res = await axios.post(`${ApiURL.sendMessage}/${id}`,{message}, {
+            withCredentials: true
+        })
+            toast.success(res.data.msg)
+            setLoading(false)
+            return res.data.newMessage
+    } catch (error) {
+        toast.warning(error.response.data.msg)
+        setLoading(false)
+    }
+}
+
+const allMessages = async(id,setLoading)=>{
+    try {
+        setLoading(true)
+        const response = await axios.get(`${ApiURL.allMessages}/${id}`, {
+            withCredentials: true
+        })
+        const message = await response.data.messages
+        toast.success(response.data.msg)
+        setLoading(false)
+        return message
+    } catch (error) {
+        toast.warning(error.response.data.msg)
+        setLoading(false)
+    }
+}
+
 export {
+    allMessages,
     SignUpUser,
     SigninUser,
     getProfile,
@@ -372,5 +409,6 @@ export {
     updateProfile,
     updateAvatar,
     deleteAvatar,
-deleteUserAccount
+    deleteUserAccount,
+    sendMessage
 }

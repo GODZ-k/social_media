@@ -30,7 +30,7 @@ const Detailpost = memo(({ Post })=>{
   const user = useSelector((state) => state.auth.userData);
   const post = useSelector(state => state.posts.find((p)=> p?._id === Post?._id))
   const [isLiked, setLiked] = useState(post?.likedBy.some((like) => like.userId === user._id) || false);
-  const [isFollowed , setIsFollowed] = useState(user?.following.some((loggedInUser)=> loggedInUser._id === post?.createdBy._id) || false)
+  const [isFollowed , setIsFollowed] = useState(user?.following.some((loggedInUser)=> loggedInUser?._id === post?.createdBy?._id) || false)
   const [loading, setLoading] = useState(false);
   const [title , setTitle] = useState(post?.postTitle || "")
   const [text, setText] = useState("");

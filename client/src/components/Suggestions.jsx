@@ -1,16 +1,24 @@
 import React, { useEffect, useState } from "react";
 import UserShortCard from "./UserShortCard";
-import { getAllSuggestions } from "../../Api/ApiData";
+import { getAllSuggestions, getAllUsers } from "../../Api/ApiData";
 import { NoData } from ".";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { setUsers } from "@/redux/features/authSlice";
 
 function Suggestions() {
-  const [users, setUsers] = useState([]);
-const [loading,setLoading] = useState(false)
+  const loggedInUser = useSelector((state)=> state.auth.userData)
+  const users = useSelector(state => state.auth.users)
+  // const [users, setUsers] = useState([]);
+  // const [loading,setLoading] = useState(false)
+  const dispatch = useDispatch()
 
   useEffect(() => {
-    getAllSuggestions(setUsers,setLoading);
-  }, []);
+     (async()=>{
+      const data = await getAllUsers('');
+      console.log("data",data)
+      dispatch(setUsers(data))
+    })()
+  }, [dispatch]);
 
   return (
     <>
@@ -26,16 +34,19 @@ const [loading,setLoading] = useState(false)
         </a>
       </div>
       {users && users?.length > 0 ? (
-        users?.map((user) => (
-          <UserShortCard
+        users?.map((user) => 
+          user._id !== loggedInUser._id && (
+            <UserShortCard
+            key={user._id}
             type={"follow"}
             _id={user?._id}
             email={user?.email}
             firstName={user?.firstName}
             username={user?.username}
             avatar={user?.avatar}
-          />
-        ))
+            />
+          )
+        )
       ) : (
         <NoData />
       )}

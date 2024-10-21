@@ -1,4 +1,4 @@
-import  { lazy, Suspense, useEffect } from "react";
+import { lazy, Suspense, useEffect } from "react";
 import { Route, Routes, useNavigate } from "react-router-dom";
 const Layout = lazy(() => import("./Layout"));
 const Homepage = lazy(() => import("./pages/Homepage"));
@@ -12,27 +12,35 @@ const SavedPostpage = lazy(() => import("./pages/SavedPostpage"));
 const EditProfile_page = lazy(() => import("./pages/EditProfile_page"));
 const Chat_page = lazy(() => import("./pages/Chat_page"));
 const Chatting_page = lazy(() => import("./pages/Chatting_page"));
-import { getProfile,getAllPosts } from "../Api/ApiData";
+import { getProfile, getAllPosts, getAllUsers } from "../Api/ApiData";
 import { useDispatch } from "react-redux";
+import { setUsers } from "./redux/features/authSlice";
+import useSocket from "./hooks/useSocket";
 
 function App() {
   const dispatch = useDispatch();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   useEffect(() => {
     getProfile(dispatch);
-  }, [dispatch,navigate]);
+    (async()=>{
+      const data = await getAllUsers('');
+      dispatch(setUsers(data))
+    })()
+  }, [navigate,dispatch]);
 
   useEffect(() => {
-     getAllPosts(dispatch);
+    getAllPosts(dispatch);
 
     const interval = setInterval(() => {
       getAllPosts(dispatch);
     }, 30000);
 
+    return () => clearInterval(interval);
+  }, [navigate,dispatch]);
 
-    return ()=>clearInterval(interval)
-  }, [dispatch,navigate]);
+  useSocket()
+  
 
   return (
     <Suspense fallback={<TopLoadingBar />}>
@@ -45,14 +53,13 @@ function App() {
             </Suspense>
           }
         >
-
           {/* protected routes */}
           <Route
             index
             element={
               <Suspense fallback={<TopLoadingBar />}>
                 {/* <ProtectedRoutes> */}
-                  <Homepage />
+                <Homepage />
                 {/* </ProtectedRoutes> */}
               </Suspense>
             }
@@ -97,7 +104,7 @@ function App() {
               </Suspense>
             }
           />
-           <Route
+          <Route
             path="/edit-profile"
             element={
               <Suspense fallback={<TopLoadingBar />}>
@@ -107,7 +114,7 @@ function App() {
               </Suspense>
             }
           />
-           <Route
+          <Route
             path="/direct/inbox/"
             element={
               <Suspense fallback={<TopLoadingBar />}>
@@ -117,8 +124,8 @@ function App() {
               </Suspense>
             }
           />
-           <Route
-            path="/direct/t/:username"
+          <Route
+            path="/direct/t/:identifier"
             element={
               <Suspense fallback={<TopLoadingBar />}>
                 <ProtectedRoutes>
@@ -128,14 +135,14 @@ function App() {
             }
           />
         </Route>
-       
+
         {/* public roiutes */}
         <Route
           path="/signup"
           element={
             <Suspense fallback={<TopLoadingBar />}>
               <PublicRoutes>
-              <Signup_page />
+                <Signup_page />
               </PublicRoutes>
             </Suspense>
           }
@@ -145,7 +152,7 @@ function App() {
           element={
             <Suspense fallback={<TopLoadingBar />}>
               <PublicRoutes>
-              <Signin_page />
+                <Signin_page />
               </PublicRoutes>
             </Suspense>
           }

@@ -40,18 +40,20 @@ function Profile() {
 
   useEffect(()=>{
     if(user && loggedInUser){
-      setIsFollowed(loggedInUser?.following.some((followedUser) => followedUser._id === user._id))
+      setIsFollowed(loggedInUser?.following.some((followedUser) => followedUser === user._id))
     }
   },[user, loggedInUser])
 
   useEffect(() => {
+    // console.log('render' , username , user)  
     getUser(username, setUser);
+
   }, [navigate,loggedInUser,username]);
 
   async function handleFollowUnfollow(){
     setLoading(true); 
     try{
-      await followUnfollow(user, dispatch, setLoading);
+      await followUnfollow(user._id, dispatch, setLoading);
       setIsFollowed(prev => !prev); 
     } catch(error){
       console.log(error);

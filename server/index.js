@@ -1,4 +1,5 @@
-import app from "./src/app.js";
+import { io } from "./socket.js";
+import { server} from "./src/app.js";
 import connectDB from "./src/connection/connection.js";
 import cluster from 'cluster'
 import os from 'os'
@@ -6,11 +7,12 @@ import os from 'os'
 const port = process.env.PORT || 4000
 const cpuCount = os.cpus().length
 
+console.log("running")
 
 if (cluster.isMaster) {
     console.log(`Master process is running with PID: ${process.pid}`);
 
-    for (let i = 0; i <= cpuCount; i++) {
+    for (let i = 0; i < cpuCount; i++) {
         cluster.fork()
     }
 
@@ -31,20 +33,22 @@ if (cluster.isMaster) {
 } else {
     connectDB()
         .then(() => {
-           const server =  app.listen(port, () => {
+           const httpserver =  server.listen(port, () => {
                 console.log(`listning on port ${port}`)
             })
 
             process.on('SIGTERM', () => {
-                server.close(() => {
-                    process.exit();
+                httpserver.close(() => {
+                    io.close(()=>{
+                        process.exit();
+                    })
                 });
             });
 
              // Allow worker to listen for shutdown message from master
              process.on('message', (msg) => {
                 if (msg === 'shutdown') {
-                    server.close(() => process.exit());
+                    httpserver.close(() => process.exit());
                 }
             });
 

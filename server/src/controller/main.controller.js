@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import Comment from "../models/comments.post.model.js";
 import Post from "../models/post.model.js";
 import User from "../models/user.model.js";
@@ -6,26 +7,31 @@ import client ,{Cache} from "../utils/client.js";
 const cache = new Cache()
 
 // get profile --------
-const getProfile = async (req, res) => {
+const getProfile = async (req, res) => {  
   try {
-    const username = req.params.username;
+    const identifier = req.params.identifier;
+    console.log(identifier)
 
-    if (!username) {
+    if (!identifier) {
       return res.status(404).json({
         msg: "All fileds must be require",
       });
     }
 
-    const cacheProfile = await cache.getCachedData('profile')
+    // const cacheProfile = await cache.hGet(`user:${username}`,username)
 
-    if(cacheProfile){
-      return res.status(200).json({
-        profile:cacheProfile,
-        msg: "Profile fetched successfully",
-      });
-    }
+    // if(cacheProfile){
+    //   return res.status(200).json({
+    //     profile:cacheProfile,
+    //     msg: "Profile fetched successfully",
+    //   });
+    // }
 
-    const profile = await User.findOne({username})
+    const query = mongoose.Types.ObjectId.isValid(identifier)
+      ? { _id: identifier }   // If valid, search by _id
+      : { username: identifier }; // Otherwise, search by username
+
+    const profile = await User.findOne(query)
     .populate({
       path: 'posts',
       populate: {
@@ -42,7 +48,7 @@ const getProfile = async (req, res) => {
       });
     }
 
-    await cache.setAndExpire('profile',profile)
+    // await cache.hSet(`user:${username}`,username,profile)
 
     return res.status(200).json({
       profile,
@@ -61,14 +67,15 @@ const getProfile = async (req, res) => {
 const getAllPosts = async (req, res) => {
   try {
 
-    const cachedPosts = await cache.getCachedData('Allposts')
+    // const cachedPosts = await cache.get('Allposts')
 
-    if(cachedPosts){
-      return res.status(200).json({
-        posts:cachedPosts,
-        msg: "Post found successfully",
-      })
-    }
+    // if(cachedPosts){
+    //   return res.status(200).json({
+    //     posts:cachedPosts,
+    //     msg: "Post found successfully",
+    //   })
+    // }
+
     const posts = await Post.find({ createdBy: { $ne:null} }).sort({ createdAt: -1 })
     .populate({path:'createdBy',select:'-password -refreshToken -createdAt -updatedAt -savedPost'})
     .populate({path:'comments',populate:{
@@ -82,7 +89,7 @@ const getAllPosts = async (req, res) => {
       });
     }
 
-    await cache.setAndExpire('Allposts',posts)
+    // await cache.set('Allposts',posts)
 
     return res.status(200).json({
       posts,
@@ -108,14 +115,14 @@ const getPost = async (req, res) => {
       });
     }
 
-    const cachedPost = await cache.getCachedData('post');
+    // const cachedPost = await cache.hGet(`post:${postId}`,postId);
 
-    if (cachedPost) {
-      return res.status(200).json({
-        post: cachedPost,
-        msg: "post found successfully",
-      });
-    }
+    // if (cachedPost) {
+    //   return res.status(200).json({
+    //     post: cachedPost,
+    //     msg: "post found successfully",
+    //   });
+    // }
 
     const post = await Post.findById(postId);
 
@@ -125,7 +132,7 @@ const getPost = async (req, res) => {
       });
     }
 
-    await cache.setAndExpire('post',post)
+    // await cache.hSet(`post:${postId}`,postId,post,500)
 
     return res.status(200).json({
       post,
@@ -149,14 +156,14 @@ const getComment = async (req, res) => {
       });
     }
 
-    const cachedComment  =  await cache.getCachedData('comment')
+    // const cachedComment  =  await cache.hGet(`comment:${commentId}`,commentId)
 
-    if(cachedComment){
-      return res.status(200).json({
-        comment:cachedComment,
-        msg: "Comment found successfully",
-      });
-    }
+    // if(cachedComment){
+    //   return res.status(200).json({
+    //     comment:cachedComment,
+    //     msg: "Comment found successfully",
+    //   });
+    // }
 
     const comment = await Comment.findById(commentId);
 
@@ -166,7 +173,7 @@ const getComment = async (req, res) => {
       });
     }
 
-    await cache.setAndExpire('comment',comment)
+    // await cache.hSet(`comment:${commentId}`,commentId,comment,500)
 
     return res.status(200).json({
       comment,
@@ -184,14 +191,14 @@ const getAllUsers = async (req,res)=>{
   try {
     const filter = req.query.filter || ""
 
-    const cachedUser = await cache.getCachedData('users')
+    // const cachedUser = await cache.hGet(`user:${filter}`,filter)
 
-    if(cachedUser){
-      return res.status(200).json({
-        users:cachedUser,
-        msg:"Users found successfully"
-      })
-    }
+    // if(cachedUser){
+    //   return res.status(200).json({
+    //     users:cachedUser,
+    //     msg:"Users found successfully"
+    //   })
+    // }
 
     const users = await User.find({ 
           $or:[
@@ -214,7 +221,7 @@ const getAllUsers = async (req,res)=>{
       })
     }
 
-    await cache.setAndExpire('users',users)
+    // await cache.hSet(`user:${filter}`,filter,users)
 
     return res.status(200).json({
       users,

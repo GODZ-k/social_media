@@ -18,14 +18,7 @@ export class Cache {
         this.expiredAt = expiredAt; // Default expiration is 600 seconds (can be overridden)
       }
     
-    async setCachedData(key,value){
-        try {
-            await client.set(key,JSON.stringify(value))
-        } catch (error) {
-            console.error("Error setting expiration:", error);
-            return null
-        }
-    }
+      // string ---
 
     async expireData(key){
         try {
@@ -36,7 +29,7 @@ export class Cache {
         }
     }
     
-    async setAndExpire(key,value,expirationTime=this.expiredAt){
+    async set(key,value,expirationTime=this.expiredAt){
         try {
             await client.set(key,JSON.stringify(value))
             await client.expire(key,expirationTime)
@@ -45,7 +38,8 @@ export class Cache {
             return null
         }
     }
-    async getCachedData(key){
+
+    async get(key){
         try {
             const cachedData = await client.get(key)
             return cachedData ? JSON.parse(cachedData) : null;
@@ -53,6 +47,68 @@ export class Cache {
             console.error("Error setting expiration:", error);
             return null
         }
+    }
+
+
+    // hash ---
+
+    async hSet(key,field,value,expirationTime=this.expiredAt){
+        try {
+            await client.hset(key,field, JSON.stringify(value));
+            await client.expire(key, expirationTime);
+            
+        } catch (error) {
+            console.error("Error setting expiration:", error);
+            return null
+        }
+    }
+
+    async hGet(key,value){
+        try {
+            const cachedData = await client.hget(key,value); 
+            return cachedData ? JSON.parse(cachedData) : null;
+        } catch (error) {
+            console.error("Error setting expiration:", error);
+            return null
+        }
+    }
+
+    async hdel(key,fieldKey){
+        try {
+            console.log("cached")
+            await client.hdel(key,fieldKey); 
+        } catch (error) {
+            console.error("Error setting expiration:", error);
+            return null
+        }
+    }
+
+
+    // list --
+
+    async lpush(key,value,expiredAt=this.expiredAt){
+        try {
+           await client.lpush(key,JSON.stringify(value))
+           await client.expire(key,expiredAt)
+        } catch (error) {
+            console.error("Error setting expiration:", error);
+            return null
+        }
+    }
+
+    async lrange(key){
+        try {
+            const data = await client.lrange(key,0,-1)
+            return JSON.parse ? JSON.parse(data) : null
+        } catch (error) {
+            console.error("Error setting expiration:", error);
+            return null
+        }
+    }
+    // delete cache 
+
+    async del(key){
+        await client.del(key)
     }
 }
 

@@ -5,6 +5,8 @@ const conversationSchema = new Schema({
         type:Schema.Types.ObjectId,
         ref:'User'
     }],
+    isGroupChat: { type: Boolean, default: false },
+    groupName: { type: String },
     message:[{
         type:Schema.Types.ObjectId,
         ref:'Message'

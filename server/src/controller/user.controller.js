@@ -62,16 +62,16 @@ const registerUser = async (req, res) => {
 
     const verificationLink = `${process.env.DOMAIN}/auth/user/verify?token=${verificationToken}`;
 
-    const { data, error } = await verificationMail(email, verificationLink);
+    // const { data, error } = await verificationMail(email, verificationLink);
 
-    // console.log(error)
+    const error = false
     if (error) {
       return res.status(500).json({
         msg: "failed to send verification mail please try again later",
       });
     }
 
-    // const data = true
+    const data = true
     if (data) {
       await User.create({
         email,
@@ -189,7 +189,7 @@ const loginUser = async (req, res) => {
       existUser._id
     );
 
-    const user = await User.findById(existUser._id)
+    const user = await User.findById(existUser._id).select('-password -refreshToken -verificationToken')
 
     if (!user) {
       return res.status(422).json({
@@ -225,14 +225,14 @@ const getCurrentUser = async (req, res) => {
       });
     }
 
-    const cachedUser = await cache.getCachedData('currentUser')
+    // const cachedUser = await cache.hGet(`currentUser:${user._id}`,user._id)
 
-    if(cachedUser){
-      return res.status(200).json({
-        profile:cachedUser,
-        msg: "User fetched successfully",
-      });
-    }
+    // if(cachedUser){
+    //   return res.status(200).json({
+    //     profile:cachedUser,
+    //     msg: "User fetched successfully",
+    //   });
+    // }
 
     const profile = await User.findById(user._id).populate({
       path:'posts'
@@ -246,7 +246,7 @@ const getCurrentUser = async (req, res) => {
       })
     }
 
-    await cache.setAndExpire('currentUser',profile)
+    // await cache.hSet(`currentUser:${user._id}`,user._id,profile)
 
     return res.status(200).json({
       profile,
@@ -254,6 +254,7 @@ const getCurrentUser = async (req, res) => {
     });
 
   } catch (error) {
+    console.log(error)
     return res.status(500).json({
       msg: "Internal server error",
     });
@@ -285,6 +286,8 @@ const logoutUser = async (req, res) => {
       },
     });
 
+    // await cache.del(`currentUser:${loggedInUser._id}`)
+
     return res
       .status(200)
       .clearCookie("accessToken", options)
@@ -311,6 +314,8 @@ const deleteAccount = async (req, res) => {
     }
 
     await User.findByIdAndDelete(user._id);
+    // await cache.del(`currentUser:${user._id}`)
+    // await cache.del('suggestion')
 
 
     return res
@@ -348,6 +353,9 @@ const deleteProfileImage = async (req, res) => {
 
     loggedInUser.avatar = "";
     await loggedInUser.save({ validateBeforeSave: false });
+    // await cache.del(`currentUser:${loggedInUser._id}`)
+    // await cache.del(`user:${loggedInUser.username}`)
+    // await cache.del(`user:${loggedInUser.name}`)
 
     return res.status(200).json({
       msg: "Profile image removed successfully",
@@ -499,6 +507,8 @@ const followUser = async (req, res) => {
     const user = req.user;
     const userId = req.params.userId;
 
+    console.log(userId , typeof userId)
+
     if (!user) {
       return res.status(422).json({
         msg: "Unauthorized access",
@@ -553,18 +563,22 @@ const followUser = async (req, res) => {
       followedUser.save({ validateBeforeSave: false }),
     ]);
 
+    // await cache.del(`currentUser:${loggedInUser._id}`)
+    // await cache.del(`user:${loggedInUser.username}`)
+    // await cache.del(`user:${loggedInUser.name}`)
+
     return res.status(200).json({
       msg: isFollowing
         ? "User unfollowed successfully"
         : "User followed successfully",
     });
   } catch (error) {
+    console.log(error)
     return res.status(500).json({
       msg: "Internal server error",
     });
   }
 };
-
 
 // get all followers
 const getFollowers = async (req, res) => {
@@ -578,15 +592,15 @@ const getFollowers = async (req, res) => {
       })
     }
 
-    const cachedFollowers = await cache.getCachedData('followers')
+    // const cachedFollowers = await cache.get(`followers:${userId}`)
 
-    if(cachedFollowers){
-      return res.status(200).json({
-        followers:cachedFollowers,
-        msg: "Followers found successfully"
-      })
+    // if(cachedFollowers){
+    //   return res.status(200).json({
+    //     followers:cachedFollowers,
+    //     msg: "Followers found successfully"
+    //   })
   
-    }
+    // }
 
     const [loggedInUser, newUser] = await Promise.all([
       await User.findById(user._id),
@@ -605,7 +619,7 @@ const getFollowers = async (req, res) => {
       })
     )
 
-    await cache.setAndExpire('followers',followers)
+    // await cache.set(`followers:${userId}`,followers)
 
     return res.status(200).json({
       followers,
@@ -640,14 +654,14 @@ const getSuggestions = async (req, res) => {
       })
     }
 
-    const cachedSuggestion = await cache.getCachedData('suggestion')
+    // const cachedSuggestion = await cache.get('suggestion')
 
-    if(cachedSuggestion){
-      return  res.status(200).json({
-        users:cachedSuggestion,
-        msg:"Users found successfully"
-      })
-    }
+    // if(cachedSuggestion){
+    //   return  res.status(200).json({
+    //     users:cachedSuggestion,
+    //     msg:"Users found successfully"
+    //   })
+    // }
 
     const users = await User.find({_id:{
       $ne:loggedInUser._id
@@ -659,7 +673,7 @@ const getSuggestions = async (req, res) => {
       })
     }
 
-    await cache.setAndExpire('suggestion',users)
+    // await cache.set('suggestion',users)
 
     return  res.status(200).json({
       users,
