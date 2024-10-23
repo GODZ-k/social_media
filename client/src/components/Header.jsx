@@ -37,8 +37,8 @@ function Header() {
       />
       <div className=" flex items-center">
         <div className=" flex gap-5">
-          {headerItem.map((item) => (
-           <Link to={item.to}>
+          {headerItem.map((item,index) => (
+           <Link to={item.to} key={index}>
             <lord-icon
               src={item.icon}
               trigger="in"

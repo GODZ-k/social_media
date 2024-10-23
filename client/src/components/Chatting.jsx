@@ -17,7 +17,6 @@ import { Dialog, DialogContent, DialogTrigger } from "./ui/dialog";
 import { allMessages, getUser, sendMessage } from "../../Api/ApiData";
 import { useDispatch, useSelector } from "react-redux";
 import { setMessages, setNewMessage } from "@/redux/features/chatSlice";
-import { io } from "socket.io-client";
 
 function Chatting() {
   const [text, setText] = useState("");
@@ -30,37 +29,6 @@ function Chatting() {
   const messages = useSelector((state) => state.chat.messages);
   const loggedInUser = useSelector((state) => state.auth.userData);
   const { socket } = useSelector((state) => state.socket);
-
-  // const messages = [
-  //   {
-  //     message:
-  //       "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Nemo ipsam nam beatae deleniti nulla sed suscipit deserunt error ut non. Numquam, dolores quos cum ipsam architecto magnam placeat magni exercitationem distinctio fugiat excepturi nam autem hic molestiae cumque eligendi enim error, mollitia explicabo dolorum reprehenderit ratione quo libero. Doloremque, labore!",
-  //     isRecived: true,
-  //   },
-  //   {
-  //     message: " hello my name is tanmay and i am a ",
-  //   },
-  //   {
-  //     message:
-  //       "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Nemo ipsam nam beatae deleniti nulla sed suscipit deserunt error ut non. Numquam, dolores quos cum ipsam architecto magnam placeat magni exercitationem distinctio fugiat excepturi nam autem hic molestiae cumque eligendi enim error, mollitia explicabo dolorum reprehenderit ratione quo libero. Doloremque, labore!",
-  //   },
-  //   {
-  //     message:
-  //       "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Nemo ipsam nam beatae deleniti nulla sed suscipit deserunt error ut non. Numquam, dolores quos cum ipsam architecto magnam placeat magni exercitationem distinctio fugiat excepturi nam autem hic molestiae cumque eligendi enim error, mollitia explicabo dolorum reprehenderit ratione quo libero. Doloremque, labore!",
-  //   },
-  //   {
-  //     message:
-  //       "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Nemo ipsam nam beatae deleniti nulla sed suscipit deserunt error ut non. Numquam, dolores quos cum ipsam architecto magnam placeat magni exercitationem distinctio fugiat excepturi nam autem hic molestiae cumque eligendi enim error, mollitia explicabo dolorum reprehenderit ratione quo libero. Doloremque, labore!",
-  //   },
-  //   {
-  //     message: "hello",
-  //     isRecived: true,
-  //   },
-  //   {
-  //     message: "hiiii",
-  //     isRecived: true,
-  //   },
-  // ];
 
   function handleComment(e) {
     const value = e.target.value;
@@ -92,7 +60,8 @@ function Chatting() {
     return () => {
       socket?.off("newMessage", handleNewMessage);
     };
-  }, [dispatch, socket, messages]);
+
+  }, [dispatch, messages]);
 
   useEffect(() => {
     (async () => {
@@ -112,7 +81,7 @@ function Chatting() {
   return (
     <Chat>
       <div className=" w-full flex flex-col justify-between relative h-screen">
-        <div className=" sticky z-50 top-0 left-0 w-full p-5 flex justify-between items-center border-b border-b-gray-300 bg-white">
+        <div className=" sticky z-50 top-0 left-0 w-full p-5 flex justify-between items-center border-b border-b-gray-300 ">
           <Link to={`/profile/${user?.username}`}>
             <div className=" flex items-center gap-2 font-semibold">
               <div className="flex gap-5 items-center">

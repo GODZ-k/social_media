@@ -54,6 +54,7 @@ function Sidebar({isExpend}) {
     },
     {
       label: "Notification",
+      isMobile: true,
       icon: "https://cdn.lordicon.com/vspbqszr.json",
       to: "/notification",
     },

@@ -26,6 +26,7 @@ import EditProfile from "./EditProfile";
 import Chat from "./Chat";
 import ChatSidebar from "./ChatSidebar";
 import Chatting from "./Chatting";
+import Notification from "./Notification";
 
 export {
     Input,
@@ -48,6 +49,7 @@ export {
     HoverUser,
     Explorepage_comp,
     ProtectedRoutes,
+    Notification,
     PublicRoutes,
     NoData,
     ProtectUserContent,

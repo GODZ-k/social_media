@@ -5,6 +5,7 @@ import storage from 'redux-persist/lib/storage' // defaults to localStorage for 
 import postReducer from "../features/postSlice"
 import chatReducer from "../features/chatSlice"
 import socketReducer from "../features/socketSlice"
+import notificationReducer from "../features/rtnSlice"
 
 
 const persistConfig = {
@@ -19,7 +20,8 @@ const rootReducer = combineReducers({
     auth:authReducer,
     posts:postReducer,
     chat:chatReducer,
-    socket:socketReducer
+    socket:socketReducer,
+    notification:notificationReducer
 })
 
 const persistedReducer = persistReducer(persistConfig, rootReducer)

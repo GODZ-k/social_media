@@ -19,8 +19,8 @@ function Chat({ children }) {
     <div className=" flex w-full">
       {identifier ? (
         <>
-          {/* <ChatSidebar /> */}
-          <div className=" w-full">
+          <ChatSidebar />
+          <div className=" hidden md:block invisible md:visible w-full">
             {identifier ? (
               children
             ) : (

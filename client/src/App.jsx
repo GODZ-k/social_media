@@ -16,6 +16,7 @@ import { getProfile, getAllPosts, getAllUsers } from "../Api/ApiData";
 import { useDispatch } from "react-redux";
 import { setUsers } from "./redux/features/authSlice";
 import useSocket from "./hooks/useSocket";
+import Notification_page from "./pages/Notification_page";
 
 function App() {
   const dispatch = useDispatch();
@@ -130,6 +131,16 @@ function App() {
               <Suspense fallback={<TopLoadingBar />}>
                 <ProtectedRoutes>
                   <Chatting_page />
+                </ProtectedRoutes>
+              </Suspense>
+            }
+          />
+           <Route
+            path="/notification"
+            element={
+              <Suspense fallback={<TopLoadingBar />}>
+                <ProtectedRoutes>
+                  <Notification_page />
                 </ProtectedRoutes>
               </Suspense>
             }

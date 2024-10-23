@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import connectSocket from '@/Socket';
 import { clearSocket, setSocket } from "@/redux/features/socketSlice";
 import { setOnlineUsers } from '@/redux/features/chatSlice';
+import { setNotification } from '@/redux/features/rtnSlice';
 
 function useSocket() {
     const user = useSelector((state) => state.auth.userData);
@@ -21,10 +22,12 @@ function useSocket() {
           newSocket.on('getOnlineUsers',(onlineUsers)=>{
             dispatch(setOnlineUsers(onlineUsers))
           })
+
+          newSocket.on('notification',(notification)=>{
+            console.log("notification",notification)
+            dispatch(setNotification(notification))
+          })
     
-        }else if(socket){
-            socket.close()
-            dispatch(clearSocket())
         }
 
 
@@ -36,7 +39,7 @@ function useSocket() {
         //         }
         //       };
 
-      },[user, dispatch])
+      },[user, dispatch ])
     
   return null
 }
