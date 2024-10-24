@@ -24,3 +24,4 @@ jobs:
         touch .env
         echo "${{ secrets.PRODUCTION }}" > .env
     - run: npm run build 
+    - run: pm2 restart social_media
